@@ -1,0 +1,20 @@
+﻿@model Content
+
+<div class="container">
+    <div class="content-detail">
+        @if (!string.IsNullOrWhiteSpace(Model.Name))
+        {
+            <h1>
+                @Model.Name
+            </h1>
+        }
+        @if (Model.IsIndexed)
+        {
+            <time>
+                @Model.PublishedDateTime.ToString("yyyy-MM-dd")
+            </time>
+        }
+
+        @Html.Raw(Model.Body)
+    </div>
+</div>

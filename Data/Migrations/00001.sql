@@ -1,0 +1,12 @@
+CREATE TABLE [Content] (
+    [Body] NVARCHAR(MAX) NOT NULL,
+    [Id] INT IDENTITY (1, 1) NOT NULL,
+    [IsIndexed] BIT NOT NULL,
+    [Name] NVARCHAR(50),
+    [Path] NVARCHAR(50) NOT NULL,
+    [PublishedDateTime] DATETIMEOFFSET(7),
+    [Summary] NVARCHAR(255) NOT NULL,
+    CONSTRAINT [PK_Content] PRIMARY KEY CLUSTERED ([Id] ASC),
+    CONSTRAINT [IX_Content] UNIQUE NONCLUSTERED ([Path] ASC)
+);
+GO

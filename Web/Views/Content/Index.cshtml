@@ -1,0 +1,51 @@
+﻿@model SearchResponse<Content>
+
+@{
+    var isPreviousVisisble = Model.PageIndex > 0;
+    var isNextVisisble = (Model.PageIndex + 1) * Model.PageSize < Model.TotalCount;
+}
+
+<div class="container">
+    <ul class="content-index">
+        @foreach (var content in Model.Items)
+        {
+            <li class="content-index-item">
+                <h1>
+                    <a href="/content/@content.Path">@content.Name</a>
+                </h1>
+                <time>
+                    @content.PublishedDateTime.ToString("yyyy-MM-dd")
+                </time>
+
+                <p>@content.Summary</p>
+
+                <a href="/content/@content.Path">Would you like to know more?</a>
+            </li>
+        }
+    </ul>
+</div>
+
+<div class="container">
+    <ul class="pager">
+        <li class="@(isPreviousVisisble ? "" : "hidden")">
+            <a href="/">
+                &lt;&lt;
+            </a>
+        </li>
+        <li class="@(isPreviousVisisble ? "" : "hidden")">
+            <a href="?page=@(Model.PageIndex - 1)">
+                &lt;
+            </a>
+        </li>
+        <li class="@(isNextVisisble ? "" : "hidden")">
+            <a href="?page=@(Model.PageIndex + 1)">
+                &gt;
+            </a>
+        </li>
+        <li class="@(isNextVisisble ? "" : "hidden")">
+            <a href="?page=@((Model.TotalCount / Model.PageSize) - 1)">
+                &gt;&gt;
+            </a>
+        </li>
+    </ul>
+</div>

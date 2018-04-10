@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta content="I like to drink beer when I'm playing video games and when I'm not playing video games." name="description">
+        <meta content="#171714" name="theme-color">
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <title>null-d3v</title>
+
+        <link href="/images/192.png" rel="icon" type="image/png">
+        <link href="/images/180.png" rel="apple-touch-icon" type="image/png">
+        <link href="/images/32.ico" rel="shortcut icon" type="image/x-icon">
+
+        <environment include="Development">
+            <link rel="stylesheet" href="~/css/site.css" />
+        </environment>
+        <environment exclude="Development">
+            <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        </environment>
+
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-73818665-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag("js", new Date());
+            gtag("config", "UA-73818665-1");
+        </script>
+    </head>
+    <body>
+        @Html.Partial("_Header")
+
+        <main id="content">
+            @RenderBody()
+        </main>
+
+        <environment include="Development">
+            <script src="~/js/site.js" asp-append-version="true"></script>
+        </environment>
+        <environment exclude="Development">
+            <script src="~/js/site.min.js" asp-append-version="true"></script>
+        </environment>
+        @RenderSection("Scripts", required: false)
+    </body>
+</html>
