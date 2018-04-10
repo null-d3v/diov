@@ -11,7 +11,7 @@ namespace Diov.Web
     public class ErrorController : Controller
     {
         [HttpGet("error/{error}")]
-        public async Task<IActionResult> Detail(string error)
+        public IActionResult Detail(string error)
         {
             return View(error);
         }

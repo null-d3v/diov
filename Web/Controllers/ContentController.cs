@@ -52,8 +52,7 @@ namespace Diov.Web
                     {
                         IsIndexed = true,
                     },
-                    page,
-                    2);
+                    page);
 
             return View(searchResponse);
         }
