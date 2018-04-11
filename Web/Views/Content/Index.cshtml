@@ -17,7 +17,7 @@
                     @content.PublishedDateTime.ToString("yyyy-MM-dd")
                 </time>
 
-                <p>@content.Summary</p>
+                @Html.Raw(Markdown.ToHtml(content.Summary))
 
                 <a href="/content/@content.Path">Would you like to know more?</a>
             </li>
