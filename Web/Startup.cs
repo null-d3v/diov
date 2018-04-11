@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Diov.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -45,6 +46,10 @@ namespace Diov.Web
             {
                 applicationBuilder
                     .UseStatusCodePagesWithReExecute("/error/{0}");
+
+                applicationBuilder.UseRewriter(
+                    new RewriteOptions()
+                        .AddRedirectToHttps());
             }
 
             applicationBuilder.UseStaticFiles();
