@@ -103,13 +103,14 @@ time
     line-height: 150%;
 }
 
-#footer, #header
+#footer
 {
-    height: 75px;
+    min-height: 75px;
 }
 
 #header
 {
+    height: 75px;
     padding: 5px 0px;
     position: fixed;
     top: 0;
