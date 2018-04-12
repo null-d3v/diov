@@ -44,7 +44,7 @@
                 </a>
             </li>
             <li>
-                <a href="?page=@(Math.Ceiling((double)(Model.TotalCount / Model.PageSize)))">
+                <a href="?page=@(Math.Ceiling((double)Model.TotalCount / Model.PageSize) - 1)">
                     &gt;&gt;
                 </a>
             </li>
