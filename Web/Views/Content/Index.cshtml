@@ -1,10 +1,5 @@
 ﻿@model SearchResponse<Content>
 
-@{
-    var isPreviousVisisble = Model.PageIndex > 0;
-    var isNextVisisble = (Model.PageIndex + 1) * Model.PageSize < Model.TotalCount;
-}
-
 <div class="container">
     <ul class="content-index">
         @foreach (var content in Model.Items)
@@ -27,25 +22,32 @@
 
 <div class="container">
     <ul class="pager">
-        <li class="@(isPreviousVisisble ? "" : "hidden")">
-            <a href="/">
-                &lt;&lt;
-            </a>
-        </li>
-        <li class="@(isPreviousVisisble ? "" : "hidden")">
-            <a href="?page=@(Model.PageIndex - 1)">
-                &lt;
-            </a>
-        </li>
-        <li class="@(isNextVisisble ? "" : "hidden")">
-            <a href="?page=@(Model.PageIndex + 1)">
-                &gt;
-            </a>
-        </li>
-        <li class="@(isNextVisisble ? "" : "hidden")">
-            <a href="?page=@((Model.TotalCount / Model.PageSize) - 1)">
-                &gt;&gt;
-            </a>
-        </li>
+        @if (Model.PageIndex > 0)
+        {
+            <li>
+                <a href="/">
+                    &lt;&lt;
+                </a>
+            </li>
+            <li>
+                <a href="?page=@(Model.PageIndex - 1)">
+                    &lt;
+                </a>
+            </li>
+        }
+        @if ((Model.PageIndex + 1) * Model.PageSize <
+            Model.TotalCount)
+        {
+            <li>
+                <a href="?page=@(Model.PageIndex + 1)">
+                    &gt;
+                </a>
+            </li>
+            <li>
+                <a href="?page=@(Math.Ceiling((double)(Model.TotalCount / Model.PageSize)))">
+                    &gt;&gt;
+                </a>
+            </li>
+        }
     </ul>
 </div>
