@@ -134,6 +134,11 @@ time
     align-items: center;
     display: flex;
 }
+#header .container
+{
+    display: flex;
+    justify-content: space-between;
+}
 
 .content-detail
 {
@@ -153,9 +158,7 @@ time
 
 .container
 {
-    display: flex;
     height: 100%;
-    justify-content: space-between;
     margin: 0 auto;
     max-width: 675px;
     width: 80%;
@@ -163,13 +166,16 @@ time
 
 .gallery
 {
-    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
 }
-.gallery-image
+.gallery img
 {
-    margin: 0 5px 0 5px;
-    max-width: 325px;
     width: 100%;
+}
+.gallery-item
+{
+    flex: 50%;
 }
 
 .hidden

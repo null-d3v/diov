@@ -6,12 +6,17 @@ namespace Diov.Data
 {
     public class Content
     {
-        private static IHtmlSanitizer htmlSanitizer =
-            new HtmlSanitizer();
+        private static IHtmlSanitizer htmlSanitizer;
 
         private string body;
         private string path;
         private string summary;
+
+        static Content()
+        {
+            htmlSanitizer = new HtmlSanitizer();
+            htmlSanitizer.AllowedAttributes.Add("class");
+        }
 
         public string Body
         {
