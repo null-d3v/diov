@@ -78,6 +78,11 @@ html, #footer, #header
     color: #EEEEEE;
 }
 
+img
+{
+    width: 100%;
+}
+
 q
 {
     color: #FFE792;
@@ -164,14 +169,17 @@ time
     width: 80%;
 }
 
+.cut
+{
+    margin: auto;
+    width: 50%;
+}
+
 .gallery
 {
     display: flex;
     flex-wrap: wrap;
-}
-.gallery img
-{
-    width: 100%;
+    justify-content: space-between;
 }
 .gallery-item
 {
