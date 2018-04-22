@@ -5,9 +5,11 @@
         @foreach (var content in Model.Items)
         {
             <li class="content-index-item">
-                <h1>
-                    <a href="/content/@content.Path">@content.Name</a>
-                </h1>
+                <a href="/content/@content.Path">
+                    <h1>
+                        @content.Name
+                    </h1>
+                </a>
                 <time>
                     @content.PublishedDateTime.ToString("yyyy-MM-dd")
                 </time>

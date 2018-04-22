@@ -1,15 +1,15 @@
-﻿(function()
+﻿(() =>
 {
-    var header = document.getElementById("header");
+    const header = document.getElementById("header");
 
-    var headerHeight = header.offsetHeight;
-    var headerY = headerHeight;
-    var scrollY = document.body.scrollTop ||
+    const headerHeight = header.offsetHeight;
+    let headerY = headerHeight;
+    let scrollY = document.body.scrollTop ||
         document.documentElement.scrollTop;
 
-    window.addEventListener("scroll", function()
+    window.addEventListener("scroll", () =>
     {
-        var scrollTop = document.body.scrollTop ||
+        let scrollTop = document.body.scrollTop ||
             document.documentElement.scrollTop;
         headerY += scrollY - scrollTop;
         if (headerY > headerHeight)
