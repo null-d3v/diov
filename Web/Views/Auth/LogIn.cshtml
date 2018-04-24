@@ -1,0 +1,11 @@
+@model LogInModel
+
+<div class="container">
+    <a
+        asp-action="Challenge"
+        asp-controller="Auth"
+        asp-route-returnUrl="@Model.ReturnUrl"
+        asp-route-scheme="Google">
+        Google
+    </a>
+</div>

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Diov.Data;
+﻿using Diov.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Rewrite;
@@ -22,10 +19,46 @@ namespace Diov.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
+            services.Configure<AuthenticationOptions>(
+                Configuration.GetSection("Authentication"));
+
             services.AddSingleton<IDbConnectionFactory>(
                 new DbConnectionFactory(
                     Configuration.GetConnectionString("Sql")));
             services.AddTransient<IContentRepository, ContentRepository>();
+
+            var authenticationOptions = Configuration
+                .GetSection("Authentication")
+                .Get<AuthenticationOptions>();
+            var authenticationBuilder = services
+                .AddAuthentication(
+                    Constants.LocalAuthenticationScheme)
+                .AddCookie(
+                    Constants.LocalAuthenticationScheme,
+                    cookieOptions =>
+                    {
+                        cookieOptions.LoginPath = "/login";
+                    })
+                .AddCookie(
+                    Constants.ExternalAuthenticationScheme);
+            if (!string.IsNullOrEmpty(
+                authenticationOptions?.Google.ClientId) &&
+                !string.IsNullOrEmpty(
+                authenticationOptions?.Google.ClientSecret))
+            {
+                authenticationBuilder
+                    .AddGoogle(
+                        googleOptions =>
+                        {
+                            googleOptions.ClientId = authenticationOptions
+                                .Google.ClientId;
+                            googleOptions.ClientSecret = authenticationOptions
+                                .Google.ClientSecret;
+                            googleOptions.SignInScheme = Constants
+                                .ExternalAuthenticationScheme;
+                        });
+            }
 
             services.AddMvc();
         }
@@ -37,6 +70,8 @@ namespace Diov.Web
             var migrator = new Migrator(
                 Configuration.GetConnectionString("Sql"));
             migrator.Migrate();
+
+            applicationBuilder.UseAuthentication();
 
             if (hostingEnvironment.IsDevelopment())
             {

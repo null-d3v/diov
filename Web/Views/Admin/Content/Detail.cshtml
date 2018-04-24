@@ -1,0 +1,25 @@
+﻿@model Content
+
+@{
+    ViewBag.Description = Markdown.ToPlainText(Model.Summary);
+}
+
+<div class="container">
+    <div class="content-detail">
+        @if (!string.IsNullOrWhiteSpace(Model.Name))
+        {
+            <h1>
+                @Model.Name
+            </h1>
+        }
+        @if (Model.IsIndexed)
+        {
+            <time>
+                @Model.PublishedDateTime.ToString("yyyy-MM-dd")
+            </time>
+        }
+
+        @Html.Raw(Markdown.ToHtml(Model.Summary))
+        @Html.Raw(Model.Body)
+    </div>
+</div>
