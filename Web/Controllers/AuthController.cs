@@ -1,18 +1,41 @@
+using Diov.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Diov.Web
 {
+    [Route("[controller]")]
     public class AuthController : Controller
     {
-        [HttpGet("/callback")]
+        public AuthController(
+            IAdminAuthorizationRepository adminAuthorizationRepository)
+        {
+            AdminAuthorizationRepository = adminAuthorizationRepository ??
+                throw new ArgumentNullException(nameof(adminAuthorizationRepository));
+        }
+
+        public IAdminAuthorizationRepository AdminAuthorizationRepository { get; }
+
+        [HttpGet("[action]")]
         public async Task<IActionResult> Callback()
         {
             var authenticateResult = await HttpContext.AuthenticateAsync(
                 Constants.ExternalAuthenticationScheme);
 
-            // TODO Authorization whitelist.
+            var nameIdentifier = authenticateResult.Principal.Claims.FirstOrDefault(
+                claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
+            var adminAuthorization = await AdminAuthorizationRepository
+                .GetAdminAuthorizationAsync(
+                    nameIdentifier,
+                    authenticateResult.Ticket.Properties.Items["scheme"]);
+            if (adminAuthorization == null)
+            {
+                return Unauthorized();
+            }
 
             await HttpContext.SignOutAsync(
                 Constants.ExternalAuthenticationScheme);
@@ -32,7 +55,7 @@ namespace Diov.Web
             return RedirectToRoute("Admin");
         }
 
-        [HttpGet("/challenge/{scheme}")]
+        [HttpGet("[action]/{scheme}")]
         public IActionResult Challenge(
             string scheme,
             string returnUrl = null)
@@ -50,7 +73,7 @@ namespace Diov.Web
             return Challenge(authenticationProperties, scheme);
         }
 
-        [HttpGet("/login")]
+        [HttpGet("[action]")]
         public IActionResult LogIn(string returnUrl)
         {
             return View(

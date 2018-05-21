@@ -287,6 +287,8 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
+appsettings.Development.json
+
 *.min.*
 
 Web/wwwroot/media/

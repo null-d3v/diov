@@ -17,7 +17,7 @@ namespace Diov.Web
 
         public IContentRepository ContentRepository { get; }
 
-        [HttpGet("/content/{path}")]
+        [HttpGet("[controller]/{path}")]
         public async Task<IActionResult> Detail(string path)
         {
             var content = (await ContentRepository
@@ -39,8 +39,8 @@ namespace Diov.Web
             return View(content);
         }
 
-        [HttpGet("/")]
-        [HttpGet("/content")]
+        [HttpGet("")]
+        [HttpGet("[controller]")]
         public async Task<IActionResult> Index(
             int page = 0)
         {

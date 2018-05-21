@@ -9,7 +9,9 @@
         @if (!string.IsNullOrWhiteSpace(Model.Name))
         {
             <h1>
-                @Model.Name
+                <a href="/content/@Model.Path">
+                    @Model.Name
+                </a>
             </h1>
         }
         @if (Model.IsIndexed)

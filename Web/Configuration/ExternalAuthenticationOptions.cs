@@ -1,6 +1,6 @@
 namespace Diov.Web
 {
-    public class AuthenticationOptions
+    public class ExternalAuthenticationOptions
     {
         public GoogleAuthenticationOptions Google { get; set; }
 

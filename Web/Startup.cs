@@ -1,4 +1,5 @@
 ﻿using Diov.Data;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -20,17 +21,20 @@ namespace Diov.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            services.Configure<AuthenticationOptions>(
-                Configuration.GetSection("Authentication"));
+            services.Configure<ExternalAuthenticationOptions>(
+                Configuration.GetSection("ExternalAuthentication"));
 
             services.AddSingleton<IDbConnectionFactory>(
                 new DbConnectionFactory(
                     Configuration.GetConnectionString("Sql")));
+            services.AddTransient<
+                IAdminAuthorizationRepository,
+                AdminAuthorizationRepository>();
             services.AddTransient<IContentRepository, ContentRepository>();
 
-            var authenticationOptions = Configuration
-                .GetSection("Authentication")
-                .Get<AuthenticationOptions>();
+            var externalAuthenticationOptions = Configuration
+                .GetSection("ExternalAuthentication")
+                .Get<ExternalAuthenticationOptions>();
             var authenticationBuilder = services
                 .AddAuthentication(
                     Constants.LocalAuthenticationScheme)
@@ -38,29 +42,34 @@ namespace Diov.Web
                     Constants.LocalAuthenticationScheme,
                     cookieOptions =>
                     {
-                        cookieOptions.LoginPath = "/login";
+                        cookieOptions.LoginPath = "/auth/login";
                     })
                 .AddCookie(
                     Constants.ExternalAuthenticationScheme);
             if (!string.IsNullOrEmpty(
-                authenticationOptions?.Google.ClientId) &&
+                    externalAuthenticationOptions?.Google.ClientId) &&
                 !string.IsNullOrEmpty(
-                authenticationOptions?.Google.ClientSecret))
+                    externalAuthenticationOptions?.Google.ClientSecret))
             {
                 authenticationBuilder
                     .AddGoogle(
                         googleOptions =>
                         {
-                            googleOptions.ClientId = authenticationOptions
+                            googleOptions.ClientId = externalAuthenticationOptions
                                 .Google.ClientId;
-                            googleOptions.ClientSecret = authenticationOptions
+                            googleOptions.ClientSecret = externalAuthenticationOptions
                                 .Google.ClientSecret;
                             googleOptions.SignInScheme = Constants
                                 .ExternalAuthenticationScheme;
                         });
             }
+            services.AddTransient<
+                IAuthenticationSchemeProvider,
+                IgnoreCaseAuthenticationSchemeProvider>();
 
-            services.AddMvc();
+            services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
+            services.AddRouting(
+                routeOptions => routeOptions.LowercaseUrls = true);
         }
 
         public void Configure(
@@ -82,10 +91,9 @@ namespace Diov.Web
                 applicationBuilder
                     .UseStatusCodePagesWithReExecute("/error/{0}");
 
-                applicationBuilder.UseRewriter(
-                    new RewriteOptions()
-                        .AddRedirectToHttps());
+                applicationBuilder.UseHttpsRedirection();
             }
+            applicationBuilder.UseHsts();
 
             applicationBuilder.UseStaticFiles();
 
