@@ -1,14 +1,16 @@
 ﻿using Diov.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Diov.Web
+namespace Diov.Web.Admin
 {
-    public class ContentController : Controller
+    [Route("admin")]
+    public class AdminContentController : Controller
     {
-        public ContentController(
+        public AdminContentController(
             IContentRepository contentRepository)
         {
             ContentRepository = contentRepository ??
@@ -17,7 +19,8 @@ namespace Diov.Web
 
         public IContentRepository ContentRepository { get; }
 
-        [HttpGet("[controller]/{path}")]
+        [Authorize]
+        [HttpGet("content/{path}")]
         public async Task<IActionResult> Detail(string path)
         {
             var content = (await ContentRepository
@@ -39,8 +42,9 @@ namespace Diov.Web
             return View(content);
         }
 
-        [HttpGet("")]
-        [HttpGet("[controller]")]
+        [Authorize]
+        [HttpGet("", Name = "Admin")]
+        [HttpGet("content")]
         public async Task<IActionResult> Index(
             int page = 0)
         {

@@ -9,7 +9,12 @@
         @if (!string.IsNullOrWhiteSpace(Model.Name))
         {
             <h1>
-                @Model.Name
+                <a
+                    asp-action="Detail"
+                    asp-controller="Content"
+                    asp-route-path="@Model.Path">
+                    @Model.Name
+                </a>
             </h1>
         }
         @if (Model.IsIndexed)
@@ -18,7 +23,6 @@
                 @Model.PublishedDateTime.ToString("yyyy-MM-dd")
             </time>
         }
-
         @Html.Raw(Markdown.ToHtml(Model.Summary))
         @Html.Raw(Model.Body)
     </div>

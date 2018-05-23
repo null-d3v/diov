@@ -1,4 +1,22 @@
-﻿@media only screen and (max-width: 725px)
+﻿@media only screen and (max-width: 500px)
+{
+    .container
+    {
+        width: 90% !important;
+    }
+
+    .menu
+    {
+        max-width: 150px !important;
+        flex-wrap: wrap !important;
+    }
+    .menu li
+    {
+        flex-basis: 33% !important;
+    }
+}
+
+@media only screen and (max-width: 725px)
 {
     body
     {
@@ -7,10 +25,9 @@
 
     #content
     {
-        padding: 0 !important;
+        padding: 5px 0 0 0 !important;
     }
-
-    #content h1
+    #content h1, #content h1 a
     {
         font-size: 25px !important;
     }
@@ -30,9 +47,14 @@
         width: 25px !important;
     }
 
-    .nav-item
+    .menu li a
     {
         margin-left: 10px !important;
+    }
+
+    .pager
+    {
+        font-size: 30px !important;
     }
 }
 
@@ -98,7 +120,7 @@ time
     margin: 75px 0 0 0;
     padding: 15px 0 0 0;
 }
-#content h1
+#content h1, #content h1 a
 {
     color: #A6E22E;
     font-size: 30px;
@@ -110,6 +132,7 @@ time
 
 #footer
 {
+    margin-top: 15px;
     min-height: 75px;
 }
 
@@ -124,7 +147,7 @@ time
 }
 #header, body
 {
-    min-width: 500px;
+    min-width: 200px;
 }
 #header a
 {
@@ -133,6 +156,7 @@ time
 #header h1
 {
     font-size: 40px;
+    min-width: 135px;
 }
 #header .column
 {
@@ -224,11 +248,13 @@ time
 {
     display: flex;
     list-style: none;
-    margin: 0px;
+    margin: 0;
+    padding: 0;
 }
 .menu li a
 {
     margin-left: 20px;
+    text-align: right;
 }
 
 .pager
@@ -239,7 +265,6 @@ time
     justify-content: flex-end;
     list-style: none;
     margin: 0;
-    padding-bottom: 15px;
     width: 100%;
 }
 .pager li

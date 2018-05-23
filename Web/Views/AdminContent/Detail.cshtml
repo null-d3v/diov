@@ -1,0 +1,20 @@
+﻿@model Content
+
+@{
+    ViewBag.Description = Markdown.ToPlainText(Model.Summary);
+}
+
+<div class="container">
+    <div class="content-detail">
+        <label asp-for="Name"></label>
+        <input asp-for="Name"></label>
+        <label asp-for="IsIndexed"></label>
+        <input asp-for="IsIndexed"></label>
+        <label asp-for="PublishedDateTime"></label>
+        <input asp-for="PublishedDateTime"></label>
+        <label asp-for="Summary"></label>
+        <input asp-for="Summary"></label>
+        <label asp-for="Body"></label>
+        <textarea asp-for="Body"></textarea>
+    </div>
+</div>
