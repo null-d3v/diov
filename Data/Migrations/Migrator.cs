@@ -1,9 +1,6 @@
-using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.Reflection;
-using System.Threading.Tasks;
 using DbUp;
+using System;
+using System.Reflection;
 
 namespace Diov.Data
 {

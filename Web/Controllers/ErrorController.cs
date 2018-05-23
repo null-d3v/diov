@@ -2,9 +2,10 @@
 
 namespace Diov.Web
 {
+    [Route("[controller]")]
     public class ErrorController : Controller
     {
-        [HttpGet("error/{error}")]
+        [HttpGet("{error}")]
         public IActionResult Detail(string error)
         {
             return View(error);
