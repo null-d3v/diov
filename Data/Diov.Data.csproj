@@ -7,6 +7,7 @@
     <PackageReference Include="Dapper" Version="1.50.4"/>
     <PackageReference Include="dbup-sqlserver" Version="4.0.0-beta0005"/>
     <PackageReference Include="HtmlSanitizer" Version="4.0.185"/>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.1.0-rc1-final"/>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\00001.sql"/>

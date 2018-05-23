@@ -1,5 +1,6 @@
 using Ganss.XSS;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Web;
 
 namespace Diov.Data
@@ -52,6 +53,7 @@ namespace Diov.Data
                 path = encodedPath;
             }
         }
+        [DataType(DataType.Date)]
         public DateTimeOffset PublishedDateTime { get; set; }
         public string Summary { get; set; }
     }

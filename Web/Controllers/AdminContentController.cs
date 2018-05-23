@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 namespace Diov.Web.Admin
 {
     [Route("admin")]
-    public class ContentController : Controller
+    public class AdminContentController : Controller
     {
-        public ContentController(
+        public AdminContentController(
             IContentRepository contentRepository)
         {
             ContentRepository = contentRepository ??
@@ -20,7 +20,7 @@ namespace Diov.Web.Admin
         public IContentRepository ContentRepository { get; }
 
         [Authorize]
-        [HttpGet("[controller]/{path}")]
+        [HttpGet("content/{path}")]
         public async Task<IActionResult> Detail(string path)
         {
             var content = (await ContentRepository
@@ -44,7 +44,7 @@ namespace Diov.Web.Admin
 
         [Authorize]
         [HttpGet("", Name = "Admin")]
-        [HttpGet("[controller]")]
+        [HttpGet("content")]
         public async Task<IActionResult> Index(
             int page = 0)
         {
