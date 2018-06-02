@@ -1,5 +1,19 @@
 ﻿@model SearchResponse<Content>
 
+@section Admin
+{
+    @if (@User.Identity.IsAuthenticated)
+    {
+        <div class="admin-action">
+            <a
+                asp-action="Add"
+                asp-controller="Content">
+                Add content
+            </a>
+        </div>
+    }
+}
+
 <div class="container">
     <ul class="content-index">
         @foreach (var content in Model.Items)
@@ -14,7 +28,7 @@
                     </a>
                 </h1>
                 <time>
-                    @content.PublishedDateTime.ToString("yyyy-MM-dd")
+                    @content.PublishedDateTime.GetValueOrDefault().ToString("yyyy-MM-dd")
                 </time>
                 @Html.Raw(Markdown.ToHtml(content.Summary))
                 <a

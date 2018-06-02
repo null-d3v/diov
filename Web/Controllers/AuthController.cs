@@ -52,7 +52,7 @@ namespace Diov.Web
                 return Redirect(returnUrl);
             }
 
-            return RedirectToRoute("Admin");
+            return RedirectToAction("Index", "Content");
         }
 
         [HttpGet("[action]/{scheme}")]
@@ -74,13 +74,21 @@ namespace Diov.Web
         }
 
         [HttpGet("[action]")]
-        public IActionResult LogIn(string returnUrl)
+        public IActionResult Login(string returnUrl)
         {
             return View(
-                new LogInModel
+                new LoginModel
                 {
                     ReturnUrl = returnUrl,
                 });
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+
+            return RedirectToAction("Index", "Content");
         }
     }
 }

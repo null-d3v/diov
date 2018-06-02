@@ -67,7 +67,7 @@ namespace Diov.Web
                 IAuthenticationSchemeProvider,
                 IgnoreCaseAuthenticationSchemeProvider>();
 
-            services.AddMvc().SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_2_1);
+            services.AddMvc();
             services.AddRouting(
                 routeOptions => routeOptions.LowercaseUrls = true);
         }
@@ -79,6 +79,8 @@ namespace Diov.Web
             var migrator = new Migrator(
                 Configuration.GetConnectionString("Sql"));
             migrator.Migrate();
+
+            applicationBuilder.UseHsts();
 
             applicationBuilder.UseAuthentication();
 
@@ -93,7 +95,6 @@ namespace Diov.Web
 
                 applicationBuilder.UseHttpsRedirection();
             }
-            applicationBuilder.UseHsts();
 
             applicationBuilder.UseStaticFiles();
 

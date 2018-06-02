@@ -1,7 +1,26 @@
 ﻿@model Content
 
 @{
-    ViewBag.Description = Markdown.ToPlainText(Model.Summary);
+    if (!string.IsNullOrWhiteSpace(Model.Summary))
+    {
+        ViewBag.Description = Markdown
+            .ToPlainText(Model.Summary);
+    }
+}
+
+@section Admin
+{
+    @if (@User.Identity.IsAuthenticated)
+    {
+        <div class="admin-action">
+            <a
+                asp-action="Edit"
+                asp-controller="Content"
+                asp-route-path="@Model.Path">
+                Edit content
+            </a>
+        </div>
+    }
 }
 
 <div class="container">
@@ -20,7 +39,7 @@
         @if (Model.IsIndexed)
         {
             <time>
-                @Model.PublishedDateTime.ToString("yyyy-MM-dd")
+                @Model.PublishedDateTime.GetValueOrDefault().ToString("yyyy-MM-dd")
             </time>
         }
         @Html.Raw(Markdown.ToHtml(Model.Summary))
