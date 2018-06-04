@@ -1,6 +1,9 @@
 ﻿@model Content
 
 <div class="container">
+    <h1>
+        Add content
+    </h1>
     <form asp-action="Add" asp-controller="Content" method="post">
         <div asp-validation-summary="All"></div>
         <div class="edit-split">
@@ -27,7 +30,7 @@
             <label asp-for="Body"></label>
             <textarea asp-for="Body" class="large" required></textarea>
         </div>
-        <div class="edit-buttons">
+        <div class="edit-buttons-right">
             <input type="submit" value="Add">
             <div>
                 <a asp-action="Index" asp-controller="Content">

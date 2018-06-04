@@ -166,7 +166,7 @@ time
 
 #footer
 {
-    margin-top: 16px;
+    margin-top: 24px;
     min-height: 64px;
 }
 
@@ -224,18 +224,13 @@ time
     margin-bottom: 16px;
 }
 
-.content-detail
-{
-    padding-bottom: 16px;
-}
-
 .content-index
 {
     list-style: none;
     margin: 0;
     padding: 0;
 }
-.content-index-item
+.content-index-item:not(:last-child)
 {
     margin-bottom: 32px;
 }
@@ -249,13 +244,19 @@ time
 .edit-buttons
 {
     display: flex;
+    justify-content: space-between;
+}
+.edit-buttons-right
+{
+    display: flex;
     justify-content: flex-end;
     line-height: 32px;
 }
-.edit-buttons > *
+.edit-buttons-right a
 {
     margin-left: 16px;
 }
+
 .edit-split
 {
     display: flex;
@@ -276,7 +277,7 @@ time
 
 .edit-stack textarea
 {
-    height: 64px;
+    height: 72px;
     margin-top: 5px;
     resize: none;
     width: 100%;
@@ -337,6 +338,23 @@ time
     stroke: #171714;
 }
 
+.login
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.login a
+{
+    align-items: center;
+    display: inline-flex;
+}
+.login img
+{
+    margin-right: 10px;
+    width: 32px;
+}
+
 .menu
 {
     display: flex;
@@ -350,6 +368,7 @@ time
 }
 .menu li a
 {
+    display: inline-block;
     margin-left: 16px;
 }
 
