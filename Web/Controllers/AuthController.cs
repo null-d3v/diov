@@ -1,6 +1,7 @@
 using Diov.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Security.Claims;
@@ -12,13 +13,17 @@ namespace Diov.Web
     public class AuthController : Controller
     {
         public AuthController(
-            IAdminAuthorizationRepository adminAuthorizationRepository)
+            IAdminAuthorizationRepository adminAuthorizationRepository,
+            IOptions<ExternalAuthenticationOptions> externalAuthenticationOptions)
         {
             AdminAuthorizationRepository = adminAuthorizationRepository ??
                 throw new ArgumentNullException(nameof(adminAuthorizationRepository));
+            ExternalAuthenticationOptions = externalAuthenticationOptions?.Value ??
+                throw new ArgumentNullException(nameof(externalAuthenticationOptions));
         }
 
         public IAdminAuthorizationRepository AdminAuthorizationRepository { get; }
+        public ExternalAuthenticationOptions ExternalAuthenticationOptions { get; }
 
         [HttpGet("[action]")]
         public async Task<IActionResult> Callback()
@@ -52,7 +57,7 @@ namespace Diov.Web
                 return Redirect(returnUrl);
             }
 
-            return RedirectToRoute("Admin");
+            return RedirectToAction("Index", "Content");
         }
 
         [HttpGet("[action]/{scheme}")]
@@ -74,13 +79,23 @@ namespace Diov.Web
         }
 
         [HttpGet("[action]")]
-        public IActionResult LogIn(string returnUrl)
+        public IActionResult Login(string returnUrl)
         {
             return View(
-                new LogInModel
+                new LoginModel
                 {
+                    ExternalAuthenticationOptions =
+                        ExternalAuthenticationOptions,
                     ReturnUrl = returnUrl,
                 });
+        }
+
+        [HttpGet("[action]")]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+
+            return RedirectToAction("Index", "Content");
         }
     }
 }

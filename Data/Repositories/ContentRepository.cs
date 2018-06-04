@@ -17,7 +17,6 @@ namespace Diov.Data
             @"INSERT INTO Content
             (
                 Body,
-                Id,
                 IsIndexed,
                 Name,
                 Path,
@@ -28,7 +27,6 @@ namespace Diov.Data
             VALUES
             (
                 @Body,
-                @Id,
                 @IsIndexed,
                 @Name,
                 @Path,

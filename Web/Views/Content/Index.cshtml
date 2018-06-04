@@ -1,8 +1,48 @@
-﻿@model SearchResponse<Content>
+﻿@model ContentIndexModel
+
+@{
+    var lastPage = Math.Ceiling(
+        (double)Model.SearchResponse.TotalCount / Model.SearchResponse.PageSize) - 1;
+}
+
+@section Admin
+{
+    @if (@User.Identity.IsAuthenticated)
+    {
+        <div class="admin-action">
+            <a
+                asp-action="Add"
+                asp-controller="Content">
+                Add content
+            </a>
+        </div>
+        @if (Model.IsIndexed)
+        {
+            <div class="admin-action">
+                <a
+                    asp-action="Index"
+                    asp-controller="Content"
+                    asp-route-indexed="false">
+                    View unindexed content
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="admin-action">
+                <a
+                    asp-action="Index"
+                    asp-controller="Content">
+                    View indexed content
+                </a>
+            </div>
+        }
+    }
+}
 
 <div class="container">
     <ul class="content-index">
-        @foreach (var content in Model.Items)
+        @foreach (var content in Model.SearchResponse.Items)
         {
             <li class="content-index-item">
                 <h1>
@@ -10,11 +50,11 @@
                         asp-action="Detail"
                         asp-controller="Content"
                         asp-route-path="@content.Path">
-                        @content.Name
+                        @(content.Name ?? $"[Content {content.Id}]")
                     </a>
                 </h1>
                 <time>
-                    @content.PublishedDateTime.ToString("yyyy-MM-dd")
+                    @content.PublishedDateTime.GetValueOrDefault().ToString("yyyy-MM-dd")
                 </time>
                 @Html.Raw(Markdown.ToHtml(content.Summary))
                 <a
@@ -30,7 +70,7 @@
 
 <div class="container">
     <ul class="pager">
-        @if (Model.PageIndex > 0)
+        @if (Model.SearchResponse.PageIndex > 0)
         {
             <li>
                 <a
@@ -43,18 +83,18 @@
                 <a
                     asp-action="Index"
                     asp-controller="Content"
-                    asp-route-page="@(Model.PageIndex - 1)">
+                    asp-route-page="@(Model.SearchResponse.PageIndex - 1)">
                     &lt;
                 </a>
             </li>
         }
-        @if ((Model.PageIndex + 1) * Model.PageSize < Model.TotalCount)
+        @if (Model.SearchResponse.PageIndex < lastPage)
         {
             <li>
                 <a
                     asp-action="Index"
                     asp-controller="Content"
-                    asp-route-page="@(Model.PageIndex + 1)">
+                    asp-route-page="@(Model.SearchResponse.PageIndex + 1)">
                     &gt;
                 </a>
             </li>
@@ -62,7 +102,7 @@
                 <a
                     asp-action="Index"
                     asp-controller="Content"
-                    asp-route-page="@(Math.Ceiling((double)Model.TotalCount / Model.PageSize) - 1)">
+                    asp-route-page="@lastPage">
                     &gt;&gt;
                 </a>
             </li>

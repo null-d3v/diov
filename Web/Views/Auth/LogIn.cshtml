@@ -1,11 +1,19 @@
-@model LogInModel
+@model LoginModel
 
 <div class="container">
-    <a
-        asp-action="Challenge"
-        asp-controller="Auth"
-        asp-route-returnUrl="@Model.ReturnUrl"
-        asp-route-scheme="Google">
-        Google
-    </a>
+    <h1>
+        Log in
+    </h1>
+    <ul class="login">
+        <li>
+            <a
+                asp-action="Challenge"
+                asp-controller="Auth"
+                asp-route-returnUrl="@Model.ReturnUrl"
+                asp-route-scheme="Google">
+                <img src="~/images/auth/google.svg" />
+                Google
+            </a>
+        </li>
+    </ul>
 </div>

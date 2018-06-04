@@ -1,17 +1,17 @@
 using Ganss.XSS;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Web;
 
 namespace Diov.Data
 {
-    public class Content
+    public class Content : IValidatableObject
     {
         private static IHtmlSanitizer htmlSanitizer;
 
         private string body;
         private string path;
-        private string summary;
 
         static Content()
         {
@@ -33,6 +33,7 @@ namespace Diov.Data
         public int Id { get; set; }
         public bool IsIndexed { get; set; }
         public string Name { get; set; }
+        [Required]
         public string Path
         {
             get
@@ -41,20 +42,40 @@ namespace Diov.Data
             }
             set
             {
-                value = value.ToLowerInvariant();
-                var encodedPath = HttpUtility.UrlPathEncode(value);
-                if (!string.Equals(
-                    value,
-                    encodedPath,
-                    StringComparison.InvariantCulture))
+                if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new ArgumentException();
+                    path = value;
                 }
-                path = encodedPath;
+                else
+                {
+                    value = value.ToLowerInvariant();
+                    var encodedPath = HttpUtility.UrlPathEncode(value);
+                    if (!string.Equals(
+                        value,
+                        encodedPath,
+                        StringComparison.InvariantCulture))
+                    {
+                        throw new ArgumentException();
+                    }
+                    path = encodedPath;
+                }
             }
         }
         [DataType(DataType.Date)]
-        public DateTimeOffset PublishedDateTime { get; set; }
+        [Required]
+        public DateTimeOffset? PublishedDateTime { get; set; }
+        [Required]
         public string Summary { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(
+            ValidationContext validationContext)
+        {
+            if (IsIndexed && string.IsNullOrWhiteSpace(Name))
+            {
+                yield return new ValidationResult(
+                    $"The Name field is required for indexed content.",
+                    new[] { "Name", });
+            }
+        }
     }
 }

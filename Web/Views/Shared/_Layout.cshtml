@@ -30,6 +30,28 @@
         @Html.Partial("_Header")
 
         <main id="content">
+            @if (@User.Identity.IsAuthenticated)
+            {
+                <fieldset class="admin">
+                    <legend>Admin</legend>
+                    <div>
+                        @User.Claims.FirstOrDefault(
+                            claim => claim.Type == ClaimTypes.Email)?.Value
+                    </div>
+                    <div class="admin-action">
+                        <a
+                            asp-action="Logout"
+                            asp-controller="Auth">
+                            Log out
+                        </a>
+                    </div>
+                    @RenderSection("Admin", required: false)
+                </fieldset>
+            }
+            else
+            {
+                @RenderSection("Admin", required: false)
+            }
             @RenderBody()
         </main>
 
