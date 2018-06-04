@@ -1,7 +1,8 @@
 namespace Diov.Web
 {
-    public class LogInModel
+    public class LoginModel
     {
+        public ExternalAuthenticationOptions ExternalAuthenticationOptions { get; set; }
         public string ReturnUrl { get; set; }
     }
 }
