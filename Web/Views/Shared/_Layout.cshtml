@@ -27,7 +27,7 @@
         </script>
     </head>
     <body>
-        @Html.Partial("_Header")
+        @await Html.PartialAsync("_Header")
 
         <main id="content">
             @if (@User.Identity.IsAuthenticated)
