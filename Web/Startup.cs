@@ -91,6 +91,8 @@ namespace Diov.Web
             else
             {
                 applicationBuilder
+                    .UseExceptionHandler("/error/500");
+                applicationBuilder
                     .UseStatusCodePagesWithReExecute("/error/{0}");
 
                 applicationBuilder.UseHttpsRedirection();
