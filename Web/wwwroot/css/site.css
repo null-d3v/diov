@@ -108,7 +108,7 @@ html, #footer, #header
 
 img
 {
-    width: 100%;
+    width: auto;
 }
 
 input, select, textarea
@@ -336,6 +336,14 @@ time
 .icon-secondary-stroke
 {
     stroke: #171714;
+}
+.icon-tertiary-fill
+{
+    fill: #A6E22E;
+}
+.icon-tertiary-stroke
+{
+    stroke: #A6E22E;
 }
 
 .login

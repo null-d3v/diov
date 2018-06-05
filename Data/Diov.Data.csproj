@@ -13,5 +13,6 @@
     <EmbeddedResource Include="Migrations\00001.sql"/>
     <EmbeddedResource Include="Migrations\00002.sql"/>
     <EmbeddedResource Include="Migrations\00003.sql"/>
+    <EmbeddedResource Include="Migrations\00004.sql"/>
   </ItemGroup>
 </Project>
