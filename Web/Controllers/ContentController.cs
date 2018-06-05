@@ -187,7 +187,6 @@ namespace Diov.Web
         }
 
         [HttpGet("")]
-        [HttpGet("[controller]")]
         public async Task<IActionResult> Index(
             [FromQuery]int page = 0,
             [FromQuery]bool indexed = true)
