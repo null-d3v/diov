@@ -108,7 +108,7 @@ html, #footer, #header
 
 img
 {
-    width: auto;
+    width: 100%;
 }
 
 input, select, textarea
