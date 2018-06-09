@@ -49,6 +49,7 @@
 
     .icon
     {
+        height: 24px !important;
         width: 24px !important;
     }
 
@@ -316,6 +317,7 @@ time
 
 .icon
 {
+    height: 32px;
     width: 32px;
 }
 .icon-primary-fill
