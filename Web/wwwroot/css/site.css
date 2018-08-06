@@ -103,7 +103,7 @@ body
 }
 body, input, select, textarea
 {
-    font-family: Monospace;
+    font-family: Consolas, monospace;
     font-size: 16px;
 }
 
