@@ -1,9 +1,8 @@
 ﻿using Diov.Data;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Rewrite;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -67,7 +66,9 @@ namespace Diov.Web
                 IAuthenticationSchemeProvider,
                 IgnoreCaseAuthenticationSchemeProvider>();
 
-            services.AddMvc();
+            services
+                .AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddRouting(
                 routeOptions => routeOptions.LowercaseUrls = true);
         }
