@@ -2,12 +2,13 @@
   <PropertyGroup>
     <AssemblyName>Diov.Data</AssemblyName>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GenerateFullPaths>true</GenerateFullPaths>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.5"/>
-    <PackageReference Include="dbup-sqlserver" Version="4.1.0"/>
-    <PackageReference Include="HtmlSanitizer" Version="4.0.185"/>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.1.0"/>
+    <PackageReference Include="dbup-sqlserver" Version="4.2.0"/>
+    <PackageReference Include="HtmlSanitizer" Version="4.0.204"/>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.2.0"/>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\00001.sql"/>
