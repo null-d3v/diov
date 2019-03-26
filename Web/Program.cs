@@ -1,9 +1,9 @@
-﻿using Serilog;
-using System;
-using System.IO;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Serilog;
+using System;
+using System.IO;
 
 namespace Diov.Web
 {
