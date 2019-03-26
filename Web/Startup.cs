@@ -81,8 +81,6 @@ namespace Diov.Web
                 Configuration.GetConnectionString("Sql"));
             migrator.Migrate();
 
-            applicationBuilder.UseHsts();
-
             applicationBuilder.UseAuthentication();
 
             if (hostingEnvironment.IsDevelopment())
@@ -96,6 +94,7 @@ namespace Diov.Web
                 applicationBuilder
                     .UseStatusCodePagesWithReExecute("/error/{0}");
 
+                applicationBuilder.UseHsts();
                 applicationBuilder.UseHttpsRedirection();
             }
 

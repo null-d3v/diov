@@ -1,13 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>Diov.Data</AssemblyName>
-    <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateFullPaths>true</GenerateFullPaths>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <TieredCompilation>true</TieredCompilation>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="1.50.5"/>
+    <PackageReference Include="Dapper" Version="1.60.1"/>
     <PackageReference Include="dbup-sqlserver" Version="4.2.0"/>
-    <PackageReference Include="HtmlSanitizer" Version="4.0.204"/>
+    <PackageReference Include="HtmlSanitizer" Version="4.0.207"/>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.2.0"/>
   </ItemGroup>
   <ItemGroup>
