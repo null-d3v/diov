@@ -10,7 +10,7 @@
     --color-title: #A6E22E;
 }
 
-@media only screen and (max-width: 500px)
+@media only screen and (max-width: 32em)
 {
     .container
     {
@@ -19,7 +19,7 @@
 
     .menu
     {
-        max-width: 150px !important;
+        max-width: 8em !important;
         flex-wrap: wrap !important;
     }
     .menu li
@@ -28,30 +28,11 @@
     }
 }
 
-@media only screen and (max-width: 725px)
+@media only screen and (max-width: 42em)
 {
-    body
-    {
-        font-size: 14px !important;
-    }
-
     #content
     {
-        padding: 8px 0 0 0 !important;
-    }
-    #content h1, #content h1 a
-    {
-        font-size: 24px !important;
-    }
-
-    #header h1
-    {
-        font-size: 28px !important;
-    }
-
-    .admin legend
-    {
-        font-size: 20px !important;
+        padding: 0.5em 0 0 0 !important;
     }
 
     .gallery-image-left, .gallery-image-right
@@ -61,18 +42,13 @@
 
     .icon
     {
-        height: 24px !important;
-        width: 24px !important;
+        height: 1.5em !important;
+        width: 1.5em !important;
     }
 
     .menu li a
     {
-        margin-left: 10px !important;
-    }
-
-    .pager
-    {
-        font-size: 28px !important;
+        margin-left: 0.625em !important;
     }
 }
 
@@ -104,7 +80,6 @@ body
 body, input, select, textarea
 {
     font-family: Consolas, monospace;
-    font-size: 16px;
 }
 
 h1, h2, h3, h4, h5, h6
@@ -126,28 +101,28 @@ img
 input, select, textarea
 {
     background-color: var(--color-background);
-    border: 1px solid var(--color-primary);
+    border: 0.0625em solid var(--color-primary);
     color: var(--color-text);
-    height: 32px;
+    height: 2em;
     margin: 0;
-    padding: 6px;
+    padding: 0.375em;
 }
 input[type="checkbox"]
 {
-    height: 24px;
-    margin: 4px;
-    width: 24px;
+    height: 1.5em;
+    margin: 0.25em;
+    width: 1.5em;
 }
 input:focus, select:focus, textarea:focus
 {
-    border: 1px solid var(--color-secondary);
+    border: 0.0625em solid var(--color-secondary);
     outline: none;
 }
 
 label
 {
     color: var(--color-tertiary);
-    line-height: 32px;
+    line-height: 1.5em;
 }
 
 q
@@ -162,30 +137,30 @@ time
 
 #content
 {
-    margin: 64px 0 0 0;
-    padding: 16px 0 0 0;
+    margin: 4em 0 0 0;
+    padding: 1em 0 0 0;
 }
 #content h1, #content h1 a
 {
     color: var(--color-title);
-    font-size: 32px;
-    margin-bottom: 8px;
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
 }
 #content p
 {
-    line-height: 150%;
+    line-height: 1.5em;
 }
 
 #footer
 {
-    margin-top: 24px;
-    min-height: 56px;
+    margin-top: 1.5em;
+    min-height: 3.5em;
 }
 
 #header
 {
-    height: 64px;
-    padding: 5px 0px;
+    height: 4em;
+    padding: 0.5em 0;
     position: fixed;
     top: 0;
     transform: translateY(0);
@@ -193,7 +168,7 @@ time
 }
 #header, body
 {
-    min-width: 200px;
+    min-width: 22em;
 }
 #header a
 {
@@ -201,8 +176,8 @@ time
 }
 #header h1
 {
-    font-size: 40px;
-    min-width: 135px;
+    font-size: 2.5em;
+    min-width: 5em;
 }
 #header .column
 {
@@ -217,28 +192,28 @@ time
 
 .admin
 {
-    border: 1px solid var(--color-title);
-    padding: 16px;
-    margin: 0 auto 16px auto;
+    border: 0.0625em solid var(--color-title);
+    padding: 1em;
+    margin: 0 auto 1em auto;
 }
 .admin, .container
 {
-    max-width: 664px;
+    max-width: 41em;
     width: 80%;
 }
 .admin legend
 {
     color: var(--color-title);
-    font-size: 24px;
+    font-size: 1.5em;
 }
 .admin-action:not(:last-child)
 {
-    margin-bottom: 16px;
+    margin-bottom: 1em;
 }
 
 .content-icon
 {
-    width: 32px;
+    width: 2em;
 }
 
 .content-index
@@ -249,7 +224,7 @@ time
 }
 .content-index-item:not(:last-child)
 {
-    margin-bottom: 32px;
+    margin-bottom: 2em;
 }
 
 .container
@@ -267,11 +242,11 @@ time
 {
     display: flex;
     justify-content: flex-end;
-    line-height: 32px;
+    line-height: 2em;
 }
 .edit-buttons-right a
 {
-    margin-left: 16px;
+    margin-left: 1em;
 }
 
 .edit-split
@@ -281,7 +256,7 @@ time
 }
 .edit-split, .edit-stack
 {
-    margin-bottom: 10px;
+    margin-bottom: 0.625em;
 }
 .edit-split *:not([type="checkbox"])
 {
@@ -294,14 +269,14 @@ time
 
 .edit-stack textarea
 {
-    height: 72px;
-    margin-top: 5px;
+    height: 4.5em;
+    margin-top: 0.25em;
     resize: none;
     width: 100%;
 }
 .edit-stack textarea.large
 {
-    height: 512px;
+    height: 32em;
 }
 
 .cut
@@ -328,8 +303,8 @@ time
 
 .icon
 {
-    height: 32px;
-    width: 32px;
+    height: 2em;
+    width: 2em;
 }
 .icon-primary-fill
 {
@@ -377,8 +352,8 @@ time
 }
 .login img
 {
-    margin-right: 10px;
-    width: 32px;
+    margin-right: 0.625em;
+    width: 2em;
 }
 
 .menu
@@ -395,22 +370,22 @@ time
 .menu li a
 {
     display: inline-block;
-    margin-left: 16px;
+    margin-left: 1em;
 }
 
 .pager
 {
     display: flex;
-    font-size: 40px;
+    font-size: 2.5em;
     font-weight: bold;
     justify-content: flex-end;
     list-style: none;
-    margin: 0;
+    margin: 0.5em 0 0 0;
     width: 100%;
 }
 .pager li
 {
-    margin-left: 24px;
+    margin-left: 1em;
 }
 
 .validation-summary-errors
