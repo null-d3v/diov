@@ -12,6 +12,15 @@
         <link href="~/img/32.ico" rel="shortcut icon" type="image/x-icon">
 
         <environment include="Development">
+            <link as="style" href="~/css/site.css" rel="preload">
+            <link as="script" href="~/js/site.js" rel="preload">
+        </environment>
+        <environment exclude="Development">
+            <link as="style" asp-append-version="true" href="~/css/site.min.css" rel="preload">
+            <link as="script" asp-append-version="true" href="~/js/site.min.js" rel="preload">
+        </environment>
+
+        <environment include="Development">
             <link rel="stylesheet" href="~/css/site.css" />
         </environment>
         <environment exclude="Development">
@@ -50,7 +59,7 @@
         <footer id="footer"></footer>
 
         <environment include="Development">
-            <script asp-append-version="true" defer src="~/js/site.js"></script>
+            <script defer src="~/js/site.js"></script>
         </environment>
         <environment exclude="Development">
             <script asp-append-version="true" defer src="~/js/site.min.js"></script>
