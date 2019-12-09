@@ -9,8 +9,15 @@
             "args":
             [
                 "build",
-                "${workspaceFolder}/Web/Diov.Web.csproj"
+                "${workspaceFolder}/Web/Diov.Web.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
             ],
+            "group":
+            {
+                "kind": "build",
+                "isDefault": true
+            },
             "problemMatcher": "$msCompile"
         }
     ]

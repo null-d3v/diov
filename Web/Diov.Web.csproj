@@ -1,20 +1,18 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
-    <AssemblyName>Diov.Web</AssemblyName>
-    <GenerateFullPaths>true</GenerateFullPaths>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <TieredCompilation>true</TieredCompilation>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="BuildBundlerMinifier" Version="2.9.406" />
-    <PackageReference Include="Markdig" Version="0.16.0" />
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
-    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="3.0.1" />
+    <ProjectReference Include="..\Data\Diov.Data.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Data\Diov.Data.csproj" />
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.435" />
+    <PackageReference Include="Markdig" Version="0.18.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Serilog.Formatting.Compact" Version="1.1.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
+    <PackageReference Include="System.Text.Json" Version="4.7.0" />
   </ItemGroup>
 </Project>

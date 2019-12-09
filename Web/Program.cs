@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Serilog;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
+using Serilog;
 
 namespace Diov.Web
 {
@@ -22,25 +22,29 @@ namespace Diov.Web
             .AddEnvironmentVariables()
             .Build();
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost
-                .CreateDefaultBuilder(args)
-                .UseConfiguration(Configuration)
-                .UseSerilog()
-                .UseStartup<Startup>();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureHostConfiguration(configurationBuilder =>
+                {
+                    configurationBuilder.AddConfiguration(Configuration);
+                })
+                .UseSerilog();
 
         public static int Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
                 .Enrich.FromLogContext()
-                .WriteTo.Console()
                 .CreateLogger();
 
             try
             {
                 Log.Information("Starting web host");
-                CreateWebHostBuilder(args).Build().Run();
+                CreateHostBuilder(args).Build().Run();
                 return 0;
             }
             catch (Exception ex)

@@ -1,10 +1,12 @@
 ﻿using Diov.Data;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace Diov.Web
 {
@@ -16,6 +18,48 @@ namespace Diov.Web
         }
 
         public IConfiguration Configuration { get; }
+
+        public void Configure(
+            IApplicationBuilder applicationBuilder,
+            IWebHostEnvironment webHostEnvironment)
+        {
+            applicationBuilder.UseSerilogRequestLogging();
+
+            if (webHostEnvironment.IsDevelopment())
+            {
+                applicationBuilder.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                applicationBuilder
+                    .UseExceptionHandler("/error/500");
+                applicationBuilder
+                    .UseStatusCodePagesWithReExecute("/error/{0}");
+            }
+
+            applicationBuilder.UseStaticFiles();
+            
+            applicationBuilder.UseRouting();
+
+            if (!webHostEnvironment.IsDevelopment())
+            {
+                applicationBuilder.UseHsts();
+                applicationBuilder.UseHttpsRedirection();
+            }
+
+            applicationBuilder.UseAuthentication();
+            applicationBuilder.UseAuthorization();
+
+            applicationBuilder.UseEndpoints(
+                endpointRouteBuilder =>
+                {
+                    endpointRouteBuilder.MapControllers();
+                });
+
+            var migrator = new Migrator(
+                Configuration.GetConnectionString("Sql"));
+            migrator.Migrate();
+        }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -66,41 +110,17 @@ namespace Diov.Web
                 IAuthenticationSchemeProvider,
                 IgnoreCaseAuthenticationSchemeProvider>();
 
-            services
-                .AddMvc()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            // services.AddAuthorization(
+            //     options =>
+            //     {
+            //         options.DefaultPolicy = new AuthorizationPolicyBuilder()
+            //             .RequireAuthenticatedUser()
+            //             .Build();
+            //     });
+
             services.AddRouting(
                 routeOptions => routeOptions.LowercaseUrls = true);
-        }
-
-        public void Configure(
-            IApplicationBuilder applicationBuilder,
-            IHostingEnvironment hostingEnvironment)
-        {
-            var migrator = new Migrator(
-                Configuration.GetConnectionString("Sql"));
-            migrator.Migrate();
-
-            applicationBuilder.UseAuthentication();
-
-            if (hostingEnvironment.IsDevelopment())
-            {
-                applicationBuilder.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                applicationBuilder
-                    .UseExceptionHandler("/error/500");
-                applicationBuilder
-                    .UseStatusCodePagesWithReExecute("/error/{0}");
-
-                applicationBuilder.UseHsts();
-                applicationBuilder.UseHttpsRedirection();
-            }
-
-            applicationBuilder.UseStaticFiles();
-
-            applicationBuilder.UseMvc();
+            services.AddControllersWithViews();
         }
     }
 }
