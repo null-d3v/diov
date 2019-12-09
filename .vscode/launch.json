@@ -3,32 +3,17 @@
     "configurations":
     [
         {
-            "name": ".NET Core Launch (web)",
+            "name": "Diov",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Web/bin/Debug/netcoreapp2.2/Diov.Web.dll",
+            "program": "${workspaceFolder}/Web/bin/Debug/netcoreapp3.1/Diov.Web.dll",
             "args": [],
             "cwd": "${workspaceFolder}/Web",
             "stopAtEntry": false,
-            "internalConsoleOptions": "openOnSessionStart",
-            "launchBrowser":
+            "serverReadyAction":
             {
-                "enabled": true,
-                "args": "${auto-detect-url}",
-                "windows":
-                {
-                    "command": "cmd.exe",
-                    "args": "/C start ${auto-detect-url}"
-                },
-                "osx":
-                {
-                    "command": "open"
-                },
-                "linux":
-                {
-                    "command": "xdg-open"
-                }
+                "action": "openExternally"
             },
             "env":
             {
@@ -38,12 +23,6 @@
             {
                 "/Views": "${workspaceFolder}/Web/Views"
             }
-        },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
         }
     ]
 }
