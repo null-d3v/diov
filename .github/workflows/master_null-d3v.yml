@@ -19,8 +19,8 @@ jobs:
       - name: Publish
         run: dotnet publish -c Release -o app Web/Diov.Web.csproj
       - name: Deploy
-        uses: azure/webapps-deploy@v1
+        uses: azure/webapps-deploy@v2
         with:
-            app-name: 'null-d3v'
+            app-name: null-d3v
             publish-profile: ${{ secrets.AzureAppService_PublishProfile_507f97ff270548f098acfcdc3a8bd15f }}
             package: ./app
