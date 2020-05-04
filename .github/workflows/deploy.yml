@@ -1,0 +1,26 @@
+name: Deploy
+
+on:
+    release:
+        types:
+          - published
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@master
+          - name: .NET Core
+            uses: actions/setup-dotnet@v1
+            with:
+                dotnet-version: '3.1.102'
+          - name: Build
+            run: dotnet build -c Release Web/Diov.Web.csproj
+          - name: Publish
+            run: dotnet publish -c Release --no-build -o ./app Web/Diov.Web.csproj
+          - name: Deploy
+            uses: azure/webapps-deploy@v2
+            with:
+                app-name: null-d3v
+                publish-profile: ${{ secrets.AzureAppService_PublishProfile_507f97ff270548f098acfcdc3a8bd15f }}
+                package: ./app
