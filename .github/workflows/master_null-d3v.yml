@@ -1,9 +1,9 @@
 name: Azure
 
 on:
-  release:
-    types:
-      - published
+    release:
+        types:
+          - published
 
 jobs:
   build-and-deploy:
@@ -13,15 +13,15 @@ jobs:
       - name: .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1.102'
+            dotnet-version: '3.1.102'
       - name: Build
         run: dotnet build -c Release Web/Diov.Web.csproj
       - name: Publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/app Web/Diov.Web.csproj
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp Web/Diov.Web.csproj
       - name: Deploy
         uses: azure/webapps-deploy@v1
         with:
-          app-name: 'null-d3v'
-          slot-name: 'production'
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_507f97ff270548f098acfcdc3a8bd15f }}
-          package: ${{env.DOTNET_ROOT}}/app 
+            app-name: 'null-d3v'
+            slot-name: 'production'
+            publish-profile: ${{ secrets.AzureAppService_PublishProfile_507f97ff270548f098acfcdc3a8bd15f }}
+            package: ${{env.DOTNET_ROOT}}/myapp
