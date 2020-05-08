@@ -12,4 +12,4 @@ jobs:
             with:
                 dotnet-version: '3.1.102'
           - name: Build
-            run: dotnet build -c Release Web/Diov.Web.csproj
+            run: dotnet build -c Release

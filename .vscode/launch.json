@@ -7,9 +7,9 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/Web/bin/Debug/netcoreapp3.1/Diov.Web.dll",
+            "program": "${workspaceFolder}/src/Web/bin/Debug/netcoreapp3.1/Diov.Web.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Web",
+            "cwd": "${workspaceFolder}/src/Web",
             "stopAtEntry": false,
             "serverReadyAction":
             {
@@ -21,7 +21,7 @@
             },
             "sourceFileMap":
             {
-                "/Views": "${workspaceFolder}/Web/Views"
+                "/Views": "${workspaceFolder}/src/Web/Views"
             }
         }
     ]
