@@ -30,12 +30,18 @@
             <label asp-for="Body"></label>
             <textarea asp-for="Body" class="large" required></textarea>
         </div>
-        <div class="edit-buttons-right">
-            <input type="submit" value="Add">
-            <div>
-                <a asp-action="Index" asp-controller="Content">
-                    Cancel
-                </a>
+        <div class="edit-buttons">
+            <div class="edit-buttons-left">
+                <button type="submit">
+                    Add
+                </button>
+            </div>
+            <div class="edit-buttons-right">
+                <div>
+                    <a asp-action="Index" asp-controller="Content">
+                        Cancel
+                    </a>
+                </div>
             </div>
         </div>
     </form>

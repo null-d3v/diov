@@ -37,15 +37,21 @@
             <label asp-for="Body"></label>
             <textarea asp-for="Body" class="large" disabled></textarea>
         </div>
-        <div class="edit-buttons-right">
-            <input type="submit" value="Delete">
-            <div>
-                <a
-                    asp-action="Edit"
-                    asp-controller="Content"
-                    asp-route-path="@Model.Path">
-                    Cancel
-                </a>
+        <div class="edit-buttons">
+            <div class="edit-buttons-left">
+                <button type="submit">
+                    Delete
+                </button>
+            </div>
+            <div class="edit-buttons-right">
+                <div>
+                    <a
+                        asp-action="Edit"
+                        asp-controller="Content"
+                        asp-route-path="@Model.Path">
+                        Cancel
+                    </a>
+                </div>
             </div>
         </div>
     </form>
