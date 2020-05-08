@@ -12,20 +12,23 @@ namespace Diov.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(
+            IConfiguration configuration,
+            IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
+            WebHostEnvironment = webHostEnvironment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment WebHostEnvironment { get; }
 
         public void Configure(
-            IApplicationBuilder applicationBuilder,
-            IWebHostEnvironment webHostEnvironment)
+            IApplicationBuilder applicationBuilder)
         {
             applicationBuilder.UseSerilogRequestLogging();
 
-            if (webHostEnvironment.IsDevelopment())
+            if (WebHostEnvironment.IsDevelopment())
             {
                 applicationBuilder.UseDeveloperExceptionPage();
             }
@@ -41,7 +44,7 @@ namespace Diov.Web
 
             applicationBuilder.UseRouting();
 
-            if (!webHostEnvironment.IsDevelopment())
+            if (!WebHostEnvironment.IsDevelopment())
             {
                 applicationBuilder.UseHsts();
                 applicationBuilder.UseHttpsRedirection();
@@ -112,7 +115,11 @@ namespace Diov.Web
 
             services.AddRouting(
                 routeOptions => routeOptions.LowercaseUrls = true);
-            services.AddControllersWithViews();
+            var mvcBuilder = services.AddControllersWithViews();
+            if (WebHostEnvironment.IsDevelopment())
+            {
+                mvcBuilder.AddRazorRuntimeCompilation();
+            }
         }
     }
 }
