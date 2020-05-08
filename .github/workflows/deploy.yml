@@ -17,9 +17,9 @@ jobs:
             with:
                 dotnet-version: '3.1.102'
           - name: Build
-            run: dotnet build -c Release -p:PackageVersion=${{ env.VERSION }} Web/Diov.Web.csproj
+            run: dotnet build -c Release
           - name: Publish
-            run: dotnet publish -c Release --no-build -o ./app -p:PackageVersion=${{ env.VERSION }} Web/Diov.Web.csproj
+            run: dotnet publish -c Release --no-build -o ./app -p:PackageVersion=${{ env.VERSION }} src/Web/Diov.Web.csproj
           - name: Deploy
             uses: azure/webapps-deploy@v2
             with:
