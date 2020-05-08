@@ -38,7 +38,7 @@ namespace Diov.Web
             }
 
             applicationBuilder.UseStaticFiles();
-            
+
             applicationBuilder.UseRouting();
 
             if (!webHostEnvironment.IsDevelopment())
@@ -109,14 +109,6 @@ namespace Diov.Web
             services.AddTransient<
                 IAuthenticationSchemeProvider,
                 IgnoreCaseAuthenticationSchemeProvider>();
-
-            // services.AddAuthorization(
-            //     options =>
-            //     {
-            //         options.DefaultPolicy = new AuthorizationPolicyBuilder()
-            //             .RequireAuthenticatedUser()
-            //             .Build();
-            //     });
 
             services.AddRouting(
                 routeOptions => routeOptions.LowercaseUrls = true);
