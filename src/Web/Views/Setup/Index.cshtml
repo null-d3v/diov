@@ -1,0 +1,32 @@
+@model SetupModel
+
+<div class="container">
+    <h1>
+        Setup
+    </h1>
+    <fieldset>
+        <legend>Content</legend>
+        <div class="edit-buttons">
+            <div class="edit-buttons-left">
+                <a
+                    asp-action="Export"
+                    asp-controller="Setup"
+                    download>
+                    Export
+                </a>
+            </div>
+            <div class="edit-buttons-right">
+                <form
+                    asp-action="Import"
+                    asp-controller="Setup"
+                    enctype="multipart/form-data"
+                    method="post">
+                    <input asp-for="ImportFile" type="file">
+                    <button type="submit">
+                        Import
+                    </button>
+                </form>
+            </div>
+        </div>
+    </fieldset>
+</div>

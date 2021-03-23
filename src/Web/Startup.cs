@@ -1,6 +1,7 @@
-﻿using Diov.Data;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Diov.Data;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -40,16 +41,17 @@ namespace Diov.Web
                     .UseStatusCodePagesWithReExecute("/error/{0}");
             }
 
+            applicationBuilder.UseResponseCompression();
+            applicationBuilder.UseCookiePolicy();
             applicationBuilder.UseStaticFiles();
-
             applicationBuilder.UseRouting();
 
+            applicationBuilder.UseForwardedHeaders();
             if (!WebHostEnvironment.IsDevelopment())
             {
                 applicationBuilder.UseHsts();
                 applicationBuilder.UseHttpsRedirection();
             }
-
             applicationBuilder.UseAuthentication();
             applicationBuilder.UseAuthorization();
 
@@ -58,15 +60,18 @@ namespace Diov.Web
                 {
                     endpointRouteBuilder.MapControllers();
                 });
-
-            var migrator = new Migrator(
-                Configuration.GetConnectionString("Sql"));
-            migrator.Migrate();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
+            services.Configure<JsonSerializerOptions>(
+                options =>
+                {
+                    options.NumberHandling = JsonNumberHandling
+                        .AllowReadingFromString;
+                    options.PropertyNameCaseInsensitive = true;
+                });
             services.Configure<ExternalAuthenticationOptions>(
                 Configuration.GetSection("ExternalAuthentication"));
 
@@ -77,6 +82,7 @@ namespace Diov.Web
                 IAdminAuthorizationRepository,
                 AdminAuthorizationRepository>();
             services.AddTransient<IContentRepository, ContentRepository>();
+            services.AddHostedService<MigrationHostedService>();
 
             var externalAuthenticationOptions = Configuration
                 .GetSection("ExternalAuthentication")
@@ -115,11 +121,14 @@ namespace Diov.Web
 
             services.AddRouting(
                 routeOptions => routeOptions.LowercaseUrls = true);
-            var mvcBuilder = services.AddControllersWithViews();
+            var mvcBuilder = services
+                .AddControllersWithViews();
             if (WebHostEnvironment.IsDevelopment())
             {
                 mvcBuilder.AddRazorRuntimeCompilation();
             }
+
+            services.AddResponseCompression();
         }
     }
 }

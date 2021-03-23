@@ -17,9 +17,11 @@ namespace Diov.Web
             IOptions<ExternalAuthenticationOptions> externalAuthenticationOptions)
         {
             AdminAuthorizationRepository = adminAuthorizationRepository ??
-                throw new ArgumentNullException(nameof(adminAuthorizationRepository));
+                throw new ArgumentNullException(
+                    nameof(adminAuthorizationRepository));
             ExternalAuthenticationOptions = externalAuthenticationOptions?.Value ??
-                throw new ArgumentNullException(nameof(externalAuthenticationOptions));
+                throw new ArgumentNullException(
+                    nameof(externalAuthenticationOptions));
         }
 
         public IAdminAuthorizationRepository AdminAuthorizationRepository { get; }
