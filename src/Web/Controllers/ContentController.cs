@@ -14,20 +14,21 @@ namespace Diov.Web
             IContentRepository contentRepository)
         {
             ContentRepository = contentRepository ??
-                throw new ArgumentNullException(nameof(contentRepository));
+                throw new ArgumentNullException(
+                    nameof(contentRepository));
         }
 
         public IContentRepository ContentRepository { get; }
 
         [Authorize]
-        [HttpGet("[controller]/add")]
+        [HttpGet("[controller]/[action]")]
         public IActionResult Add()
         {
             return View();
         }
 
         [Authorize]
-        [HttpPost("[controller]/add")]
+        [HttpPost("[controller]/[action]")]
         public async Task<IActionResult> Add(
             [FromForm]Content content)
         {
@@ -48,7 +49,7 @@ namespace Diov.Web
         }
 
         [Authorize]
-        [HttpGet("[controller]/{path}/delete")]
+        [HttpGet("[controller]/{path}/[action]")]
         public async Task<IActionResult> Delete(
             [FromRoute]string path)
         {
@@ -72,7 +73,7 @@ namespace Diov.Web
         }
 
         [Authorize]
-        [HttpPost("[controller]/{path}/delete")]
+        [HttpPost("[controller]/{path}/[action]")]
         public async Task<IActionResult> Delete(
             [FromRoute]string path,
             [FromForm]Content content)
@@ -124,7 +125,7 @@ namespace Diov.Web
         }
 
         [Authorize]
-        [HttpGet("[controller]/{path}/edit")]
+        [HttpGet("[controller]/{path}/[action]")]
         public async Task<IActionResult> Edit(
             [FromRoute]string path)
         {
@@ -148,7 +149,7 @@ namespace Diov.Web
         }
 
         [Authorize]
-        [HttpPost("[controller]/{path}/edit")]
+        [HttpPost("[controller]/{path}/[action]")]
         public async Task<IActionResult> Edit(
             [FromRoute]string path,
             [FromForm]Content content)

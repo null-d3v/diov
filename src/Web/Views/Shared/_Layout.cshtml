@@ -46,6 +46,13 @@
                             Log out
                         </a>
                     </div>
+                    <div class="admin-action">
+                        <a
+                            asp-action="Index"
+                            asp-controller="Setup">
+                            Setup
+                        </a>
+                    </div>
                     @RenderSection("Admin", required: false)
                 </fieldset>
             }

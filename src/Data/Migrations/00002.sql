@@ -5,4 +5,3 @@ CREATE TABLE [AdminAuthorization] (
     CONSTRAINT [PK_Authorization] PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [IX_Authorization] UNIQUE NONCLUSTERED ([AccountId] ASC, [IdentityProvider] ASC)
 );
-GO

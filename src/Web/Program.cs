@@ -9,18 +9,12 @@ namespace Diov.Web
 {
     public class Program
     {
-        public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile(
-                "appsettings.json",
-                optional: false,
-                reloadOnChange: true)
-            .AddJsonFile(
-                $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json",
-                optional: true,
-                reloadOnChange: true)
-            .AddEnvironmentVariables()
-            .Build();
+        public static IConfiguration Configuration { get; } =
+            new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
+                .Build();
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
@@ -38,18 +32,17 @@ namespace Diov.Web
         {
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
-                .Enrich.FromLogContext()
                 .CreateLogger();
 
             try
             {
-                Log.Information("Starting web host");
+                Log.Information("Starting host");
                 CreateHostBuilder(args).Build().Run();
                 return 0;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Log.Fatal(ex, "Host terminated unexpectedly");
+                Log.Fatal(exception, "Host terminated unexpectedly");
                 return 1;
             }
             finally

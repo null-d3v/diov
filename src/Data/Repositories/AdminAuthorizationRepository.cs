@@ -8,18 +8,19 @@ namespace Diov.Data
     {
         private const string SelectStatement =
             @"SELECT
-                AccountId,
-                Id,
-                IdentityProvider
-            FROM AdminAuthorization
-            WHERE AccountId = @AccountId AND
-                IdentityProvider = @IdentityProvider";
+                [AccountId],
+                [Id],
+                [IdentityProvider]
+            FROM [AdminAuthorization]
+            WHERE [AccountId] = @AccountId AND
+                [IdentityProvider] = @IdentityProvider";
 
         public AdminAuthorizationRepository(
             IDbConnectionFactory dbConnectionFactory)
         {
             DbConnectionFactory = dbConnectionFactory ??
-                throw new ArgumentNullException(nameof(dbConnectionFactory));
+                throw new ArgumentNullException(
+                    nameof(dbConnectionFactory));
         }
 
         public IDbConnectionFactory DbConnectionFactory { get; }
@@ -28,21 +29,17 @@ namespace Diov.Data
             string accountId,
             string identityProvider)
         {
-            var adminAuthorization = default(AdminAuthorization);
-
-            using (var sqlConnection =
-                await DbConnectionFactory.GetSqlConnectionAsync())
-            {
-                adminAuthorization = await sqlConnection
-                    .QueryFirstOrDefaultAsync<AdminAuthorization>(
-                        SelectStatement,
-                        new
-                        {
-                            AccountId = accountId,
-                            IdentityProvider = identityProvider
-                                .ToLowerInvariant(),
-                        });
-            }
+            using var sqlConnection = await DbConnectionFactory
+                .GetSqlConnectionAsync();
+            var adminAuthorization = await sqlConnection
+                .QueryFirstOrDefaultAsync<AdminAuthorization>(
+                    SelectStatement,
+                    new
+                    {
+                        AccountId = accountId,
+                        IdentityProvider = identityProvider
+                            .ToLowerInvariant(),
+                    });
 
             return adminAuthorization;
         }

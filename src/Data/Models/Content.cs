@@ -73,8 +73,8 @@ namespace Diov.Data
             if (IsIndexed && string.IsNullOrWhiteSpace(Name))
             {
                 yield return new ValidationResult(
-                    $"The Name field is required for indexed content.",
-                    new[] { "Name", });
+                    $"The {nameof(Name)} field is required for indexed content.",
+                    new[] { nameof(Name), });
             }
         }
     }
