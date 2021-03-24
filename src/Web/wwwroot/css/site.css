@@ -139,6 +139,10 @@ input[type="checkbox"]
     margin: 0.25rem;
     width: 1.5rem;
 }
+input[type="file"]
+{
+    vertical-align: top;
+}
 input[type="file"]:hover
 {
     border-color: var(--color-secondary);
