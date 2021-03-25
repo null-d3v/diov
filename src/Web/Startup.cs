@@ -1,14 +1,16 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using Diov.Data;
+﻿using Diov.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using StackExchange.Redis;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Diov.Web
 {
@@ -51,8 +53,9 @@ namespace Diov.Web
             if (!WebHostEnvironment.IsDevelopment())
             {
                 applicationBuilder.UseHsts();
-                applicationBuilder.UseHttpsRedirection();
             }
+            applicationBuilder.UseHttpsRedirection();
+
             applicationBuilder.UseAuthentication();
             applicationBuilder.UseAuthorization();
 
@@ -94,6 +97,11 @@ namespace Diov.Web
                     options.KnownNetworks.Clear();
                     options.KnownProxies.Clear();
                 });
+
+            services.AddDataProtection()
+                .PersistKeysToStackExchangeRedis(
+                    ConnectionMultiplexer.Connect(
+                        Configuration.GetConnectionString("Redis")));
 
             var externalAuthenticationOptions = Configuration
                 .GetSection("ExternalAuthentication")

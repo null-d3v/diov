@@ -6,6 +6,7 @@ services:
         ports:
           - 5000:80
         environment:
+            ConnectionStrings__Redis: "redis"
             ConnectionStrings__Sql: "Server=mssql;Database=Diov;User ID=SA;Password=P@ssword123;"
         entrypoint:
           - "/wait-for-it.sh"
@@ -16,7 +17,8 @@ services:
           - "dotnet"
           - "/app/Diov.dll"
         depends_on:
-          - "mssql:1433"
+          - mssql
+          - redis
     mssql:
         image: mcr.microsoft.com/mssql/server:2019-latest
         container_name: mssql
@@ -26,3 +28,8 @@ services:
             ACCEPT_EULA: "Y"
             MSSQL_PID: "Express"
             SA_PASSWORD: "P@ssword123"
+    redis:
+        image: redis
+        container_name: redis
+        ports:
+          - 6379:6379
