@@ -148,8 +148,8 @@ namespace Diov.Data
                     new
                     {
                         Index = pageIndex * pageSize,
-                        IsIndexed = contentSearchRequest.IsIndexed,
-                        Path = contentSearchRequest.Path,
+                        contentSearchRequest.IsIndexed,
+                        contentSearchRequest.Path,
                         PageSize = pageSize,
                     });
 
@@ -158,8 +158,8 @@ namespace Diov.Data
                     selectTotalCountStatementBuilder.ToString(),
                     new
                     {
-                        IsIndexed = contentSearchRequest.IsIndexed,
-                        Path = contentSearchRequest.Path,
+                        contentSearchRequest.IsIndexed,
+                        contentSearchRequest.Path,
                     });
 
             return new SearchResponse<Content>

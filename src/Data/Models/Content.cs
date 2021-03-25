@@ -8,7 +8,7 @@ namespace Diov.Data
 {
     public class Content : IValidatableObject
     {
-        private static IHtmlSanitizer htmlSanitizer;
+        private static readonly IHtmlSanitizer htmlSanitizer;
 
         private string body;
         private string path;
@@ -48,16 +48,8 @@ namespace Diov.Data
                 }
                 else
                 {
-                    value = value.ToLowerInvariant();
-                    var encodedPath = HttpUtility.UrlPathEncode(value);
-                    if (!string.Equals(
-                        value,
-                        encodedPath,
-                        StringComparison.InvariantCulture))
-                    {
-                        throw new ArgumentException();
-                    }
-                    path = encodedPath;
+                    path = HttpUtility.UrlPathEncode(
+                        value.ToLowerInvariant());
                 }
             }
         }

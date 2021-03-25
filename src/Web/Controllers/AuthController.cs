@@ -30,18 +30,32 @@ namespace Diov.Web
         [HttpGet("[action]")]
         public async Task<IActionResult> Callback()
         {
-            var authenticateResult = await HttpContext.AuthenticateAsync(
-                Constants.ExternalAuthenticationScheme);
+            var authenticateResult = await HttpContext
+                .AuthenticateAsync(
+                    Constants.ExternalAuthenticationScheme);
 
-            var nameIdentifier = authenticateResult.Principal.Claims.FirstOrDefault(
-                claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
-            var adminAuthorization = await AdminAuthorizationRepository
-                .GetAdminAuthorizationAsync(
-                    nameIdentifier,
-                    authenticateResult.Ticket.Properties.Items["scheme"]);
-            if (adminAuthorization == null)
+            var nameIdentifier = authenticateResult.Principal
+                .Claims.FirstOrDefault(
+                    claim => claim.Type == ClaimTypes.NameIdentifier)?
+                .Value;
+            var scheme = authenticateResult.Ticket
+                .Properties.Items["scheme"];
+
+            if (ExternalAuthenticationOptions
+                .GetSchemeOptions(scheme)?
+                .AdminAuthorization?
+                .Contains(nameIdentifier) != true)
             {
-                return Unauthorized();
+                var adminAuthorization = await AdminAuthorizationRepository
+                    .GetAdminAuthorizationAsync(nameIdentifier, scheme);
+                if (adminAuthorization == null)
+                {
+                    return Unauthorized();
+                }
+                if (adminAuthorization == null)
+                {
+                    return Unauthorized();
+                }
             }
 
             await HttpContext.SignOutAsync(
@@ -69,12 +83,13 @@ namespace Diov.Web
         {
             var authenticationProperties = new AuthenticationProperties
             {
-                RedirectUri = Url.Action(nameof(Callback)),
+                AllowRefresh = true,
                 Items =
                 {
                     { "returnUrl", returnUrl },
                     { "scheme", scheme },
-                }
+                },
+                RedirectUri = Url.Action(nameof(Callback)),
             };
 
             return Challenge(authenticationProperties, scheme);
