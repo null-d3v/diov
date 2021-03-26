@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
@@ -62,6 +63,20 @@ namespace Diov.Web
             applicationBuilder.UseEndpoints(
                 endpointRouteBuilder =>
                 {
+                    endpointRouteBuilder.MapHealthChecks(
+                        "/health/live",
+                        new HealthCheckOptions
+                        {
+                            Predicate = (healthCheckRegistration) => false,
+                        });
+                    endpointRouteBuilder.MapHealthChecks(
+                        "/health/ready",
+                        new HealthCheckOptions
+                        {
+                            Predicate = (healthCheckRegistration) =>
+                                healthCheckRegistration.Tags.Contains(
+                                    Constants.ReadinessHealthCheckTag),
+                        });
                     endpointRouteBuilder.MapControllers();
                 });
         }
@@ -97,6 +112,7 @@ namespace Diov.Web
                     options.KnownNetworks.Clear();
                     options.KnownProxies.Clear();
                 });
+            services.AddResponseCompression();
 
             services.AddDataProtection()
                 .PersistKeysToStackExchangeRedis(
@@ -140,6 +156,16 @@ namespace Diov.Web
 
             services.AddRouting(
                 routeOptions => routeOptions.LowercaseUrls = true);
+
+            services
+                .AddHealthChecks()
+                .AddRedis(
+                    Configuration.GetConnectionString("Redis"),
+                    tags: new[] { Constants.ReadinessHealthCheckTag, })
+                .AddSqlServer(
+                    Configuration.GetConnectionString("Sql"),
+                    tags: new[] { Constants.ReadinessHealthCheckTag, });
+
             var mvcBuilder = services
                 .AddControllersWithViews();
             if (WebHostEnvironment.IsDevelopment())
@@ -147,7 +173,6 @@ namespace Diov.Web
                 mvcBuilder.AddRazorRuntimeCompilation();
             }
 
-            services.AddResponseCompression();
         }
     }
 }

@@ -125,25 +125,25 @@ spec:
                     limits:
                         cpu: {{ .Values.web.cpu }}
                         memory: {{ .Values.web.memory }}
-            #     readinessProbe:
-            #         httpGet:
-            #             path: /health/readiness
-            #             port: 80
-            #         initialDelaySeconds: 10
-            #         timeoutSeconds: 30
-            #         periodSeconds: 60
-            #         successThreshold: 1
-            #         failureThreshold: 5
-            #     livenessProbe:
-            #         httpGet:
-            #             path: /health/liveness
-            #             port: 80
-            #         initialDelaySeconds: 10
-            #         timeoutSeconds: 5
-            #         periodSeconds: 15
-            #         successThreshold: 1
-            #         failureThreshold: 3
-            # restartPolicy: Always
+                livenessProbe:
+                    httpGet:
+                        path: /health/live
+                        port: http
+                    periodSeconds: 15
+                    timeoutSeconds: 5
+                readinessProbe:
+                    httpGet:
+                        path: /health/ready
+                        port: http
+                    periodSeconds: 60
+                    timeoutSeconds: 15
+                startupProbe:
+                    httpGet:
+                        path: /health/ready
+                        port: http
+                    failureThreshold: 10
+                    periodSeconds: 5
+            restartPolicy: Always
             volumes:
               - name: media
                 persistentVolumeClaim:
