@@ -1,10 +1,5 @@
 ﻿@model ContentIndexModel
 
-@{
-    var lastPage = Math.Ceiling(
-        (double)Model.SearchResponse.TotalCount / Model.SearchResponse.PageSize) - 1;
-}
-
 @section Admin
 {
     @if (@User.Identity.IsAuthenticated)
@@ -70,7 +65,7 @@
 
 <div class="container">
     <ul class="pager">
-        @if (Model.SearchResponse.PageIndex > 0)
+        @if (Model.SearchResponse.Skip > 0)
         {
             <li>
                 <a
@@ -83,18 +78,19 @@
                 <a
                     asp-action="Index"
                     asp-controller="Content"
-                    asp-route-page="@(Model.SearchResponse.PageIndex - 1)">
+                    asp-route-skip="@(Model.SearchResponse.Skip - Model.SearchResponse.Take)">
                     &lt;
                 </a>
             </li>
         }
-        @if (Model.SearchResponse.PageIndex < lastPage)
+        @if (Model.SearchResponse.TotalCount >
+            Model.SearchResponse.Skip + Model.SearchResponse.Take)
         {
             <li>
                 <a
                     asp-action="Index"
                     asp-controller="Content"
-                    asp-route-page="@(Model.SearchResponse.PageIndex + 1)">
+                    asp-route-skip="@(Model.SearchResponse.Skip + Model.SearchResponse.Take)">
                     &gt;
                 </a>
             </li>
@@ -102,7 +98,9 @@
                 <a
                     asp-action="Index"
                     asp-controller="Content"
-                    asp-route-page="@lastPage">
+                    asp-route-skip="@(Math.Floor(
+                        (double)Model.SearchResponse.TotalCount / Model.SearchResponse.Take) *
+                        Model.SearchResponse.Take)">
                     &gt;&gt;
                 </a>
             </li>

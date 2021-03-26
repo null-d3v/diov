@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Diov.Web
@@ -30,7 +31,8 @@ namespace Diov.Web
         [Authorize]
         [HttpPost("[controller]/[action]")]
         public async Task<IActionResult> Add(
-            [FromForm]Content content)
+            [FromForm]Content content,
+            CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -39,8 +41,8 @@ namespace Diov.Web
                 return View(content);
             }
 
-            await ContentRepository
-                .AddContentAsync(content);
+            await ContentRepository.AddContentAsync(
+                content, cancellationToken);
 
             return RedirectToAction(
                 "Detail",
@@ -51,7 +53,8 @@ namespace Diov.Web
         [Authorize]
         [HttpGet("[controller]/{path}/[action]")]
         public async Task<IActionResult> Delete(
-            [FromRoute]string path)
+            [FromRoute]string path,
+            CancellationToken cancellationToken = default)
         {
             var content = (await ContentRepository
                 .SearchContentsAsync(
@@ -60,7 +63,8 @@ namespace Diov.Web
                         Path = path,
                     },
                     0,
-                    1))
+                    1,
+                    cancellationToken))
                 .Items
                 .FirstOrDefault();
 
@@ -76,7 +80,8 @@ namespace Diov.Web
         [HttpPost("[controller]/{path}/[action]")]
         public async Task<IActionResult> Delete(
             [FromRoute]string path,
-            [FromForm]Content content)
+            [FromForm]Content content,
+            CancellationToken cancellationToken = default)
         {
             var contentId = (await ContentRepository
                 .SearchContentsAsync(
@@ -85,15 +90,16 @@ namespace Diov.Web
                         Path = path,
                     },
                     0,
-                    1))
+                    1,
+                    cancellationToken))
                 .Items
                 .FirstOrDefault()?
                 .Id ?? 0;
 
             if (contentId != 0)
             {
-                await ContentRepository
-                    .DeleteContentAsync(contentId);
+                await ContentRepository.DeleteContentAsync(
+                    contentId, cancellationToken);
             }
 
             return RedirectToAction(
@@ -103,7 +109,8 @@ namespace Diov.Web
 
         [HttpGet("[controller]/{path}")]
         public async Task<IActionResult> Detail(
-            [FromRoute]string path)
+            [FromRoute]string path,
+            CancellationToken cancellationToken = default)
         {
             var content = (await ContentRepository
                 .SearchContentsAsync(
@@ -112,7 +119,8 @@ namespace Diov.Web
                         Path = path,
                     },
                     0,
-                    1))
+                    1,
+                    cancellationToken))
                 .Items
                 .FirstOrDefault();
 
@@ -127,7 +135,8 @@ namespace Diov.Web
         [Authorize]
         [HttpGet("[controller]/{path}/[action]")]
         public async Task<IActionResult> Edit(
-            [FromRoute]string path)
+            [FromRoute]string path,
+            CancellationToken cancellationToken = default)
         {
             var content = (await ContentRepository
                 .SearchContentsAsync(
@@ -136,7 +145,8 @@ namespace Diov.Web
                         Path = path,
                     },
                     0,
-                    1))
+                    1,
+                    cancellationToken))
                 .Items
                 .FirstOrDefault();
 
@@ -152,7 +162,8 @@ namespace Diov.Web
         [HttpPost("[controller]/{path}/[action]")]
         public async Task<IActionResult> Edit(
             [FromRoute]string path,
-            [FromForm]Content content)
+            [FromForm]Content content,
+            CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -168,7 +179,8 @@ namespace Diov.Web
                         Path = path,
                     },
                     0,
-                    1))
+                    1,
+                    cancellationToken))
                 .Items
                 .FirstOrDefault()?
                 .Id ?? 0;
@@ -178,8 +190,8 @@ namespace Diov.Web
                 return NotFound();
             }
 
-            await ContentRepository
-                .UpdateContentAsync(content);
+            await ContentRepository.UpdateContentAsync(
+                content, cancellationToken);
 
             return RedirectToAction(
                 "Detail",
@@ -189,8 +201,8 @@ namespace Diov.Web
 
         [HttpGet("")]
         public async Task<IActionResult> Index(
-            [FromQuery]int page = 0,
-            [FromQuery]bool indexed = true)
+            [FromQuery]bool indexed = true,
+            [FromQuery]int skip = 0)
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -203,7 +215,7 @@ namespace Diov.Web
                     {
                         IsIndexed = indexed,
                     },
-                    page);
+                    skip);
 
             return View(new ContentIndexModel
             {
