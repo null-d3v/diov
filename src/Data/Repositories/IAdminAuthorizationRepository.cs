@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Diov.Data
@@ -6,6 +7,7 @@ namespace Diov.Data
     {
         Task<AdminAuthorization> GetAdminAuthorizationAsync(
             string accountId,
-            string identityProvider);
+            string identityProvider,
+            CancellationToken cancellationToken = default);
     }
 }

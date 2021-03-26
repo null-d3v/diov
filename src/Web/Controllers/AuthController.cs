@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Diov.Web
@@ -28,7 +29,8 @@ namespace Diov.Web
         public ExternalAuthenticationOptions ExternalAuthenticationOptions { get; }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> Callback()
+        public async Task<IActionResult> Callback(
+            CancellationToken cancellationToken = default)
         {
             var authenticateResult = await HttpContext
                 .AuthenticateAsync(
@@ -46,7 +48,8 @@ namespace Diov.Web
                 .AdminAuthorization != nameIdentifier)
             {
                 var adminAuthorization = await AdminAuthorizationRepository
-                    .GetAdminAuthorizationAsync(nameIdentifier, scheme);
+                    .GetAdminAuthorizationAsync(
+                        nameIdentifier, scheme, cancellationToken);
                 if (adminAuthorization == null)
                 {
                     return Unauthorized();

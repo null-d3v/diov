@@ -1,4 +1,5 @@
 using System.Data.SqlClient;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Diov.Data
@@ -12,10 +13,11 @@ namespace Diov.Data
 
         public string Connection { get; }
 
-        public async Task<SqlConnection> GetSqlConnectionAsync()
+        public async Task<SqlConnection> GetSqlConnectionAsync(
+            CancellationToken cancellationToken = default)
         {
             var sqlConnection = new SqlConnection(Connection);
-            await sqlConnection.OpenAsync();
+            await sqlConnection.OpenAsync(cancellationToken);
             return sqlConnection;
         }
     }

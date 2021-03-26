@@ -2,6 +2,7 @@ using Dapper;
 using System;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Diov.Data
@@ -46,8 +47,8 @@ namespace Diov.Data
             @" AND [IsIndexed] = @IsIndexed";
         private const string SelectStatementOrderByClause =
             @" ORDER BY [PublishedDateTime] DESC
-            OFFSET @Index ROWS
-            FETCH NEXT @PageSize ROWS ONLY";
+            OFFSET @Skip ROWS
+            FETCH NEXT @Take ROWS ONLY";
         private const string SelectStatementPathPredicate =
             @" AND [Path] = @Path";
         private const string SelectTotalCountStatement =
@@ -74,12 +75,14 @@ namespace Diov.Data
 
         public IDbConnectionFactory DbConnectionFactory { get; }
 
-        public async Task<int> AddContentAsync(Content content)
+        public async Task<int> AddContentAsync(
+            Content content,
+            CancellationToken cancellationToken = default)
         {
             using var sqlConnection = await DbConnectionFactory
-                .GetSqlConnectionAsync();
-            using var sqlTransaction = sqlConnection
-                .BeginTransaction();
+                .GetSqlConnectionAsync(cancellationToken);
+            using var sqlTransaction = await sqlConnection
+                .BeginTransactionAsync(cancellationToken);
             try
             {
                 var id = (await sqlConnection
@@ -89,30 +92,49 @@ namespace Diov.Data
                         sqlTransaction))
                     .FirstOrDefault();
 
-                sqlTransaction.Commit();
+                await sqlTransaction.CommitAsync(
+                    cancellationToken);
 
                 return id;
             }
             catch
             {
-                sqlTransaction.Rollback();
+                await sqlTransaction.RollbackAsync(
+                    cancellationToken);
                 throw;
             }
         }
 
-        public async Task DeleteContentAsync(int id)
+        public async Task DeleteContentAsync(
+            int id,
+            CancellationToken cancellationToken = default)
         {
             using var sqlConnection = await DbConnectionFactory
-                .GetSqlConnectionAsync();
-            await sqlConnection.ExecuteAsync(
-                DeleteStatement,
-                new { Id = id, });
+                .GetSqlConnectionAsync(cancellationToken);
+            using var sqlTransaction = await sqlConnection
+                .BeginTransactionAsync(cancellationToken);
+            try
+            {
+                await sqlConnection.ExecuteAsync(
+                    DeleteStatement,
+                    new { Id = id, });
+
+                await sqlTransaction.CommitAsync(
+                    cancellationToken);
+            }
+            catch
+            {
+                await sqlTransaction.RollbackAsync(
+                    cancellationToken);
+                throw;
+            }
         }
 
         public async Task<SearchResponse<Content>> SearchContentsAsync(
             ContentSearchRequest contentSearchRequest,
-            int pageIndex = 0,
-            int pageSize = 5)
+            int skip = 0,
+            int take = 5,
+            CancellationToken cancellationToken = default)
         {
             var selectStatementBuilder = new StringBuilder(
                 SelectStatement);
@@ -141,16 +163,16 @@ namespace Diov.Data
             selectTotalCountStatementBuilder.Append(';');
 
             using var sqlConnection = await DbConnectionFactory
-                .GetSqlConnectionAsync();
+                .GetSqlConnectionAsync(cancellationToken);
             var contents = await sqlConnection
                 .QueryAsync<Content>(
                     selectStatementBuilder.ToString(),
                     new
                     {
-                        Index = pageIndex * pageSize,
                         contentSearchRequest.IsIndexed,
                         contentSearchRequest.Path,
-                        PageSize = pageSize,
+                        Skip = skip,
+                        Take = take,
                     });
 
             var totalCount = await sqlConnection
@@ -165,18 +187,20 @@ namespace Diov.Data
             return new SearchResponse<Content>
             {
                 Items = contents,
-                PageIndex = pageIndex,
-                PageSize = pageSize,
+                Skip = skip,
+                Take = take,
                 TotalCount = totalCount,
             };
         }
 
-        public async Task UpdateContentAsync(Content content)
+        public async Task UpdateContentAsync(
+            Content content,
+            CancellationToken cancellationToken = default)
         {
             using var sqlConnection = await DbConnectionFactory
-                .GetSqlConnectionAsync();
-            using var sqlTransaction = sqlConnection
-                .BeginTransaction();
+                .GetSqlConnectionAsync(cancellationToken);
+            using var sqlTransaction = await sqlConnection
+                .BeginTransactionAsync(cancellationToken);
             try
             {
                 var recordsAffected = await sqlConnection
@@ -191,11 +215,13 @@ namespace Diov.Data
                         nameof(content));
                 }
 
-                sqlTransaction.Commit();
+                await sqlTransaction.CommitAsync(
+                    cancellationToken);
             }
             catch
             {
-                sqlTransaction.Rollback();
+                await sqlTransaction.RollbackAsync(
+                    cancellationToken);
                 throw;
             }
         }

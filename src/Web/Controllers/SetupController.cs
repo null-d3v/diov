@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Diov.Web
@@ -31,39 +32,52 @@ namespace Diov.Web
         public JsonSerializerOptions JsonSerializerOptions { get; }
 
         [HttpGet("[action]")]
-        public async Task<IActionResult> Export()
+        public async Task<IActionResult> Export(
+            CancellationToken cancellationToken = default)
         {
             var contents = new List<Content>();
 
             var pagedContents = new SearchResponse<Content>
             {
-                PageIndex = -1,
+                Skip = -100,
+                Take = 100,
             };
             do
             {
+                pagedContents.Skip += pagedContents.Take;
+
                 pagedContents = await ContentRepository
                     .SearchContentsAsync(
                         new ContentSearchRequest(),
-                        ++pagedContents.PageIndex,
-                        100);
+                        pagedContents.Skip,
+                        pagedContents.Take,
+                        cancellationToken);
 
                 contents.AddRange(pagedContents.Items);
             }
             while (pagedContents.TotalCount >=
-                pagedContents.PageIndex *
-                (pagedContents.PageSize + 1));
+                pagedContents.Skip + pagedContents.Take);
 
             return Ok(contents);
         }
 
         [HttpPost("[action]")]
         public async Task<IActionResult> Import(
-            SetupModel setupModel)
+            SetupModel setupModel,
+            CancellationToken cancellationToken = default)
         {
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = StatusCodes
+                    .Status400BadRequest;
+                return View(nameof(Index));
+            }
+
             var contents = await JsonSerializer
                 .DeserializeAsync<IEnumerable<Content>>(
                     setupModel.ImportFile.OpenReadStream(),
-                    JsonSerializerOptions);
+                    JsonSerializerOptions,
+                    cancellationToken);
             foreach (var content in contents)
             {
                 var existingContent = (await ContentRepository
@@ -73,19 +87,20 @@ namespace Diov.Web
                             Path = content.Path,
                         },
                         0,
-                        1))
+                        1,
+                        cancellationToken))
                     .Items
                     .FirstOrDefault();
                 if (existingContent != null)
                 {
                     content.Id = existingContent.Id;
-                    await ContentRepository
-                        .UpdateContentAsync(content);
+                    await ContentRepository.UpdateContentAsync(
+                        content, cancellationToken);
                 }
                 else
                 {
-                    await ContentRepository
-                        .AddContentAsync(content);
+                    await ContentRepository.AddContentAsync(
+                        content, cancellationToken);
                 }
             }
 

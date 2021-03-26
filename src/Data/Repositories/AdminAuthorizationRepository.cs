@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
 
@@ -27,10 +28,12 @@ namespace Diov.Data
 
         public async Task<AdminAuthorization> GetAdminAuthorizationAsync(
             string accountId,
-            string identityProvider)
+            string identityProvider,
+            CancellationToken cancellationToken = default)
         {
             using var sqlConnection = await DbConnectionFactory
-                .GetSqlConnectionAsync();
+                .GetSqlConnectionAsync(cancellationToken);
+
             var adminAuthorization = await sqlConnection
                 .QueryFirstOrDefaultAsync<AdminAuthorization>(
                     SelectStatement,
