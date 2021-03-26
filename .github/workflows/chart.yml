@@ -1,4 +1,4 @@
-name: Release Charts
+name: Release Helm chart
 
 on:
     push:
@@ -9,8 +9,7 @@ jobs:
     release:
         runs-on: ubuntu-latest
         steps:
-          - name: Checkout
-            uses: actions/checkout@v2
+          - uses: actions/checkout@v2
             with:
                 fetch-depth: 0
           - name: Configure Git
