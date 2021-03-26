@@ -8,6 +8,8 @@
     <ProjectReference Include="..\Data\Diov.Data.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="5.0.*" />
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="5.0.*" />
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.*" />
     <PackageReference Include="Markdig" Version="0.24.*" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.*" />
