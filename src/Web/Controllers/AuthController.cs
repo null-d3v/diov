@@ -43,8 +43,7 @@ namespace Diov.Web
 
             if (ExternalAuthenticationOptions
                 .GetSchemeOptions(scheme)?
-                .AdminAuthorization?
-                .Contains(nameIdentifier) != true)
+                .AdminAuthorization == nameIdentifier)
             {
                 var adminAuthorization = await AdminAuthorizationRepository
                     .GetAdminAuthorizationAsync(nameIdentifier, scheme);

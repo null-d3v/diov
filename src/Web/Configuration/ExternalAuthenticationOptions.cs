@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace Diov.Web
@@ -20,12 +19,12 @@ namespace Diov.Web
 
         public interface ISchemeOptions
         {
-            IEnumerable<string> AdminAuthorization { get; set; }
+            string AdminAuthorization { get; set; }
         }
 
         public class GoogleAuthenticationOptions : ISchemeOptions
         {
-            public IEnumerable<string> AdminAuthorization { get; set; }
+            public string AdminAuthorization { get; set; }
             public string ClientId { get; set; }
             public string ClientSecret { get; set; }
         }
