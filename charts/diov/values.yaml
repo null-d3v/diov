@@ -3,7 +3,7 @@ db:
     image: mcr.microsoft.com/mssql/server:2019-latest
     memory: 2Gi
     replicas: 1
-    saPassword: {}
+    saPassword:
     storage: 2Gi
 
 redis:
@@ -13,7 +13,7 @@ redis:
     replicas: 1
     storage: 2Gi
 
-storageClassName: {}
+storageClassName:
 
 web:
     cpu: 2
@@ -22,9 +22,9 @@ web:
         userId: userId
     externalIdentityProviders:
         google:
-            adminAuthorization: {}
-            clientId: {}
-            clientSecret: {}
+            adminAuthorization:
+            clientId:
+            clientSecret:
     host: host
     image: nulld3v/diov
     ingress:
