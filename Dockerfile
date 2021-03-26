@@ -15,6 +15,11 @@ RUN apk add --no-cache bash \
     && wget -O wait-for-it.sh -q https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
     && chmod +x wait-for-it.sh
 
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT false
+RUN apk add --no-cache icu-libs
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+
 WORKDIR /app
 COPY --from=build /app .
 
