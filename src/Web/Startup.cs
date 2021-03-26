@@ -51,11 +51,6 @@ namespace Diov.Web
             applicationBuilder.UseRouting();
 
             applicationBuilder.UseForwardedHeaders();
-            if (!WebHostEnvironment.IsDevelopment())
-            {
-                applicationBuilder.UseHsts();
-            }
-            applicationBuilder.UseHttpsRedirection();
 
             applicationBuilder.UseAuthentication();
             applicationBuilder.UseAuthorization();
