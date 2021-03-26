@@ -6,10 +6,10 @@ metadata:
 spec:
     tls:
       - hosts:
-          - {{ .Values.web.host }}
+          - {{ .Values.web.host | quote }}
         secretName: tls
     rules:
-      - host: {{ .Values.web.host }}
+      - host: {{ .Values.web.host | quote }}
         http:
             paths:
               - path: /
