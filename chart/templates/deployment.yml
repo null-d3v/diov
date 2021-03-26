@@ -1,0 +1,150 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: db
+spec:
+    replicas: {{ .Values.db.replicas }}
+    strategy:
+        type: Recreate
+    selector:
+        matchLabels:
+            service: diov
+    template:
+        metadata:
+            labels:
+                service: diov
+        spec:
+            securityContext:
+                runAsUser: 10001
+                fsGroup: 0
+            terminationGracePeriodSeconds: 10
+            containers:
+              - name: db
+                image: {{ .Values.db.image }}
+                ports:
+                  - name: db
+                    containerPort: 1433
+                env:
+                  - name: MSSQL_PID
+                    value: Developer
+                  - name: ACCEPT_EULA
+                    value: "Y"
+                  - name: MSSQL_SA_PASSWORD
+                    value: {{ .Values.db.saPassword }}
+                volumeMounts:
+                  - name: db
+                    mountPath: /var/opt/mssql
+                resources:
+                    limits:
+                        cpu: {{ .Values.db.cpu }}
+                        memory: {{ .Values.db.memory }}
+            volumes:
+              - name: db
+                persistentVolumeClaim:
+                    claimName: db
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: redis
+spec:
+    replicas: {{ .Values.redis.replicas }}
+    strategy:
+        type: Recreate
+    selector:
+        matchLabels:
+            service: diov
+    template:
+        metadata:
+            labels:
+                service: diov
+        spec:
+            containers:
+              - name: redis
+                image: {{ .Values.redis.image }}
+                ports:
+                  - containerPort: 6379
+                volumeMounts:
+                  - mountPath: /data
+                    name: redis
+                resources:
+                    limits:
+                        cpu: {{ .Values.redis.cpu }}
+                        memory: {{ .Values.redis.memory }}
+            volumes:
+              - name: redis
+                persistentVolumeClaim:
+                    claimName: redis
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: web
+spec:
+    replicas: {{ .Values.web.replicas }}
+    selector:
+        matchLabels:
+            service: diov
+    strategy:
+        rollingUpdate:
+            maxSurge: 25%
+            maxUnavailable: 25%
+        type: RollingUpdate
+    template:
+        metadata:
+            labels:
+                service: diov
+        spec:
+            containers:
+              - image: {{ .Values.web.image }}
+                name: web
+                ports:
+                  - name: http
+                    containerPort: 80
+                    protocol: TCP
+                env:
+                  - name: ASPNETCORE_ENVIRONMENT
+                    value: Production
+                  - name: ConnectionStrings__Redis
+                    value: redis
+                  - name: ConnectionStrings__Sql
+                    value: Server=db;Database=Diov;User Id={{ .Values.web.db.userId }};Password={{ .Values.web.db.password }};
+                  - name: ExternalAuthentication__Google__AdminAuthorization
+                    value: {{ .Values.web.externalIdentityProviders.google.adminAuthorization }}
+                  - name: ExternalAuthentication__Google__ClientId
+                    value: {{ .Values.web.externalIdentityProviders.google.clientId }}
+                  - name: ExternalAuthentication__Google__ClientSecret
+                    value: {{ .Values.web.externalIdentityProviders.google.clientSecret }}
+                  - name: Serilog__MinimumLevel
+                    value: Warning
+                volumeMounts:
+                  - name: media
+                    mountPath: /app/wwwroot/media
+                    readOnly: true
+                resources:
+                    limits:
+                        cpu: {{ .Values.web.cpu }}
+                        memory: {{ .Values.web.memory }}
+            #     readinessProbe:
+            #         httpGet:
+            #             path: /health/readiness
+            #             port: 80
+            #         initialDelaySeconds: 10
+            #         timeoutSeconds: 30
+            #         periodSeconds: 60
+            #         successThreshold: 1
+            #         failureThreshold: 5
+            #     livenessProbe:
+            #         httpGet:
+            #             path: /health/liveness
+            #             port: 80
+            #         initialDelaySeconds: 10
+            #         timeoutSeconds: 5
+            #         periodSeconds: 15
+            #         successThreshold: 1
+            #         failureThreshold: 3
+            # restartPolicy: Always
+            volumes:
+              - name: media
+                persistentVolumeClaim:
+                    claimName: media

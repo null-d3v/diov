@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    annotations: {{- toYaml .Values.web.ingress.annotations | nindent 8 }}
+    name: web
+spec:
+    tls:
+      - hosts:
+          - {{ .Values.web.host }}
+        secretName: tls
+    rules:
+      - host: {{ .Values.web.host }}
+        http:
+            paths:
+              - path: /
+                pathType: Prefix
+                backend:
+                    service:
+                        name: web
+                        port:
+                            number: 80

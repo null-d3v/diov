@@ -1,0 +1,5 @@
+apiVersion: v2
+name: diov
+description: https://github.com/null-d3v/diov
+type: application
+version: "1"
