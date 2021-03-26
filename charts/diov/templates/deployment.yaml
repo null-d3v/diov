@@ -20,7 +20,7 @@ spec:
             terminationGracePeriodSeconds: 10
             containers:
               - name: db
-                image: {{ .Values.db.image }}
+                image: {{ .Values.db.image | quote }}
                 ports:
                   - name: db
                     containerPort: 1433
@@ -30,7 +30,7 @@ spec:
                   - name: ACCEPT_EULA
                     value: "Y"
                   - name: MSSQL_SA_PASSWORD
-                    value: {{ .Values.db.saPassword }}
+                    value: {{ .Values.db.saPassword | quote }}
                 volumeMounts:
                   - name: db
                     mountPath: /var/opt/mssql
@@ -61,7 +61,7 @@ spec:
         spec:
             containers:
               - name: redis
-                image: {{ .Values.redis.image }}
+                image: {{ .Values.redis.image | quote }}
                 ports:
                   - containerPort: 6379
                 volumeMounts:
@@ -96,7 +96,7 @@ spec:
                 service: diov
         spec:
             containers:
-              - image: {{ .Values.web.image }}
+              - image: {{ .Values.web.image | quote }}
                 name: web
                 ports:
                   - name: http
@@ -110,11 +110,11 @@ spec:
                   - name: ConnectionStrings__Sql
                     value: Server=db;Database=Diov;User Id={{ .Values.web.db.userId }};Password={{ .Values.web.db.password }};
                   - name: ExternalAuthentication__Google__AdminAuthorization
-                    value: {{ .Values.web.externalIdentityProviders.google.adminAuthorization }}
+                    value: {{ .Values.web.externalIdentityProviders.google.adminAuthorization | quote }}
                   - name: ExternalAuthentication__Google__ClientId
-                    value: {{ .Values.web.externalIdentityProviders.google.clientId }}
+                    value: {{ .Values.web.externalIdentityProviders.google.clientId | quote }}
                   - name: ExternalAuthentication__Google__ClientSecret
-                    value: {{ .Values.web.externalIdentityProviders.google.clientSecret }}
+                    value: {{ .Values.web.externalIdentityProviders.google.clientSecret | quote }}
                   - name: Serilog__MinimumLevel
                     value: Warning
                 volumeMounts:
