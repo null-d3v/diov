@@ -9,7 +9,6 @@ spec:
         requests:
             storage: {{ .Values.db.storage }}
     storageClassName: {{ .Values.storageClassName }}
-status: {}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -22,7 +21,6 @@ spec:
         requests:
             storage: {{ .Values.web.storage }}
     storageClassName: {{ .Values.storageClassName }}
-status: {}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -35,4 +33,3 @@ spec:
         requests:
             storage: {{ .Values.redis.storage }}
     storageClassName: {{ .Values.storageClassName }}
-status: {}

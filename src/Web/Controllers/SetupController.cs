@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,18 +16,18 @@ namespace Diov.Web
     public class SetupController : Controller
     {
         public SetupController(
-            IContentRepository contentRepository,
+            IContentAccessor contentAccessor,
             IOptions<JsonSerializerOptions> jsonSerializerOptions)
         {
-            ContentRepository = contentRepository ??
+            ContentAccessor = contentAccessor ??
                 throw new ArgumentNullException(
-                    nameof(contentRepository));
+                    nameof(contentAccessor));
             JsonSerializerOptions = jsonSerializerOptions?.Value ??
                 throw new ArgumentNullException(
-                    nameof(contentRepository));
+                    nameof(contentAccessor));
         }
 
-        public IContentRepository ContentRepository { get; }
+        public IContentAccessor ContentAccessor { get; }
         public JsonSerializerOptions JsonSerializerOptions { get; }
 
         [HttpGet("[action]")]
@@ -46,8 +45,8 @@ namespace Diov.Web
             {
                 pagedContents.Skip += pagedContents.Take;
 
-                pagedContents = await ContentRepository
-                    .SearchContentsAsync(
+                pagedContents = await ContentAccessor
+                    .SearchContentAsync(
                         new ContentSearchRequest(),
                         pagedContents.Skip,
                         pagedContents.Take,
@@ -80,26 +79,19 @@ namespace Diov.Web
                     cancellationToken);
             foreach (var content in contents)
             {
-                var existingContent = (await ContentRepository
-                    .SearchContentsAsync(
-                        new ContentSearchRequest
-                        {
-                            Path = content.Path,
-                        },
-                        0,
-                        1,
-                        cancellationToken))
-                    .Items
-                    .FirstOrDefault();
+                var existingContent = await ContentAccessor
+                    .GetContentAsync(
+                        content.Path,
+                        cancellationToken);
                 if (existingContent != null)
                 {
                     content.Id = existingContent.Id;
-                    await ContentRepository.UpdateContentAsync(
+                    await ContentAccessor.UpdateContentAsync(
                         content, cancellationToken);
                 }
                 else
                 {
-                    await ContentRepository.AddContentAsync(
+                    await ContentAccessor.AddContentAsync(
                         content, cancellationToken);
                 }
             }

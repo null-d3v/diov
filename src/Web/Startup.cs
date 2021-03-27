@@ -5,11 +5,13 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using StackExchange.Redis;
+using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -79,6 +81,14 @@ namespace Diov.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
+            services.Configure<DistributedCacheEntryOptions>(
+                options =>
+                {
+                    options.AbsoluteExpirationRelativeToNow =
+                        TimeSpan.FromDays(1);
+                });
+            services.Configure<ExternalAuthenticationOptions>(
+                Configuration.GetSection("ExternalAuthentication"));
             services.Configure<JsonSerializerOptions>(
                 options =>
                 {
@@ -86,8 +96,6 @@ namespace Diov.Web
                         .AllowReadingFromString;
                     options.PropertyNameCaseInsensitive = true;
                 });
-            services.Configure<ExternalAuthenticationOptions>(
-                Configuration.GetSection("ExternalAuthentication"));
 
             services.AddSingleton<IDbConnectionFactory>(
                 new DbConnectionFactory(
@@ -97,6 +105,15 @@ namespace Diov.Web
                 AdminAuthorizationRepository>();
             services.AddTransient<IContentRepository, ContentRepository>();
             services.AddHostedService<MigrationHostedService>();
+
+            services.AddL1L2RedisCache(
+                options =>
+                {
+                    options.Configuration = Configuration
+                        .GetConnectionString("Redis");
+                    options.InstanceName = Constants.RedisInstanceName;
+                });
+            services.AddTransient<IContentAccessor, DistributedCacheContentAccessor>();
 
             services.Configure<ForwardedHeadersOptions>(
                 options =>
@@ -167,7 +184,6 @@ namespace Diov.Web
             {
                 mvcBuilder.AddRazorRuntimeCompilation();
             }
-
         }
     }
 }

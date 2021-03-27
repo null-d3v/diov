@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,14 +11,14 @@ namespace Diov.Web
     public class ContentController : Controller
     {
         public ContentController(
-            IContentRepository contentRepository)
+            IContentAccessor contentAccessor)
         {
-            ContentRepository = contentRepository ??
+            ContentAccessor = contentAccessor ??
                 throw new ArgumentNullException(
-                    nameof(contentRepository));
+                    nameof(contentAccessor));
         }
 
-        public IContentRepository ContentRepository { get; }
+        public IContentAccessor ContentAccessor { get; }
 
         [Authorize]
         [HttpGet("[controller]/[action]")]
@@ -41,7 +40,7 @@ namespace Diov.Web
                 return View(content);
             }
 
-            await ContentRepository.AddContentAsync(
+            await ContentAccessor.AddContentAsync(
                 content, cancellationToken);
 
             return RedirectToAction(
@@ -56,17 +55,10 @@ namespace Diov.Web
             [FromRoute]string path,
             CancellationToken cancellationToken = default)
         {
-            var content = (await ContentRepository
-                .SearchContentsAsync(
-                    new ContentSearchRequest
-                    {
-                        Path = path,
-                    },
-                    0,
-                    1,
-                    cancellationToken))
-                .Items
-                .FirstOrDefault();
+            var content = await ContentAccessor
+                .GetContentAsync(
+                    path.ToLowerInvariant(),
+                    cancellationToken);
 
             if (content == null)
             {
@@ -83,24 +75,8 @@ namespace Diov.Web
             [FromForm]Content content,
             CancellationToken cancellationToken = default)
         {
-            var contentId = (await ContentRepository
-                .SearchContentsAsync(
-                    new ContentSearchRequest
-                    {
-                        Path = path,
-                    },
-                    0,
-                    1,
-                    cancellationToken))
-                .Items
-                .FirstOrDefault()?
-                .Id ?? 0;
-
-            if (contentId != 0)
-            {
-                await ContentRepository.DeleteContentAsync(
-                    contentId, cancellationToken);
-            }
+            await ContentAccessor.DeleteContentAsync(
+                path.ToLowerInvariant(), cancellationToken);
 
             return RedirectToAction(
                 "Index",
@@ -112,17 +88,10 @@ namespace Diov.Web
             [FromRoute]string path,
             CancellationToken cancellationToken = default)
         {
-            var content = (await ContentRepository
-                .SearchContentsAsync(
-                    new ContentSearchRequest
-                    {
-                        Path = path,
-                    },
-                    0,
-                    1,
-                    cancellationToken))
-                .Items
-                .FirstOrDefault();
+            var content = await ContentAccessor
+                .GetContentAsync(
+                    path.ToLowerInvariant(),
+                    cancellationToken);
 
             if (content == null)
             {
@@ -138,17 +107,10 @@ namespace Diov.Web
             [FromRoute]string path,
             CancellationToken cancellationToken = default)
         {
-            var content = (await ContentRepository
-                .SearchContentsAsync(
-                    new ContentSearchRequest
-                    {
-                        Path = path,
-                    },
-                    0,
-                    1,
-                    cancellationToken))
-                .Items
-                .FirstOrDefault();
+            var content = await ContentAccessor
+                .GetContentAsync(
+                    path.ToLowerInvariant(),
+                    cancellationToken);
 
             if (content == null)
             {
@@ -172,25 +134,18 @@ namespace Diov.Web
                 return View(content);
             }
 
-            content.Id = (await ContentRepository
-                .SearchContentsAsync(
-                    new ContentSearchRequest
-                    {
-                        Path = path,
-                    },
-                    0,
-                    1,
-                    cancellationToken))
-                .Items
-                .FirstOrDefault()?
-                .Id ?? 0;
+            content.Id = (await ContentAccessor
+                .GetContentAsync(
+                    path.ToLowerInvariant(),
+                    cancellationToken))?
+                    .Id ?? 0;
 
             if (content.Id == 0)
             {
                 return NotFound();
             }
 
-            await ContentRepository.UpdateContentAsync(
+            await ContentAccessor.UpdateContentAsync(
                 content, cancellationToken);
 
             return RedirectToAction(
@@ -209,8 +164,8 @@ namespace Diov.Web
                 indexed = true;
             }
 
-            var searchResponse = await ContentRepository
-                .SearchContentsAsync(
+            var searchResponse = await ContentAccessor
+                .SearchContentAsync(
                     new ContentSearchRequest
                     {
                         IsIndexed = indexed,

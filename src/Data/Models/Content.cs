@@ -30,9 +30,13 @@ namespace Diov.Data
                 body = htmlSanitizer.Sanitize(value);
             }
         }
+
         public int Id { get; set; }
+
         public bool IsIndexed { get; set; }
+
         public string Name { get; set; }
+
         [Required]
         public string Path
         {
@@ -53,9 +57,11 @@ namespace Diov.Data
                 }
             }
         }
+
         [DataType(DataType.Date)]
         [Required]
         public DateTimeOffset? PublishedDateTime { get; set; }
+
         [Required]
         public string Summary { get; set; }
 

@@ -11,7 +11,7 @@ namespace Diov.Data
     {
         private const string DeleteStatement =
             @"DELETE FROM [Content]
-            WHERE [Id] = @Id;";
+            WHERE [Path] = @Path;";
         private const string InsertStatement =
             @"INSERT INTO [Content]
             (
@@ -66,7 +66,8 @@ namespace Diov.Data
                 [Summary] = @Summary
             WHERE [Id] = @Id;";
 
-        public ContentRepository(IDbConnectionFactory dbConnectionFactory)
+        public ContentRepository(
+            IDbConnectionFactory dbConnectionFactory)
         {
             DbConnectionFactory = dbConnectionFactory ??
                 throw new ArgumentNullException(
@@ -106,7 +107,7 @@ namespace Diov.Data
         }
 
         public async Task DeleteContentAsync(
-            int id,
+            string path,
             CancellationToken cancellationToken = default)
         {
             using var sqlConnection = await DbConnectionFactory
@@ -117,7 +118,8 @@ namespace Diov.Data
             {
                 await sqlConnection.ExecuteAsync(
                     DeleteStatement,
-                    new { Id = id, });
+                    new { Path = path, },
+                    sqlTransaction);
 
                 await sqlTransaction.CommitAsync(
                     cancellationToken);
@@ -130,7 +132,28 @@ namespace Diov.Data
             }
         }
 
-        public async Task<SearchResponse<Content>> SearchContentsAsync(
+        public async Task<Content> GetContentAsync(
+            string path,
+            CancellationToken cancellationToken = default)
+        {
+            var selectStatementBuilder = new StringBuilder(
+                SelectStatement);
+            selectStatementBuilder.Append(
+                SelectStatementPathPredicate);
+            selectStatementBuilder.Append(';');
+
+            using var sqlConnection = await DbConnectionFactory
+                .GetSqlConnectionAsync(cancellationToken);
+            return await sqlConnection
+                .QuerySingleAsync<Content>(
+                    selectStatementBuilder.ToString(),
+                    new
+                    {
+                        Path = path,
+                    });
+        }
+
+        public async Task<SearchResponse<Content>> SearchContentAsync(
             ContentSearchRequest contentSearchRequest,
             int skip = 0,
             int take = 5,
@@ -164,7 +187,7 @@ namespace Diov.Data
 
             using var sqlConnection = await DbConnectionFactory
                 .GetSqlConnectionAsync(cancellationToken);
-            var contents = await sqlConnection
+            var content = await sqlConnection
                 .QueryAsync<Content>(
                     selectStatementBuilder.ToString(),
                     new
@@ -186,7 +209,7 @@ namespace Diov.Data
 
             return new SearchResponse<Content>
             {
-                Items = contents,
+                Items = content,
                 Skip = skip,
                 Take = take,
                 TotalCount = totalCount,

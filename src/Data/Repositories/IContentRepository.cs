@@ -10,10 +10,14 @@ namespace Diov.Data
             CancellationToken cancellationToken = default);
 
         Task DeleteContentAsync(
-            int id,
+            string path,
             CancellationToken cancellationToken = default);
 
-        Task<SearchResponse<Content>> SearchContentsAsync(
+        Task<Content> GetContentAsync(
+            string path,
+            CancellationToken cancellationToken = default);
+
+        Task<SearchResponse<Content>> SearchContentAsync(
             ContentSearchRequest contentSearchRequest,
             int skip = 0,
             int take = 5,
