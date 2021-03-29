@@ -1,7 +1,7 @@
 db:
     cpu: 1
     image: mcr.microsoft.com/mssql/server:2019-latest
-    memory: 2Gi
+    memory: 4Gi
     replicas: 1
     saPassword:
     storage: 2Gi

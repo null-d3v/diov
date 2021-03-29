@@ -42,7 +42,7 @@ namespace Diov.Web
             Content content,
             CancellationToken cancellationToken = default)
         {
-            var id = await ContentRepository.AddContentAsync(
+            content.Id = await ContentRepository.AddContentAsync(
                 content, cancellationToken);
 
             await DistributedCache.SetAsync(
@@ -52,7 +52,7 @@ namespace Diov.Web
                 JsonSerializerOptions,
                 cancellationToken);
 
-            return id;
+            return content.Id;
         }
 
         public async Task DeleteContentAsync(
