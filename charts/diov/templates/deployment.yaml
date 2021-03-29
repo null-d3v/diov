@@ -38,7 +38,7 @@ spec:
                     limits:
                         cpu: {{ .Values.db.cpu }}
                         memory: {{ .Values.db.memory }}
-                    request:
+                    requests:
                         cpu: 250m
                         memory: 1Gi
             volumes:
@@ -74,7 +74,7 @@ spec:
                     limits:
                         cpu: {{ .Values.redis.cpu }}
                         memory: {{ .Values.redis.memory }}
-                    request:
+                    requests:
                         cpu: 250m
                         memory: 1Gi
             volumes:
@@ -131,7 +131,7 @@ spec:
                     limits:
                         cpu: {{ .Values.web.cpu }}
                         memory: {{ .Values.web.memory }}
-                    request:
+                    requests:
                         cpu: 100m
                         memory: 1Gi
                 livenessProbe:
