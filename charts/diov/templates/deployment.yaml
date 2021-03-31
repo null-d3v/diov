@@ -8,11 +8,11 @@ spec:
         type: Recreate
     selector:
         matchLabels:
-            service: diov-db
+            app.kubernetes.io/name: db
     template:
         metadata:
             labels:
-                service: diov-db
+                app.kubernetes.io/name: db
         spec:
             securityContext:
                 runAsUser: 10001
@@ -56,11 +56,11 @@ spec:
         type: Recreate
     selector:
         matchLabels:
-            service: diov-redis
+            app.kubernetes.io/name: redis
     template:
         metadata:
             labels:
-                service: diov-redis
+                app.kubernetes.io/name: redis
         spec:
             containers:
               - name: redis
@@ -90,7 +90,7 @@ spec:
     replicas: {{ .Values.web.replicas }}
     selector:
         matchLabels:
-            service: diov-web
+            app.kubernetes.io/name: web
     strategy:
         rollingUpdate:
             maxSurge: 25%
@@ -99,7 +99,7 @@ spec:
     template:
         metadata:
             labels:
-                service: diov-web
+                app.kubernetes.io/name: web
         spec:
             containers:
               - image: {{ .Values.web.image | quote }}

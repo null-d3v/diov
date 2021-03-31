@@ -3,10 +3,10 @@ kind: Service
 metadata:
     name: db
     labels:
-        service: diov-db
+        app.kubernetes.io/name: db
 spec:
     selector:
-        service: diov-db
+        app.kubernetes.io/name: db
     ports:
       - port: 1433
 ---
@@ -15,10 +15,10 @@ kind: Service
 metadata:
     name: redis
     labels:
-        service: diov-redis
+        app.kubernetes.io/name: redis
 spec:
     selector:
-        service: diov-redis
+        app.kubernetes.io/name: redis
     ports:
       - port: 6379
 ---
