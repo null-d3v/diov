@@ -3,10 +3,10 @@ kind: Service
 metadata:
     name: db
     labels:
-        service: diov
+        service: diov-db
 spec:
     selector:
-        service: diov
+        service: diov-db
     ports:
       - port: 1433
 ---
@@ -15,10 +15,10 @@ kind: Service
 metadata:
     name: redis
     labels:
-        service: diov
+        service: diov-redis
 spec:
     selector:
-        service: diov
+        service: diov-redis
     ports:
       - port: 6379
 ---
@@ -27,10 +27,10 @@ kind: Service
 metadata:
     name: web
     labels:
-        service: diov
+        service: diov-web
 spec:
     selector:
-        service: diov
+        service: diov-web
     ports:
       - name: http
         port: 80

@@ -8,11 +8,11 @@ spec:
         type: Recreate
     selector:
         matchLabels:
-            service: diov
+            service: diov-db
     template:
         metadata:
             labels:
-                service: diov
+                service: diov-db
         spec:
             securityContext:
                 runAsUser: 10001
@@ -56,11 +56,11 @@ spec:
         type: Recreate
     selector:
         matchLabels:
-            service: diov
+            service: diov-redis
     template:
         metadata:
             labels:
-                service: diov
+                service: diov-redis
         spec:
             containers:
               - name: redis
@@ -90,7 +90,7 @@ spec:
     replicas: {{ .Values.web.replicas }}
     selector:
         matchLabels:
-            service: diov
+            service: diov-web
     strategy:
         rollingUpdate:
             maxSurge: 25%
@@ -99,7 +99,7 @@ spec:
     template:
         metadata:
             labels:
-                service: diov
+                service: diov-web
         spec:
             containers:
               - image: {{ .Values.web.image | quote }}
