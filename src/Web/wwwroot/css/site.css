@@ -169,13 +169,14 @@ q
 
 summary
 {
-    color: var(--color-text-primary);
+    color: var(--color-primary);
     cursor: pointer;
     outline: none;
+    width: fit-content;
 }
-summary:hover
+summary:focus, summary:hover
 {
-    color: var(--color-text-secondary);
+    color: var(--color-secondary);
 }
 
 time
