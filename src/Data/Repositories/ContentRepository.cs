@@ -145,7 +145,7 @@ namespace Diov.Data
             using var sqlConnection = await DbConnectionFactory
                 .GetSqlConnectionAsync(cancellationToken);
             return await sqlConnection
-                .QuerySingleAsync<Content>(
+                .QuerySingleOrDefaultAsync<Content>(
                     selectStatementBuilder.ToString(),
                     new
                     {
