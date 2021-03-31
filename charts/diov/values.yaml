@@ -31,4 +31,6 @@ web:
         annotations: {}
     memory: 2Gi
     replicas: 2
+    serilog:
+        minimumLevel: Warning
     storage: 2Gi

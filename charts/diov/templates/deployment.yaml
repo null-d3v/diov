@@ -122,7 +122,7 @@ spec:
                   - name: ExternalAuthentication__Google__ClientSecret
                     value: {{ .Values.web.externalIdentityProviders.google.clientSecret | quote }}
                   - name: Serilog__MinimumLevel
-                    value: Warning
+                    value: {{ .Values.web.serilog.minimumLevel | quote }}
                 volumeMounts:
                   - name: media
                     mountPath: /app/wwwroot/media
