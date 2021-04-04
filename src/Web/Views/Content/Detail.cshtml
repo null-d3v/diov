@@ -43,6 +43,6 @@
             </time>
         }
         @Html.Raw(Markdown.ToHtml(Model.Summary))
-        @Html.Raw(Model.Body)
+        @Html.Raw(Markdown.ToHtml(Model.Body))
     </div>
 </div>

@@ -167,6 +167,17 @@ legend
     font-size: 1.5rem;
 }
 
+li
+{
+    margin-bottom: 1rem;
+}
+
+ol, ul
+{
+    margin-block-end: 0;
+    padding-inline-start: 2rem;
+}
+
 q
 {
     color: var(--color-text-alt);
@@ -419,6 +430,7 @@ time
 }
 .menu li
 {
+    margin: 0;
     text-align: right;
 }
 .menu li a
