@@ -105,7 +105,7 @@ button:focus, input:focus, select:focus, textarea:focus
 code
 {
     color: var(--color-text-alt);
-    white-space: normal;
+    white-space: break-spaces;
 }
 
 fieldset
