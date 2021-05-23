@@ -2,6 +2,15 @@ apiVersion: v1
 entries:
   diov:
   - apiVersion: v2
+    created: "2021-05-23T04:04:35.23142857Z"
+    description: https://github.com/null-d3v/diov
+    digest: c5ded55e4dfe666233d82728b22af5301e7af92a4a5498655235da582b4f7ad8
+    name: diov
+    type: application
+    urls:
+    - https://github.com/null-d3v/diov/releases/download/diov-1.1.1/diov-1.1.1.tgz
+    version: 1.1.1
+  - apiVersion: v2
     created: "2021-05-23T01:57:49.392804837Z"
     description: https://github.com/null-d3v/diov
     digest: 6ec60effee6397c3e3e8d840ac52520ab79f7ca443858f177b676fd6ae0f61c9
@@ -109,4 +118,4 @@ entries:
     urls:
     - https://github.com/null-d3v/diov/releases/download/diov-1.0.0-beta.1/diov-1.0.0-beta.1.tgz
     version: 1.0.0-beta.1
-generated: "2021-05-23T01:57:49.392853437Z"
+generated: "2021-05-23T04:04:35.23149437Z"
