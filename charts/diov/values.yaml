@@ -13,8 +13,8 @@ db:
             cpu: 1
             memory: 4Gi
         requests:
-            cpu: 50m
-            memory: 256Mi
+            cpu: 25m
+            memory: 1Gi
     saPassword:
 
 redis:
@@ -32,8 +32,8 @@ redis:
             cpu: 1
             memory: 2Gi
         requests:
-            cpu: 50m
-            memory: 256Mi
+            cpu: 10m
+            memory: 32Mi
 
 web:
     additionalVolumeMounts: []
@@ -61,7 +61,7 @@ web:
             cpu: 2
             memory: 2Gi
         requests:
-            cpu: 50m
-            memory: 256Mi
+            cpu: 10m
+            memory: 64Mi
     serilog:
         minimumLevel: Warning
