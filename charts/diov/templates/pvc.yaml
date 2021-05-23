@@ -1,35 +1,48 @@
+{{- if .Values.db.persistence.enabled -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+    labels:
+        {{- include "diov.db.labels" . | nindent 8 }}
     name: db
 spec:
     accessModes:
       - ReadWriteMany
     resources:
         requests:
-            storage: {{ .Values.db.storage }}
-    storageClassName: {{ .Values.storageClassName }}
+            storage: {{ .Values.db.persistence.storage }}
+    storageClassName: {{ .Values.db.persistence.storageClassName }}
 ---
+{{- end }}
+{{- if .Values.redis.persistence.enabled -}}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-    name: media
-spec:
-    accessModes:
-      - ReadWriteMany
-    resources:
-        requests:
-            storage: {{ .Values.web.storage }}
-    storageClassName: {{ .Values.storageClassName }}
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
+    labels:
+        {{- include "diov.redis.labels" . | nindent 8 }}
     name: redis
 spec:
     accessModes:
       - ReadWriteOnce
     resources:
         requests:
-            storage: {{ .Values.redis.storage }}
-    storageClassName: {{ .Values.storageClassName }}
+            storage: {{ .Values.redis.persistence.storage }}
+    storageClassName: {{ .Values.redis.persistence.storageClassName }}
+---
+{{- end }}
+{{- if .Values.web.persistence.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    labels:
+        {{- include "diov.web.labels" . | nindent 8 }}
+    name: web
+spec:
+    accessModes:
+      - ReadWriteMany
+    resources:
+        requests:
+            storage: {{ .Values.web.persistence.storage }}
+    storageClassName: {{ .Values.web.persistence.storageClassName }}
+---
+{{- end }}

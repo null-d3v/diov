@@ -1,36 +1,67 @@
 db:
-    cpu: 1
+    additionalVolumeMounts: []
+    additionalVolumes: []
     image: mcr.microsoft.com/mssql/server:2019-latest
-    memory: 4Gi
+    persistence:
+        enabled: false
+        mountPath: /var/opt/mssql
+        storage: 2Gi
+        storageClassName:
     replicas: 1
+    resources:
+        limits:
+            cpu: 1
+            memory: 4Gi
+        requests:
+            cpu: 50m
+            memory: 256Mi
     saPassword:
-    storage: 2Gi
 
 redis:
-    cpu: 1
+    additionalVolumeMounts: []
+    additionalVolumes: []
     image: redis
-    memory: 2Gi
+    persistence:
+        enabled: false
+        mountPath: /data
+        storage: 2Gi
+        storageClassName:
     replicas: 1
-    storage: 2Gi
-
-storageClassName:
+    resources:
+        limits:
+            cpu: 1
+            memory: 2Gi
+        requests:
+            cpu: 50m
+            memory: 256Mi
 
 web:
-    cpu: 2
+    additionalVolumeMounts: []
+    additionalVolumes: []
     db:
-        password: password
-        userId: userId
+        password:
+        userId:
     externalIdentityProviders:
         google:
             adminAuthorization:
             clientId:
             clientSecret:
-    host: host
+    host: example.com
     image: nulld3v/diov
     ingress:
         annotations: {}
-    memory: 2Gi
-    replicas: 2
+    persistence:
+        enabled: false
+        mountPath: /app/wwwroot/media
+        storage: 2Gi
+        storageClassName:
+    replicas: 1
+    resources:
+        limits:
+            cpu: 2
+            memory: 2Gi
+        requests:
+            cpu: 50m
+            memory: 256Mi
     serilog:
         minimumLevel: Warning
-    storage: 2Gi

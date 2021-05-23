@@ -1,7 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-    annotations: {{- toYaml .Values.web.ingress.annotations | nindent 8 }}
+    annotations:
+        {{- toYaml .Values.web.ingress.annotations | nindent 8 }}
+    labels:
+        {{- include "diov.web.labels" . | nindent 8 }}
     name: web
 spec:
     tls:

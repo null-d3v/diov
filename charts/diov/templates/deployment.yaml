@@ -1,6 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+    labels:
+        {{- include "diov.db.labels" . | nindent 8 }}
     name: db
 spec:
     replicas: {{ .Values.db.replicas }}
@@ -8,11 +10,11 @@ spec:
         type: Recreate
     selector:
         matchLabels:
-            app.kubernetes.io/name: db
+            {{- include "diov.db.selectorLabels" . | nindent 12 }}
     template:
         metadata:
             labels:
-                app.kubernetes.io/name: db
+                {{- include "diov.db.selectorLabels" . | nindent 16 }}
         spec:
             securityContext:
                 runAsUser: 10001
@@ -31,24 +33,34 @@ spec:
                     value: "Y"
                   - name: MSSQL_SA_PASSWORD
                     value: {{ .Values.db.saPassword | quote }}
+                {{- if or .Values.db.persistence.enabled .Values.db.additionalVolumeMounts }}
                 volumeMounts:
+                  {{- if .Values.db.persistence.enabled }}
                   - name: db
-                    mountPath: /var/opt/mssql
-                resources:
-                    limits:
-                        cpu: {{ .Values.db.cpu }}
-                        memory: {{ .Values.db.memory }}
-                    requests:
-                        cpu: 250m
-                        memory: 1Gi
+                    mountPath: {{ .Values.db.persistence.mountPath | quote }}
+                  {{- end }}
+                  {{- with .Values.db.additionalVolumeMounts }}
+                  {{- toYaml . | nindent 18 }}
+                  {{- end }}
+                {{- end }}
+                resources: {{- toYaml .Values.db.resources | nindent 20 }}
+            {{- if or .Values.db.persistence.enabled .Values.db.additionalVolumes }}
             volumes:
+              {{- if .Values.db.persistence.enabled }}
               - name: db
                 persistentVolumeClaim:
                     claimName: db
+              {{- end }}
+              {{- with .Values.db.additionalVolumes }}
+              {{- toYaml . | nindent 14 }}
+              {{- end }}
+            {{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+    labels:
+        {{- include "diov.redis.labels" . | nindent 8 }}
     name: redis
 spec:
     replicas: {{ .Values.redis.replicas }}
@@ -56,50 +68,55 @@ spec:
         type: Recreate
     selector:
         matchLabels:
-            app.kubernetes.io/name: redis
+            {{- include "diov.redis.selectorLabels" . | nindent 12 }}
     template:
         metadata:
             labels:
-                app.kubernetes.io/name: redis
+                {{- include "diov.redis.selectorLabels" . | nindent 16 }}
         spec:
             containers:
               - name: redis
                 image: {{ .Values.redis.image | quote }}
                 ports:
                   - containerPort: 6379
+                {{- if or .Values.redis.persistence.enabled .Values.redis.additionalVolumeMounts }}
                 volumeMounts:
-                  - mountPath: /data
+                  {{- if .Values.redis.persistence.enabled }}
+                  - mountPath: {{ .Values.redis.persistence.mountPath | quote }}
                     name: redis
-                resources:
-                    limits:
-                        cpu: {{ .Values.redis.cpu }}
-                        memory: {{ .Values.redis.memory }}
-                    requests:
-                        cpu: 250m
-                        memory: 1Gi
+                  {{- end }}
+                  {{- with .Values.redis.additionalVolumeMounts }}
+                  {{- toYaml . | nindent 18 }}
+                  {{- end }}
+                {{- end }}
+                resources: {{- toYaml .Values.redis.resources | nindent 20 }}
+            {{- if or .Values.redis.persistence.enabled .Values.redis.additionalVolumes }}
             volumes:
+              {{- if .Values.redis.persistence.enabled }}
               - name: redis
                 persistentVolumeClaim:
                     claimName: redis
+              {{- end }}
+              {{- with .Values.redis.additionalVolumes }}
+              {{- toYaml . | nindent 14 }}
+              {{- end }}
+            {{- end }}
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+    labels:
+        {{- include "diov.web.labels" . | nindent 8 }}
     name: web
 spec:
     replicas: {{ .Values.web.replicas }}
     selector:
         matchLabels:
-            app.kubernetes.io/name: web
-    strategy:
-        rollingUpdate:
-            maxSurge: 25%
-            maxUnavailable: 25%
-        type: RollingUpdate
+            {{- include "diov.web.selectorLabels" . | nindent 12 }}
     template:
         metadata:
             labels:
-                app.kubernetes.io/name: web
+                {{- include "diov.web.selectorLabels" . | nindent 16 }}
         spec:
             containers:
               - image: {{ .Values.web.image | quote }}
@@ -123,17 +140,18 @@ spec:
                     value: {{ .Values.web.externalIdentityProviders.google.clientSecret | quote }}
                   - name: Serilog__MinimumLevel
                     value: {{ .Values.web.serilog.minimumLevel | quote }}
+                {{- if or .Values.web.persistence.enabled .Values.web.additionalVolumeMounts }}
                 volumeMounts:
-                  - name: media
-                    mountPath: /app/wwwroot/media
+                  {{- if .Values.web.persistence.enabled }}
+                  - name: web
+                    mountPath: {{ .Values.web.persistence.mountPath | quote }}
                     readOnly: true
-                resources:
-                    limits:
-                        cpu: {{ .Values.web.cpu }}
-                        memory: {{ .Values.web.memory }}
-                    requests:
-                        cpu: 100m
-                        memory: 1Gi
+                  {{- end }}
+                  {{- with .Values.web.additionalVolumeMounts }}
+                  {{- toYaml . | nindent 18 }}
+                  {{- end }}
+                {{- end }}
+                resources: {{- toYaml .Values.web.resources | nindent 20 }}
                 livenessProbe:
                     httpGet:
                         path: /health/live
@@ -153,7 +171,14 @@ spec:
                     failureThreshold: 10
                     periodSeconds: 5
             restartPolicy: Always
+            {{- if or .Values.web.persistence.enabled .Values.web.additionalVolumes }}
             volumes:
-              - name: media
+              {{- if .Values.web.persistence.enabled }}
+              - name: web
                 persistentVolumeClaim:
-                    claimName: media
+                    claimName: web
+              {{- end }}
+              {{- with .Values.web.additionalVolumes }}
+              {{- toYaml . | nindent 14 }}
+              {{- end }}
+            {{- end }}

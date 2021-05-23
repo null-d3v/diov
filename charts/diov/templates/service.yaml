@@ -3,10 +3,10 @@ kind: Service
 metadata:
     name: db
     labels:
-        app.kubernetes.io/name: db
+        {{- include "diov.db.labels" . | nindent 8 }}
 spec:
     selector:
-        app.kubernetes.io/name: db
+        {{- include "diov.db.selectorLabels" . | nindent 8 }}
     ports:
       - port: 1433
 ---
@@ -15,10 +15,10 @@ kind: Service
 metadata:
     name: redis
     labels:
-        app.kubernetes.io/name: redis
+        {{- include "diov.redis.labels" . | nindent 8 }}
 spec:
     selector:
-        app.kubernetes.io/name: redis
+        {{- include "diov.redis.selectorLabels" . | nindent 8 }}
     ports:
       - port: 6379
 ---
@@ -27,10 +27,10 @@ kind: Service
 metadata:
     name: web
     labels:
-        app.kubernetes.io/name: web
+        {{- include "diov.web.labels" . | nindent 8 }}
 spec:
     selector:
-        app.kubernetes.io/name: web
+        {{- include "diov.web.selectorLabels" . | nindent 8 }}
     ports:
       - name: http
         port: 80
