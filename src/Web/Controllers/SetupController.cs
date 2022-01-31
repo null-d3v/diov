@@ -12,10 +12,10 @@ public class SetupController : Controller
 {
     public SetupController(
         IContentAccessor contentAccessor,
-        IOptions<JsonSerializerOptions> jsonSerializerOptions)
+        IOptions<JsonSerializerOptions> jsonSerializerOptionsAccessor)
     {
         ContentAccessor = contentAccessor;
-        JsonSerializerOptions = jsonSerializerOptions.Value;
+        JsonSerializerOptions = jsonSerializerOptionsAccessor.Value;
     }
 
     public IContentAccessor ContentAccessor { get; }

@@ -10,13 +10,13 @@ public class DistributedCacheContentAccessor : IContentAccessor
     public DistributedCacheContentAccessor(
         IContentRepository contentRepository,
         IDistributedCache distributedCache,
-        IOptions<DistributedCacheEntryOptions> distributedCacheEntryOptions,
-        IOptions<JsonSerializerOptions> jsonSerializerOptions)
+        IOptions<DistributedCacheEntryOptions> distributedCacheEntryOptionsAccessor,
+        IOptions<JsonSerializerOptions> jsonSerializerOptionsAccessor)
     {
         ContentRepository = contentRepository;
         DistributedCache = distributedCache;
-        DistributedCacheEntryOptions = distributedCacheEntryOptions.Value;
-        JsonSerializerOptions = jsonSerializerOptions.Value;
+        DistributedCacheEntryOptions = distributedCacheEntryOptionsAccessor.Value;
+        JsonSerializerOptions = jsonSerializerOptionsAccessor.Value;
     }
 
     private static string CacheKeyPrefix { get; } =

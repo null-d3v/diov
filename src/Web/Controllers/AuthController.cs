@@ -11,10 +11,10 @@ public class AuthController : Controller
 {
     public AuthController(
         IAdminAuthorizationRepository adminAuthorizationRepository,
-        IOptions<ExternalAuthenticationOptions> externalAuthenticationOptions)
+        IOptions<ExternalAuthenticationOptions> externalAuthenticationOptionsAccessor)
     {
         AdminAuthorizationRepository = adminAuthorizationRepository;
-        ExternalAuthenticationOptions = externalAuthenticationOptions.Value;
+        ExternalAuthenticationOptions = externalAuthenticationOptionsAccessor.Value;
     }
 
     public IAdminAuthorizationRepository AdminAuthorizationRepository { get; }

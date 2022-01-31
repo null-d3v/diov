@@ -7,9 +7,9 @@ public class IgnoreCaseAuthenticationSchemeProvider :
     AuthenticationSchemeProvider
 {
     public IgnoreCaseAuthenticationSchemeProvider(
-        IOptions<AuthenticationOptions> options) :
+        IOptions<AuthenticationOptions> optionsAccessor) :
         base(
-            options,
+            optionsAccessor,
             new Dictionary<string, AuthenticationScheme>(
                 StringComparer.OrdinalIgnoreCase))
     {
