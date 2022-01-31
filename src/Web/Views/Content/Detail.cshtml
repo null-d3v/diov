@@ -1,7 +1,7 @@
 ﻿@model Content
 
 @{
-    if (!string.IsNullOrWhiteSpace(Model.Summary))
+    if (!string.IsNullOrWhiteSpace(Model?.Summary))
     {
         ViewBag.Description = Markdown
             .ToPlainText(Model.Summary);
@@ -10,14 +10,22 @@
 
 @section Admin
 {
-    @if (@User.Identity.IsAuthenticated)
+    @if (@User.Identity?.IsAuthenticated == true)
     {
         <div class="admin-action">
             <a
                 asp-action="Edit"
                 asp-controller="Content"
-                asp-route-path="@Model.Path">
+                asp-route-path="@Model?.Path">
                 Edit content
+            </a>
+        </div>
+        <div class="admin-action">
+            <a
+                asp-action="Delete"
+                asp-controller="Content"
+                asp-route-path="@Model?.Path">
+                Delete content
             </a>
         </div>
     }
@@ -25,24 +33,26 @@
 
 <div class="container">
     <div class="content-detail">
-        @if (!string.IsNullOrWhiteSpace(Model.Name))
+        @if (!string.IsNullOrWhiteSpace(Model?.Name))
         {
             <h1>
                 <a
                     asp-action="Detail"
                     asp-controller="Content"
-                    asp-route-path="@Model.Path">
+                    asp-route-path="@Model?.Path">
                     @Model.Name
                 </a>
             </h1>
         }
-        @if (Model.IsIndexed)
+        @if (Model?.IsIndexed == true)
         {
             <time>
                 @Model.PublishedDateTime.GetValueOrDefault().ToString("yyyy-MM-dd")
             </time>
         }
-        @Html.Raw(Markdown.ToHtml(Model.Summary))
-        @Html.Raw(Markdown.ToHtml(Model.Body))
+        @Html.Raw(Markdown.ToHtml(
+            Model?.Summary ?? string.Empty))
+        @Html.Raw(Markdown.ToHtml(
+            Model?.Body ?? string.Empty))
     </div>
 </div>

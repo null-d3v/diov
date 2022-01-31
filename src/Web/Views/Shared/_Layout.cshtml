@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8" />
         <meta content="@(ViewBag.Description ?? "I like to drink beer when I'm playing video games and when I'm not playing video games.")" name="description">
@@ -31,7 +31,7 @@
         @await Html.PartialAsync("_Header")
 
         <main id="content">
-            @if (@User.Identity.IsAuthenticated)
+            @if (@User.Identity?.IsAuthenticated == true)
             {
                 <fieldset class="admin">
                     <legend>Admin</legend>

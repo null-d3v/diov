@@ -19,7 +19,7 @@ jobs:
           - name: Install Helm
             uses: azure/setup-helm@v1
             with:
-                version: v3.4.0
+                version: default
           - name: Run chart-releaser
             uses: helm/chart-releaser-action@v1.2.0
             env:

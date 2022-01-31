@@ -1,10 +1,10 @@
 using Diov.Data;
 
-namespace Diov.Web
+namespace Diov.Web;
+
+public class ContentIndexModel
 {
-    public class ContentIndexModel
-    {
-        public bool IsIndexed { get; set; }
-        public SearchResponse<Content> SearchResponse { get; set; }
-    }
+    public bool IsIndexed { get; set; }
+
+    public SearchResponse<Content> SearchResponse { get; set; } = default!;
 }

@@ -470,3 +470,8 @@ time
     margin: 0 auto 1rem auto;
     padding: 0;
 }
+
+.validation-summary-valid ul
+{
+    margin: 0;
+}

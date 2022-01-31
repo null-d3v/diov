@@ -1,8 +1,8 @@
 using Diov.Data;
 
-namespace Diov.Web
+namespace Diov.Web;
+
+public interface IContentAccessor
+    : IContentRepository
 {
-    public interface IContentAccessor : IContentRepository
-    {
-    }
 }

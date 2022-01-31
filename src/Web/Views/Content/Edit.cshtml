@@ -1,7 +1,7 @@
 ﻿@model Content
 
 @{
-    if (!string.IsNullOrWhiteSpace(Model.Summary))
+    if (!string.IsNullOrWhiteSpace(Model?.Summary))
     {
         ViewBag.Description = Markdown
             .ToPlainText(Model.Summary);
@@ -47,17 +47,9 @@
             <div class="edit-buttons-right">
                 <div>
                     <a
-                        asp-action="Delete"
-                        asp-controller="Content"
-                        asp-route-path="@Model.Path">
-                        Delete
-                    </a>
-                </div>
-                <div>
-                    <a
                         asp-action="Detail"
                         asp-controller="Content"
-                        asp-route-path="@Model.Path">
+                        asp-route-path="@Model?.Path">
                         Cancel
                     </a>
                 </div>

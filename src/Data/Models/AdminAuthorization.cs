@@ -1,21 +1,26 @@
-namespace Diov.Data
-{
-    public class AdminAuthorization
-    {
-        private string identityProvider;
+using System.ComponentModel.DataAnnotations;
 
-        public string AccountId { get; set; }
-        public int Id { get; set; }
-        public string IdentityProvider
+namespace Diov.Data;
+
+public class AdminAuthorization
+{
+    private string identityProvider = default!;
+
+    [Required]
+    public string AccountId { get; set; } = default!;
+
+    public int Id { get; set; }
+
+    [Required]
+    public string IdentityProvider
+    {
+        get
         {
-            get
-            {
-                return identityProvider;
-            }
-            set
-            {
-                identityProvider = value.ToLowerInvariant();
-            }
+            return identityProvider;
+        }
+        set
+        {
+            identityProvider = value.ToLowerInvariant();
         }
     }
 }

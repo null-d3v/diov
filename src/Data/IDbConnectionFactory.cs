@@ -1,14 +1,11 @@
-using System.Data.SqlClient;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 
-namespace Diov.Data
+namespace Diov.Data;
+
+public interface IDbConnectionFactory
 {
-    public interface IDbConnectionFactory
-    {
-        string Connection { get; }
+    string Connection { get; }
 
-        Task<SqlConnection> GetSqlConnectionAsync(
-            CancellationToken cancellationToken = default);
-    }
+    Task<SqlConnection> GetSqlConnectionAsync(
+        CancellationToken cancellationToken = default);
 }

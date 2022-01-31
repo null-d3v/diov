@@ -2,7 +2,7 @@
 
 @section Admin
 {
-    @if (@User.Identity.IsAuthenticated)
+    @if (@User.Identity?.IsAuthenticated == true)
     {
         <div class="admin-action">
             <a
@@ -11,7 +11,7 @@
                 Add content
             </a>
         </div>
-        @if (Model.IsIndexed)
+        @if (Model?.IsIndexed == true)
         {
             <div class="admin-action">
                 <a
@@ -37,28 +37,31 @@
 
 <div class="container">
     <ul class="content-index">
-        @foreach (var content in Model.SearchResponse.Items)
+        @if (Model?.SearchResponse.Items.Any() == true)
         {
-            <li class="content-index-item">
-                <h1>
+            @foreach (var content in Model.SearchResponse.Items)
+            {
+                <li class="content-index-item">
+                    <h1>
+                        <a
+                            asp-action="Detail"
+                            asp-controller="Content"
+                            asp-route-path="@content.Path">
+                            @(content.Name ?? $"[Content {content.Id}]")
+                        </a>
+                    </h1>
+                    <time>
+                        @content.PublishedDateTime.GetValueOrDefault().ToString("yyyy-MM-dd")
+                    </time>
+                    @Html.Raw(Markdown.ToHtml(content.Summary))
                     <a
                         asp-action="Detail"
                         asp-controller="Content"
                         asp-route-path="@content.Path">
-                        @(content.Name ?? $"[Content {content.Id}]")
+                        Would you like to know more?
                     </a>
-                </h1>
-                <time>
-                    @content.PublishedDateTime.GetValueOrDefault().ToString("yyyy-MM-dd")
-                </time>
-                @Html.Raw(Markdown.ToHtml(content.Summary))
-                <a
-                    asp-action="Detail"
-                    asp-controller="Content"
-                    asp-route-path="@content.Path">
-                    Would you like to know more?
-                </a>
-            </li>
+                </li>
+            }
         }
     </ul>
 </div>
@@ -98,8 +101,8 @@
                 <a
                     asp-action="Index"
                     asp-controller="Content"
-                    asp-route-skip="@(Math.Floor(
-                        (double)Model.SearchResponse.TotalCount / Model.SearchResponse.Take) *
+                    asp-route-skip="@(Math.Ceiling(
+                        (double)(Model.SearchResponse.TotalCount - Model.SearchResponse.Take) / Model.SearchResponse.Take) *
                         Model.SearchResponse.Take)">
                     &gt;&gt;
                 </a>

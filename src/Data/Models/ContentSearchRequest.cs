@@ -1,8 +1,8 @@
-namespace Diov.Data
+namespace Diov.Data;
+
+public class ContentSearchRequest
 {
-    public class ContentSearchRequest
-    {
-        public bool? IsIndexed { get; set; }
-        public string Path { get; set; }
-    }
+    public bool? IsIndexed { get; set; }
+
+    public string? Path { get; set; }
 }
