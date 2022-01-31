@@ -1,116 +1,92 @@
-namespace Diov.Web
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+namespace Diov.Web;
+
+public static class DistributedCacheExtensions
 {
-    using Microsoft.Extensions.Caching.Distributed;
-    using System;
-    using System.Text.Json;
-    using System.Text.Json.Serialization;
-    using System.Threading;
-    using System.Threading.Tasks;
-
-    public static class DistributedCacheExtensions
+    static DistributedCacheExtensions()
     {
-        static DistributedCacheExtensions()
+        DefaultJsonSerializerOptions = new JsonSerializerOptions
         {
-            DefaultJsonSerializerOptions = new JsonSerializerOptions
-            {
-                NumberHandling = JsonNumberHandling
-                    .AllowReadingFromString,
-                PropertyNameCaseInsensitive = true,
-            };
+            NumberHandling = JsonNumberHandling
+                .AllowReadingFromString,
+            PropertyNameCaseInsensitive = true,
+        };
+    }
+
+    private static JsonSerializerOptions DefaultJsonSerializerOptions { get; }
+
+    public static T? Get<T>(
+        this IDistributedCache distributedCache,
+        string key,
+        JsonSerializerOptions? jsonSerializerOptions = null)
+    {
+        jsonSerializerOptions ??= DefaultJsonSerializerOptions;
+
+        var bytes = distributedCache.Get(key);
+        if (bytes == null)
+        {
+            return default;
         }
 
-        private static JsonSerializerOptions DefaultJsonSerializerOptions { get; }
+        return JsonSerializer.Deserialize<T>(
+            bytes,
+            jsonSerializerOptions);
+    }
 
-        public static T Get<T>(
-            this IDistributedCache distributedCache,
-            string key,
-            JsonSerializerOptions jsonSerializerOptions = null)
+    public static async Task<T?> GetAsync<T>(
+        this IDistributedCache distributedCache,
+        string key,
+        JsonSerializerOptions? jsonSerializerOptions = null,
+        CancellationToken cancellationToken = default)
+    {
+        jsonSerializerOptions ??= DefaultJsonSerializerOptions;
+
+        var bytes = await distributedCache.GetAsync(
+            key, cancellationToken);
+        if (bytes == null)
         {
-            if (distributedCache == null)
-            {
-                throw new ArgumentNullException(
-                    nameof(distributedCache));
-            }
-            jsonSerializerOptions ??= DefaultJsonSerializerOptions;
-
-            var bytes = distributedCache.Get(key);
-            if (bytes == null)
-            {
-                return default;
-            }
-
-            return JsonSerializer.Deserialize<T>(
-                bytes,
-                jsonSerializerOptions);
+            return default;
         }
 
-        public static async Task<T> GetAsync<T>(
-            this IDistributedCache distributedCache,
-            string key,
-            JsonSerializerOptions jsonSerializerOptions = null,
-            CancellationToken cancellationToken = default)
-        {
-            if (distributedCache == null)
-            {
-                throw new ArgumentNullException(
-                    nameof(distributedCache));
-            }
-            jsonSerializerOptions ??= DefaultJsonSerializerOptions;
+        return JsonSerializer.Deserialize<T>(
+            bytes,
+            jsonSerializerOptions);
+    }
 
-            var bytes = await distributedCache.GetAsync(
-                key, cancellationToken);
-            if (bytes == null)
-            {
-                return default;
-            }
+    public static void Set(
+        this IDistributedCache distributedCache,
+        string key,
+        object value,
+        DistributedCacheEntryOptions distributedCacheEntryOptions,
+        JsonSerializerOptions? jsonSerializerOptions = null)
+    {
+        jsonSerializerOptions ??= DefaultJsonSerializerOptions;
 
-            return JsonSerializer.Deserialize<T>(
-                bytes,
-                jsonSerializerOptions);
-        }
+        distributedCache.Set(
+            key,
+            JsonSerializer.SerializeToUtf8Bytes(
+                value, jsonSerializerOptions),
+            distributedCacheEntryOptions);
+    }
 
-        public static void Set(
-            this IDistributedCache distributedCache,
-            string key,
-            object value,
-            DistributedCacheEntryOptions distributedCacheEntryOptions,
-            JsonSerializerOptions jsonSerializerOptions = null)
-        {
-            if (distributedCache == null)
-            {
-                throw new ArgumentNullException(
-                    nameof(distributedCache));
-            }
-            jsonSerializerOptions ??= DefaultJsonSerializerOptions;
+    public static async Task SetAsync(
+        this IDistributedCache distributedCache,
+        string key,
+        object value,
+        DistributedCacheEntryOptions distributedCacheEntryOptions,
+        JsonSerializerOptions? jsonSerializerOptions = null,
+        CancellationToken cancellationToken = default)
+    {
+        jsonSerializerOptions ??= DefaultJsonSerializerOptions;
 
-            distributedCache.Set(
-                key,
-                JsonSerializer.SerializeToUtf8Bytes(
-                    value, jsonSerializerOptions),
-                distributedCacheEntryOptions);
-        }
-
-        public static async Task SetAsync(
-            this IDistributedCache distributedCache,
-            string key,
-            object value,
-            DistributedCacheEntryOptions distributedCacheEntryOptions,
-            JsonSerializerOptions jsonSerializerOptions = null,
-            CancellationToken cancellationToken = default)
-        {
-            if (distributedCache == null)
-            {
-                throw new ArgumentNullException(
-                    nameof(distributedCache));
-            }
-            jsonSerializerOptions ??= DefaultJsonSerializerOptions;
-
-            await distributedCache.SetAsync(
-                key,
-                JsonSerializer.SerializeToUtf8Bytes(
-                    value, jsonSerializerOptions),
-                distributedCacheEntryOptions,
-                cancellationToken);
-        }
+        await distributedCache.SetAsync(
+            key,
+            JsonSerializer.SerializeToUtf8Bytes(
+                value, jsonSerializerOptions),
+            distributedCacheEntryOptions,
+            cancellationToken);
     }
 }

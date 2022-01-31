@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Diov.Web
+namespace Diov.Web;
+
+[Route("[controller]")]
+public class ErrorController : Controller
 {
-    [Route("[controller]")]
-    public class ErrorController : Controller
+    [HttpGet("{error}")]
+    public IActionResult Detail(
+        [FromRoute]string error)
     {
-        [HttpGet("{error}")]
-        public IActionResult Detail(string error)
-        {
-            return View(error);
-        }
+        return View(error);
     }
 }

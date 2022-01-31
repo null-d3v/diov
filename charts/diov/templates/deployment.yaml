@@ -131,7 +131,7 @@ spec:
                   - name: ConnectionStrings__Redis
                     value: redis
                   - name: ConnectionStrings__Sql
-                    value: Server=db;Database=Diov;User Id={{ .Values.web.db.userId }};Password={{ .Values.web.db.password }};
+                    value: Server=db;Database=Diov;User Id={{ .Values.web.db.userId }};Password={{ .Values.web.db.password }};Encrypt=False;
                   - name: ExternalAuthentication__Google__AdminAuthorization
                     value: {{ .Values.web.externalIdentityProviders.google.adminAuthorization | quote }}
                   - name: ExternalAuthentication__Google__ClientId

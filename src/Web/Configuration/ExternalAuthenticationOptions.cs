@@ -1,32 +1,33 @@
 using System.Reflection;
 
-namespace Diov.Web
+namespace Diov.Web;
+
+public class ExternalAuthenticationOptions
 {
-    public class ExternalAuthenticationOptions
+    public GoogleAuthenticationOptions? Google { get; set; }
+
+    public ISchemeOptions? GetSchemeOptions(string scheme)
     {
-        public GoogleAuthenticationOptions Google { get; set; }
+        return typeof(ExternalAuthenticationOptions)
+            .GetProperty(
+                scheme,
+                BindingFlags.IgnoreCase |
+                    BindingFlags.Instance |
+                    BindingFlags.Public)?
+            .GetValue(this) as ISchemeOptions;
+    }
 
-        public ISchemeOptions GetSchemeOptions(string scheme)
-        {
-            return typeof(ExternalAuthenticationOptions)
-                .GetProperty(
-                    scheme,
-                    BindingFlags.IgnoreCase |
-                        BindingFlags.Instance |
-                        BindingFlags.Public)?
-                .GetValue(this) as ISchemeOptions;
-        }
+    public interface ISchemeOptions
+    {
+        string? AdminAuthorization { get; set; }
+    }
 
-        public interface ISchemeOptions
-        {
-            string AdminAuthorization { get; set; }
-        }
+    public class GoogleAuthenticationOptions : ISchemeOptions
+    {
+        public string? AdminAuthorization { get; set; }
 
-        public class GoogleAuthenticationOptions : ISchemeOptions
-        {
-            public string AdminAuthorization { get; set; }
-            public string ClientId { get; set; }
-            public string ClientSecret { get; set; }
-        }
+        public string? ClientId { get; set; }
+
+        public string? ClientSecret { get; set; }
     }
 }

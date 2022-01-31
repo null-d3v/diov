@@ -1,24 +1,21 @@
-using System.Data.SqlClient;
-using System.Threading;
-using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 
-namespace Diov.Data
+namespace Diov.Data;
+
+public class DbConnectionFactory : IDbConnectionFactory
 {
-    public class DbConnectionFactory : IDbConnectionFactory
+    public DbConnectionFactory(string connection)
     {
-        public DbConnectionFactory(string connection)
-        {
-            Connection = connection;
-        }
+        Connection = connection;
+    }
 
-        public string Connection { get; }
+    public string Connection { get; }
 
-        public async Task<SqlConnection> GetSqlConnectionAsync(
-            CancellationToken cancellationToken = default)
-        {
-            var sqlConnection = new SqlConnection(Connection);
-            await sqlConnection.OpenAsync(cancellationToken);
-            return sqlConnection;
-        }
+    public async Task<SqlConnection> GetSqlConnectionAsync(
+        CancellationToken cancellationToken = default)
+    {
+        var sqlConnection = new SqlConnection(Connection);
+        await sqlConnection.OpenAsync(cancellationToken);
+        return sqlConnection;
     }
 }

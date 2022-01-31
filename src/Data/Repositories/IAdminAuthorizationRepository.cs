@@ -1,13 +1,9 @@
-using System.Threading;
-using System.Threading.Tasks;
+namespace Diov.Data;
 
-namespace Diov.Data
+public interface IAdminAuthorizationRepository
 {
-    public interface IAdminAuthorizationRepository
-    {
-        Task<AdminAuthorization> GetAdminAuthorizationAsync(
-            string accountId,
-            string identityProvider,
-            CancellationToken cancellationToken = default);
-    }
+    Task<AdminAuthorization?> GetAdminAuthorizationAsync(
+        string accountId,
+        string identityProvider,
+        CancellationToken cancellationToken = default);
 }
