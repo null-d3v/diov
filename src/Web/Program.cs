@@ -166,7 +166,11 @@ try
 
     webApplication.UseResponseCompression();
     webApplication.UseCookiePolicy();
-    webApplication.UseStaticFiles();
+    webApplication.UseStaticFiles(
+        new StaticFileOptions
+        {
+            ServeUnknownFileTypes = true,
+        });
     webApplication.UseRouting();
 
     webApplication.UseForwardedHeaders();
