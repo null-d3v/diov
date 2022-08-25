@@ -14,9 +14,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.*" />
-    <PackageReference Include="dbup-sqlserver" Version="4.5.*" />
+    <PackageReference Include="dbup-sqlserver" Version="4.6.*" />
     <PackageReference Include="HtmlSanitizer" Version="7.1.*" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="4.0.*" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.*" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.*" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.*" />
   </ItemGroup>

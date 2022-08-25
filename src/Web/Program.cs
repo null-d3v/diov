@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Caching.Distributed;
 using Serilog;
 using StackExchange.Redis;
+using WebMarkupMin.AspNetCore6;
 
 try
 {
@@ -85,6 +86,15 @@ try
             options.KnownProxies.Clear();
         });
     webApplicationBuilder.Services.AddResponseCompression();
+    webApplicationBuilder.Services
+        .AddWebMarkupMin(
+            options =>
+            {
+                options.AllowMinificationInDevelopmentEnvironment = true;
+                options.AllowCompressionInDevelopmentEnvironment = true;
+            })
+        .AddHtmlMinification()
+        .AddHttpCompression();
 
     webApplicationBuilder.Services.AddDataProtection()
         .PersistKeysToStackExchangeRedis(
@@ -165,6 +175,7 @@ try
     }
 
     webApplication.UseResponseCompression();
+    webApplication.UseWebMarkupMin();
     webApplication.UseCookiePolicy();
     webApplication.UseStaticFiles(
         new StaticFileOptions

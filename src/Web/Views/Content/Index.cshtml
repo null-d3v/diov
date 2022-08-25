@@ -11,7 +11,7 @@
                 Add content
             </a>
         </div>
-        @if (Model?.IsIndexed == true)
+        @if (Model.IsIndexed == true)
         {
             <div class="admin-action">
                 <a
@@ -37,7 +37,7 @@
 
 <div class="container">
     <ul class="content-index">
-        @if (Model?.SearchResponse.Items.Any() == true)
+        @if (Model.SearchResponse.Items.Any() == true)
         {
             @foreach (var content in Model.SearchResponse.Items)
             {
