@@ -4,7 +4,7 @@ namespace Diov.Data;
 
 public interface IDbConnectionFactory
 {
-    string Connection { get; }
+    public string Connection { get; }
 
     Task<SqlConnection> GetSqlConnectionAsync(
         CancellationToken cancellationToken = default);
