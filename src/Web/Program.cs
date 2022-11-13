@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using Diov.Data;
+﻿using Diov.Data;
 using Diov.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
@@ -9,12 +7,13 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Caching.Distributed;
 using Serilog;
 using StackExchange.Redis;
-using WebMarkupMin.AspNetCore6;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using WebMarkupMin.AspNetCore7;
 
 try
 {
     Log.Logger = new LoggerConfiguration()
-        .WriteTo.Console()
         .CreateBootstrapLogger();
 
     var webApplicationBuilder = WebApplication.CreateBuilder(args);
@@ -57,7 +56,7 @@ try
         .AddSingleton<IDbConnectionFactory>(
             new DbConnectionFactory(
                 webApplicationBuilder.Configuration
-                    .GetConnectionString("Sql")));
+                    .GetConnectionString("Sql")!));
     webApplicationBuilder.Services.AddTransient<
         IAdminAuthorizationRepository,
         AdminAuthorizationRepository>();
@@ -100,7 +99,7 @@ try
         .PersistKeysToStackExchangeRedis(
             ConnectionMultiplexer.Connect(
                 webApplicationBuilder.Configuration
-                    .GetConnectionString("Redis")));
+                    .GetConnectionString("Redis")!));
 
     var externalAuthenticationOptions = webApplicationBuilder.Configuration
         .GetSection("ExternalAuthentication")
@@ -144,11 +143,11 @@ try
         .AddHealthChecks()
         .AddRedis(
             webApplicationBuilder.Configuration
-                .GetConnectionString("Redis"),
+                .GetConnectionString("Redis")!,
             tags: new[] { Constants.ReadinessHealthCheckTag, })
         .AddSqlServer(
             webApplicationBuilder.Configuration
-                .GetConnectionString("Sql"),
+                .GetConnectionString("Sql")!,
             tags: new[] { Constants.ReadinessHealthCheckTag, });
 
     var mvcBuilder = webApplicationBuilder.Services
@@ -189,25 +188,21 @@ try
     webApplication.UseAuthentication();
     webApplication.UseAuthorization();
 
-    webApplication.UseEndpoints(
-        endpointRouteBuilder =>
+    webApplication.MapHealthChecks(
+        "/health/live",
+        new HealthCheckOptions
         {
-            endpointRouteBuilder.MapHealthChecks(
-                "/health/live",
-                new HealthCheckOptions
-                {
-                    Predicate = (healthCheckRegistration) => false,
-                });
-            endpointRouteBuilder.MapHealthChecks(
-                "/health/ready",
-                new HealthCheckOptions
-                {
-                    Predicate = (healthCheckRegistration) =>
-                        healthCheckRegistration.Tags.Contains(
-                            Constants.ReadinessHealthCheckTag),
-                });
-            endpointRouteBuilder.MapControllers();
+            Predicate = (healthCheckRegistration) => false,
         });
+    webApplication.MapHealthChecks(
+        "/health/ready",
+        new HealthCheckOptions
+        {
+            Predicate = (healthCheckRegistration) =>
+                healthCheckRegistration.Tags.Contains(
+                    Constants.ReadinessHealthCheckTag),
+        });
+    webApplication.MapControllers();
 
     webApplication.Run();
     return 0;

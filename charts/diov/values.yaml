@@ -1,7 +1,7 @@
 db:
     additionalVolumeMounts: []
     additionalVolumes: []
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    image: mcr.microsoft.com/mssql/server:2022-latest
     persistence:
         enabled: false
         mountPath: /var/opt/mssql

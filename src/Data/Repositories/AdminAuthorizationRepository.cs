@@ -2,8 +2,8 @@ using Dapper;
 
 namespace Diov.Data;
 
-public class AdminAuthorizationRepository
-    : IAdminAuthorizationRepository
+public class AdminAuthorizationRepository :
+    IAdminAuthorizationRepository
 {
     private const string SelectStatement =
         @"SELECT
