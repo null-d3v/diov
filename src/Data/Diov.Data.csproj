@@ -3,6 +3,7 @@
     <AnalysisLevel>latest-all</AnalysisLevel>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <ImplicitUsings>enable</ImplicitUsings>
+    <NoWarn>CA1062;CA1308;</NoWarn>
     <Nullable>enable</Nullable>
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>

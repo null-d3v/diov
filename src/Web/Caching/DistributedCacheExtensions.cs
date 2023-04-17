@@ -44,8 +44,11 @@ public static class DistributedCacheExtensions
     {
         jsonSerializerOptions ??= DefaultJsonSerializerOptions;
 
-        var bytes = await distributedCache.GetAsync(
-            key, cancellationToken);
+        var bytes = await distributedCache
+            .GetAsync(
+                key,
+                cancellationToken)
+            .ConfigureAwait(false);
         if (bytes == null)
         {
             return default;
@@ -82,11 +85,13 @@ public static class DistributedCacheExtensions
     {
         jsonSerializerOptions ??= DefaultJsonSerializerOptions;
 
-        await distributedCache.SetAsync(
-            key,
-            JsonSerializer.SerializeToUtf8Bytes(
-                value, jsonSerializerOptions),
-            distributedCacheEntryOptions,
-            cancellationToken);
+        await distributedCache
+            .SetAsync(
+                key,
+                JsonSerializer.SerializeToUtf8Bytes(
+                    value, jsonSerializerOptions),
+                distributedCacheEntryOptions,
+                cancellationToken)
+            .ConfigureAwait(false);
     }
 }

@@ -28,7 +28,8 @@ public class AdminAuthorizationRepository :
         CancellationToken cancellationToken = default)
     {
         using var sqlConnection = await DbConnectionFactory
-            .GetSqlConnectionAsync(cancellationToken);
+            .GetSqlConnectionAsync(cancellationToken)
+            .ConfigureAwait(false);
 
         var adminAuthorization = await sqlConnection
             .QueryFirstOrDefaultAsync<AdminAuthorization?>(
@@ -38,7 +39,8 @@ public class AdminAuthorizationRepository :
                     AccountId = accountId,
                     IdentityProvider = identityProvider
                         .ToLowerInvariant(),
-                });
+                })
+            .ConfigureAwait(false);
 
         return adminAuthorization;
     }

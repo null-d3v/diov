@@ -41,7 +41,8 @@ public class SetupController : Controller
                     new ContentSearchRequest(),
                     pagedContents.Skip,
                     pagedContents.Take,
-                    cancellationToken);
+                    cancellationToken)
+                .ConfigureAwait(false);
 
             contents.AddRange(pagedContents.Items);
         }
@@ -67,7 +68,8 @@ public class SetupController : Controller
             .DeserializeAsync<IEnumerable<Content>>(
                 setupModel.ImportFile.OpenReadStream(),
                 JsonSerializerOptions,
-                cancellationToken);
+                cancellationToken)
+            .ConfigureAwait(false);
         if (contents != null)
         {
             foreach (var content in contents)
@@ -75,17 +77,24 @@ public class SetupController : Controller
                 var existingContent = await ContentAccessor
                     .GetContentAsync(
                         content.Path,
-                        cancellationToken);
+                        cancellationToken)
+                    .ConfigureAwait(false);
                 if (existingContent != null)
                 {
                     content.Id = existingContent.Id;
-                    await ContentAccessor.UpdateContentAsync(
-                        content, cancellationToken);
+                    await ContentAccessor
+                        .UpdateContentAsync(
+                            content,
+                            cancellationToken)
+                        .ConfigureAwait(false);
                 }
                 else
                 {
-                    await ContentAccessor.AddContentAsync(
-                        content, cancellationToken);
+                    await ContentAccessor
+                        .AddContentAsync(
+                            content,
+                            cancellationToken)
+                        .ConfigureAwait(false);
                 }
             }
         }

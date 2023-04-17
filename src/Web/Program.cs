@@ -11,6 +11,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using WebMarkupMin.AspNetCore7;
 
+#pragma warning disable CA1031
+
 try
 {
     Log.Logger = new LoggerConfiguration()
@@ -175,7 +177,6 @@ try
 
     webApplication.UseResponseCompression();
     webApplication.UseWebMarkupMin();
-    webApplication.UseCookiePolicy();
     webApplication.UseStaticFiles(
         new StaticFileOptions
         {
@@ -216,3 +217,5 @@ finally
 {
     Log.CloseAndFlush();
 }
+
+#pragma warning restore CA1031

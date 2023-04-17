@@ -31,15 +31,20 @@ public class DistributedCacheContentAccessor : IContentAccessor
         Content content,
         CancellationToken cancellationToken = default)
     {
-        content.Id = await ContentRepository.AddContentAsync(
-            content, cancellationToken);
+        content.Id = await ContentRepository
+            .AddContentAsync(
+                content,
+                cancellationToken)
+            .ConfigureAwait(false);
 
-        await DistributedCache.SetAsync(
-            $"{CacheKeyPrefix}{content.Path}",
-            content,
-            DistributedCacheEntryOptions,
-            JsonSerializerOptions,
-            cancellationToken);
+        await DistributedCache
+            .SetAsync(
+                $"{CacheKeyPrefix}{content.Path}",
+                content,
+                DistributedCacheEntryOptions,
+                JsonSerializerOptions,
+                cancellationToken)
+            .ConfigureAwait(false);
 
         return content.Id;
     }
@@ -48,12 +53,17 @@ public class DistributedCacheContentAccessor : IContentAccessor
         string path,
         CancellationToken cancellationToken = default)
     {
-        await ContentRepository.DeleteContentAsync(
-            path, cancellationToken);
+        await ContentRepository
+            .DeleteContentAsync(
+                path,
+                cancellationToken)
+            .ConfigureAwait(false);
 
-        await DistributedCache.RemoveAsync(
-            $"{CacheKeyPrefix}{path}",
-            cancellationToken);
+        await DistributedCache
+            .RemoveAsync(
+                $"{CacheKeyPrefix}{path}",
+                cancellationToken)
+            .ConfigureAwait(false);
     }
 
     public async Task<Content?> GetContentAsync(
@@ -62,22 +72,31 @@ public class DistributedCacheContentAccessor : IContentAccessor
     {
         var cacheKey = $"{CacheKeyPrefix}{path}";
 
-        var content = await DistributedCache.GetAsync<Content>(
-            cacheKey, JsonSerializerOptions, cancellationToken);
+        var content = await DistributedCache
+            .GetAsync<Content>(
+                cacheKey,
+                JsonSerializerOptions,
+                cancellationToken)
+            .ConfigureAwait(false);
 
         if (content == null)
         {
-            content = await ContentRepository.GetContentAsync(
-                path, cancellationToken);
+            content = await ContentRepository
+                .GetContentAsync(
+                    path,
+                    cancellationToken)
+                .ConfigureAwait(false);
 
             if (content != null)
             {
-                await DistributedCache.SetAsync(
-                    cacheKey,
-                    content,
-                    DistributedCacheEntryOptions,
-                    JsonSerializerOptions,
-                    cancellationToken);
+                await DistributedCache
+                    .SetAsync(
+                        cacheKey,
+                        content,
+                        DistributedCacheEntryOptions,
+                        JsonSerializerOptions,
+                        cancellationToken)
+                    .ConfigureAwait(false);
             }
         }
 
@@ -90,25 +109,33 @@ public class DistributedCacheContentAccessor : IContentAccessor
         int take = 5,
         CancellationToken cancellationToken = default)
     {
-        var searchResponse = await ContentRepository.SearchContentAsync(
-            contentSearchRequest,
-            skip,
-            take,
-            cancellationToken);
+        var searchResponse = await ContentRepository
+            .SearchContentAsync(
+                contentSearchRequest,
+                skip,
+                take,
+                cancellationToken)
+            .ConfigureAwait(false);
 
         foreach (var content in searchResponse.Items)
         {
             var cacheKey = $"{CacheKeyPrefix}{content.Path}";
 
-            if (await DistributedCache.GetAsync<Content>(
-                cacheKey, JsonSerializerOptions, cancellationToken) == null)
+            if (await DistributedCache
+                    .GetAsync<Content>(
+                        cacheKey,
+                        JsonSerializerOptions,
+                        cancellationToken)
+                    .ConfigureAwait(false) == null)
             {
-                await DistributedCache.SetAsync(
-                    cacheKey,
-                    content,
-                    DistributedCacheEntryOptions,
-                    JsonSerializerOptions,
-                    cancellationToken);
+                await DistributedCache
+                    .SetAsync(
+                        cacheKey,
+                        content,
+                        DistributedCacheEntryOptions,
+                        JsonSerializerOptions,
+                        cancellationToken)
+                    .ConfigureAwait(false);
             }
         }
 
@@ -119,14 +146,19 @@ public class DistributedCacheContentAccessor : IContentAccessor
         Content content,
         CancellationToken cancellationToken = default)
     {
-        await ContentRepository.UpdateContentAsync(
-            content, cancellationToken);
+        await ContentRepository
+            .UpdateContentAsync(
+                content,
+                cancellationToken)
+            .ConfigureAwait(false);
 
-        await DistributedCache.SetAsync(
-            $"{CacheKeyPrefix}{content.Path}",
-            content,
-            DistributedCacheEntryOptions,
-            JsonSerializerOptions,
-            cancellationToken);
+        await DistributedCache
+            .SetAsync(
+                $"{CacheKeyPrefix}{content.Path}",
+                content,
+                DistributedCacheEntryOptions,
+                JsonSerializerOptions,
+                cancellationToken)
+            .ConfigureAwait(false);
     }
 }

@@ -41,11 +41,17 @@ web:
     db:
         password:
         userId:
-    externalIdentityProviders:
-        google:
-            adminAuthorization:
-            clientId:
-            clientSecret:
+    env:
+      - name: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - name: ExternalAuthentication__Google__AdminAuthorization
+        value:
+      - name: ExternalAuthentication__Google__ClientId
+        value:
+      - name: ExternalAuthentication__Google__ClientSecret
+        value:
+      - name: Serilog__MinimumLevel
+        value: Warning
     host: example.com
     image: nulld3v/diov
     ingress:
@@ -63,5 +69,3 @@ web:
         requests:
             cpu: 10m
             memory: 64Mi
-    serilog:
-        minimumLevel: Warning

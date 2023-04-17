@@ -15,7 +15,9 @@ public class DbConnectionFactory : IDbConnectionFactory
         CancellationToken cancellationToken = default)
     {
         var sqlConnection = new SqlConnection(Connection);
-        await sqlConnection.OpenAsync(cancellationToken);
+        await sqlConnection
+            .OpenAsync(cancellationToken)
+            .ConfigureAwait(false);
         return sqlConnection;
     }
 }
