@@ -83,8 +83,8 @@ public class AuthController : Controller
 
     [HttpGet("[action]/{scheme}")]
     public IActionResult Challenge(
-        [FromRoute]string scheme,
-        [FromQuery]string? returnUrl = null)
+        [FromRoute] string scheme,
+        [FromQuery] string? returnUrl = null)
     {
         var authenticationProperties = new AuthenticationProperties
         {

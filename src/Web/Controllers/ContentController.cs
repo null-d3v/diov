@@ -50,7 +50,7 @@ public class ContentController : Controller
     [Authorize]
     [HttpGet("[controller]/{path}/[action]")]
     public async Task<IActionResult> Delete(
-        [FromRoute]string path,
+        [FromRoute] string path,
         CancellationToken cancellationToken = default)
     {
         var content = await ContentAccessor
@@ -70,8 +70,8 @@ public class ContentController : Controller
     [Authorize]
     [HttpPost("[controller]/{path}/[action]")]
     public async Task<IActionResult> Delete(
-        [FromRoute]string path,
-        [FromForm]Content _,
+        [FromRoute] string path,
+        [FromForm] Content _,
         CancellationToken cancellationToken = default)
     {
         await ContentAccessor
@@ -87,7 +87,7 @@ public class ContentController : Controller
 
     [HttpGet("[controller]/{path}")]
     public async Task<IActionResult> Detail(
-        [FromRoute]string path,
+        [FromRoute] string path,
         CancellationToken cancellationToken = default)
     {
         var content = await ContentAccessor
@@ -107,7 +107,7 @@ public class ContentController : Controller
     [Authorize]
     [HttpGet("[controller]/{path}/[action]")]
     public async Task<IActionResult> Edit(
-        [FromRoute]string path,
+        [FromRoute] string path,
         CancellationToken cancellationToken = default)
     {
         var content = await ContentAccessor
@@ -127,8 +127,8 @@ public class ContentController : Controller
     [Authorize]
     [HttpPost("[controller]/{path}/[action]")]
     public async Task<IActionResult> Edit(
-        [FromRoute]string path,
-        [FromForm]Content content,
+        [FromRoute] string path,
+        [FromForm] Content content,
         CancellationToken cancellationToken = default)
     {
         if (!ModelState.IsValid)
