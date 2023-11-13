@@ -81,6 +81,7 @@ body
     background-color: var(--color-background);
     color: var(--color-text);
     margin: 0;
+    min-width: 22rem;
 }
 body, button, code, input, q, select, textarea
 {
@@ -210,16 +211,24 @@ time
 {
     margin: 4rem 0 0 0;
     padding: 1rem 0 0 0;
-}
-#content h1, #content h1 a
-{
-    color: var(--color-title);
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-}
-#content p
-{
-    line-height: 1.5rem;
+
+    h1
+    {
+        color: var(--color-title);
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+
+        a
+        {
+            color: var(--color-title);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+    }
+    p
+    {
+        line-height: 1.5rem;
+    }
 }
 
 #footer
@@ -231,37 +240,35 @@ time
 #header
 {
     height: 4rem;
+    min-width: 22rem;
     padding: 0.5rem 0;
     position: fixed;
     top: 0;
     transform: translateY(0);
     width: 100%;
-}
-#header, body
-{
-    min-width: 22rem;
-}
-#header a
-{
-    color: var(--color-title);
-}
-#header h1
-{
-    font-size: 2.5rem;
-    min-width: 5rem;
-}
-#header .column
-{
-    align-items: center;
-    display: flex;
-}
-#header .container
-{
-    display: flex;
-    justify-content: space-between;
+
+    a
+    {
+        color: var(--color-title);
+    }
+    h1
+    {
+        font-size: 2.5rem;
+        min-width: 5rem;
+    }
+    .column
+    {
+        align-items: center;
+        display: flex;
+    }
+    .container
+    {
+        display: flex;
+        justify-content: space-between;
+    }
 }
 
-.admin, .container
+.admin
 {
     max-width: 41rem;
     width: 80%;
@@ -291,6 +298,8 @@ time
 {
     height: 100%;
     margin: 0 auto;
+    max-width: 41rem;
+    width: 80%;
 }
 
 .edit-buttons
@@ -298,7 +307,7 @@ time
     display: flex;
     justify-content: space-between;
 }
-.edit-buttons-left, .edit-buttons-right
+.edit-buttons-left
 {
     line-height: 2rem;
 }
@@ -306,40 +315,45 @@ time
 {
     display: flex;
     justify-content: flex-end;
-}
-.edit-buttons-right a
-{
-    margin-left: 1rem;
+    line-height: 2rem;
+
+    a
+    {
+        margin-left: 1rem;
+    }
 }
 
 .edit-split
 {
     display: flex;
     justify-content: space-between;
-}
-.edit-split, .edit-stack
-{
     margin-bottom: 0.625rem;
-}
-.edit-split *:not([type="checkbox"])
-{
-    width: 50%;
-}
-.edit-split span
-{
-    text-align: center;
+
+    *:not([type="checkbox"])
+    {
+        width: 50%;
+    }
+    span
+    {
+        text-align: center;
+    }
 }
 
-.edit-stack textarea
+.edit-stack
 {
-    height: 4.5rem;
-    margin-top: 0.25rem;
-    resize: none;
-    width: 100%;
-}
-.edit-stack textarea.large
-{
-    height: 32rem;
+    margin-bottom: 0.625rem;
+
+    textarea
+    {
+        height: 4.5rem;
+        margin-top: 0.25rem;
+        resize: none;
+        width: 100%;
+    }
+    textarea.large
+    {
+        height: 32rem;
+    }
 }
 
 .cut
@@ -369,29 +383,35 @@ time
     height: 2rem;
     width: 2rem;
 }
+.icon:hover
+{
+    .icon-primary-fill
+    {
+        fill: var(--color-secondary);
+    }
+    .icon-primary-stroke
+    {
+        stroke: var(--color-secondary);
+    }
+}
+.icon:focus
+{
+    icon-primary-fill
+    {
+        fill: var(--color-secondary);
+    }
+    .icon-primary-stroke
+    {
+        stroke: var(--color-secondary);
+    }
+}
 .icon-primary-fill
 {
     fill: var(--color-primary);
 }
-.icon:focus .icon-primary-fill
-{
-    fill: var(--color-secondary);
-}
-.icon:hover .icon-primary-fill
-{
-    fill: var(--color-secondary);
-}
 .icon-primary-stroke
 {
     stroke: var(--color-primary);
-}
-.icon:focus .icon-primary-stroke
-{
-    stroke: var(--color-secondary);
-}
-.icon:hover .icon-primary-stroke
-{
-    stroke: var(--color-secondary);
 }
 .icon-secondary-fill
 {
@@ -415,16 +435,17 @@ time
     list-style: none;
     margin: 0;
     padding: 0;
-}
-.login a
-{
-    align-items: center;
-    display: inline-flex;
-}
-.login img
-{
-    margin-right: 0.625rem;
-    width: 2rem;
+
+    a
+    {
+        align-items: center;
+        display: inline-flex;
+    }
+    img
+    {
+        margin-right: 0.625rem;
+        width: 2rem;
+    }
 }
 
 .menu
@@ -433,16 +454,17 @@ time
     list-style: none;
     margin: 0;
     padding: 0;
-}
-.menu li
-{
-    margin: 0;
-    text-align: right;
-}
-.menu li a
-{
-    display: inline-block;
-    margin-left: 1rem;
+
+    li
+    {
+        margin: 0;
+        text-align: right;
+        a
+        {
+            display: inline-block;
+            margin-left: 1rem;
+        }
+    }
 }
 
 .pager
@@ -454,24 +476,29 @@ time
     list-style: none;
     margin: 0.5rem 0 0 0;
     width: 100%;
-}
-.pager li
-{
-    margin-left: 1rem;
+
+    li
+    {
+        margin-left: 1rem;
+    }
 }
 
 .validation-summary-errors
 {
     color: var(--color-text-alt);
-}
-.validation-summary-errors ul
-{
-    list-style: none;
-    margin: 0 auto 1rem auto;
-    padding: 0;
+
+    ul
+    {
+        list-style: none;
+        margin: 0 auto 1rem auto;
+        padding: 0;
+    }
 }
 
-.validation-summary-valid ul
+.validation-summary-valid
 {
-    margin: 0;
+    ul
+    {
+        margin: 0;
+    }
 }

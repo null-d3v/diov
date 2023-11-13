@@ -46,8 +46,8 @@ public class AuthController : Controller
         }
 
         if (ExternalAuthenticationOptions
-            .GetSchemeOptions(scheme)?
-            .AdminAuthorization != nameIdentifier)
+                .GetSchemeOptions(scheme)?
+                .AdminAuthorization != nameIdentifier)
         {
             var adminAuthorization = await AdminAuthorizationRepository
                 .GetAdminAuthorizationAsync(

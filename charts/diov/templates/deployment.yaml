@@ -17,8 +17,7 @@ spec:
                 {{- include "diov.db.selectorLabels" . | nindent 16 }}
         spec:
             securityContext:
-                runAsUser: 10001
-                fsGroup: 0
+                fsGroup: 10001
             terminationGracePeriodSeconds: 10
             containers:
               - name: db

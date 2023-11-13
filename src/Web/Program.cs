@@ -33,7 +33,8 @@ try
     webApplicationBuilder.Services
         .AddSingleton(webApplicationBuilder.Configuration);
 
-    webApplicationBuilder.Services.AddOptions();
+    webApplicationBuilder.Services
+        .AddOptions();
     webApplicationBuilder.Services
         .Configure<DistributedCacheEntryOptions>(
             options =>
@@ -59,34 +60,55 @@ try
             new DbConnectionFactory(
                 webApplicationBuilder.Configuration
                     .GetConnectionString("Sql")!));
-    webApplicationBuilder.Services.AddTransient<
-        IAdminAuthorizationRepository,
-        AdminAuthorizationRepository>();
+    webApplicationBuilder.Services
+        .AddTransient<
+            IAdminAuthorizationRepository,
+            AdminAuthorizationRepository>();
     webApplicationBuilder.Services
         .AddTransient<IContentRepository, ContentRepository>();
     webApplicationBuilder.Services
         .AddHostedService<MigrationHostedService>();
 
-    webApplicationBuilder.Services.AddL1L2RedisCache(
-        options =>
-        {
-            options.Configuration = webApplicationBuilder.Configuration
-                .GetConnectionString("Redis");
-            options.InstanceName = Constants.RedisInstanceName;
-        });
     webApplicationBuilder.Services
-        .AddTransient<IContentAccessor, DistributedCacheContentAccessor>();
+        .AddL1L2RedisCache(
+            options =>
+            {
+                options.Configuration = webApplicationBuilder.Configuration
+                    .GetConnectionString("Redis");
+                options.InstanceName = Constants.RedisInstanceName;
+            });
+    webApplicationBuilder.Services
+        .AddTransient<
+            IContentAccessor,
+            DistributedCacheContentAccessor>();
 
-    webApplicationBuilder.Services.Configure<ForwardedHeadersOptions>(
-        options =>
-        {
-            options.ForwardedHeaders =
-                ForwardedHeaders.XForwardedFor |
-                ForwardedHeaders.XForwardedProto;
-            options.KnownNetworks.Clear();
-            options.KnownProxies.Clear();
-        });
-    webApplicationBuilder.Services.AddResponseCompression();
+    webApplicationBuilder.Services
+        .Configure<ForwardedHeadersOptions>(
+            options =>
+            {
+                options.ForwardedHeaders =
+                    ForwardedHeaders.XForwardedFor |
+                    ForwardedHeaders.XForwardedProto;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
+    webApplicationBuilder.Services
+        .AddResponseCompression();
+    webApplicationBuilder.Services
+        .AddWebOptimizer(
+            assetPipeline =>
+            {
+                assetPipeline.MinifyCssFiles(
+                    "css/**/*.css");
+                assetPipeline.MinifyJsFiles(
+                    "js/**/*.js");
+                assetPipeline.AddCssBundle(
+                    "/css/site.min.css",
+                    "css/**/*.css");
+                assetPipeline.AddJavaScriptBundle(
+                    "/js/site.min.js",
+                    "js/**/*.js");
+            });
     webApplicationBuilder.Services
         .AddWebMarkupMin(
             options =>
@@ -97,7 +119,8 @@ try
         .AddHtmlMinification()
         .AddHttpCompression();
 
-    webApplicationBuilder.Services.AddDataProtection()
+    webApplicationBuilder.Services
+        .AddDataProtection()
         .PersistKeysToStackExchangeRedis(
             ConnectionMultiplexer.Connect(
                 webApplicationBuilder.Configuration
@@ -134,12 +157,17 @@ try
                         .ExternalAuthenticationScheme;
                 });
     }
-    webApplicationBuilder.Services.AddTransient<
-        IAuthenticationSchemeProvider,
-        IgnoreCaseAuthenticationSchemeProvider>();
+    webApplicationBuilder.Services
+        .AddTransient<
+            IAuthenticationSchemeProvider,
+            IgnoreCaseAuthenticationSchemeProvider>();
 
-    webApplicationBuilder.Services.AddRouting(
-        routeOptions => routeOptions.LowercaseUrls = true);
+    webApplicationBuilder.Services
+        .AddRouting(
+            routeOptions =>
+            {
+                routeOptions.LowercaseUrls = true;
+            });
 
     webApplicationBuilder.Services
         .AddHealthChecks()
@@ -176,6 +204,7 @@ try
     }
 
     webApplication.UseResponseCompression();
+    webApplication.UseWebOptimizer();
     webApplication.UseWebMarkupMin();
     webApplication.UseStaticFiles(
         new StaticFileOptions
@@ -210,7 +239,9 @@ try
 }
 catch (Exception exception)
 {
-    Log.Fatal(exception, "Host terminated unexpectedly");
+    Log.Fatal(
+        exception,
+        "Host terminated unexpectedly");
     return 1;
 }
 finally
