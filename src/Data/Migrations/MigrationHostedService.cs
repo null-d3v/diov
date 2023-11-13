@@ -1,5 +1,6 @@
 using DbUp;
 using Microsoft.Extensions.Hosting;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace Diov.Data;
@@ -17,6 +18,7 @@ public class MigrationHostedService : IHostedService
     public IDbConnectionFactory DbConnectionFactory { get; }
     public IHostApplicationLifetime HostApplicationLifetime { get; }
 
+    [SuppressMessage("Design", "CA1031")]
     public Task StartAsync(
         CancellationToken cancellationToken)
     {

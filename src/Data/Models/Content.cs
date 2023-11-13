@@ -6,16 +6,16 @@ namespace Diov.Data;
 
 public class Content : IValidatableObject
 {
-    private static readonly IHtmlSanitizer htmlSanitizer;
-
     private string body = string.Empty;
     private string path = default!;
 
     static Content()
     {
-        htmlSanitizer = new HtmlSanitizer();
-        htmlSanitizer.AllowedAttributes.Add("class");
+        HtmlSanitizer = new HtmlSanitizer();
+        HtmlSanitizer.AllowedAttributes.Add("class");
     }
+
+    private static IHtmlSanitizer HtmlSanitizer  { get; }
 
     public string Body
     {
@@ -25,7 +25,7 @@ public class Content : IValidatableObject
         }
         set
         {
-            body = htmlSanitizer.Sanitize(value);
+            body = HtmlSanitizer.Sanitize(value);
         }
     }
 

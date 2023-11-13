@@ -17,8 +17,7 @@ spec:
                 {{- include "diov.db.selectorLabels" . | nindent 16 }}
         spec:
             securityContext:
-                runAsUser: 10001
-                fsGroup: 0
+                fsGroup: 10001
             terminationGracePeriodSeconds: 10
             containers:
               - name: db
@@ -126,20 +125,14 @@ spec:
                     containerPort: 80
                     protocol: TCP
                 env:
-                  - name: ASPNETCORE_ENVIRONMENT
-                    value: Production
                   - name: ConnectionStrings__Redis
                     value: redis
                   - name: ConnectionStrings__Sql
                     value: Server=db;Database=Diov;User Id={{ .Values.web.db.userId }};Password={{ .Values.web.db.password }};Encrypt=False;
-                  - name: ExternalAuthentication__Google__AdminAuthorization
-                    value: {{ .Values.web.externalIdentityProviders.google.adminAuthorization | quote }}
-                  - name: ExternalAuthentication__Google__ClientId
-                    value: {{ .Values.web.externalIdentityProviders.google.clientId | quote }}
-                  - name: ExternalAuthentication__Google__ClientSecret
-                    value: {{ .Values.web.externalIdentityProviders.google.clientSecret | quote }}
-                  - name: Serilog__MinimumLevel
-                    value: {{ .Values.web.serilog.minimumLevel | quote }}
+                  {{- range .Values.env }}
+                  - name: {{ .name | quote }}
+                    value: {{ .value | quote }}
+                  {{- end }}
                 {{- if or .Values.web.persistence.enabled .Values.web.additionalVolumeMounts }}
                 volumeMounts:
                   {{- if .Values.web.persistence.enabled }}

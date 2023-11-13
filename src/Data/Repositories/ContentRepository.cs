@@ -75,27 +75,34 @@ public class ContentRepository : IContentRepository
         CancellationToken cancellationToken = default)
     {
         using var sqlConnection = await DbConnectionFactory
-            .GetSqlConnectionAsync(cancellationToken);
+            .GetSqlConnectionAsync(cancellationToken)
+            .ConfigureAwait(false);
         using var sqlTransaction = await sqlConnection
-            .BeginTransactionAsync(cancellationToken);
+            .BeginTransactionAsync(cancellationToken)
+            .ConfigureAwait(false);
         try
         {
             var id = (await sqlConnection
                 .QueryAsync<int>(
                     InsertStatement,
                     content,
-                    sqlTransaction))
+                    sqlTransaction)
+                .ConfigureAwait(false))
                 .FirstOrDefault();
 
-            await sqlTransaction.CommitAsync(
-                cancellationToken);
+            await sqlTransaction
+                .CommitAsync(
+                    cancellationToken)
+                .ConfigureAwait(false);
 
             return id;
         }
         catch
         {
-            await sqlTransaction.RollbackAsync(
-                cancellationToken);
+            await sqlTransaction
+                .RollbackAsync(
+                    cancellationToken)
+                .ConfigureAwait(false);
             throw;
         }
     }
@@ -105,23 +112,31 @@ public class ContentRepository : IContentRepository
         CancellationToken cancellationToken = default)
     {
         using var sqlConnection = await DbConnectionFactory
-            .GetSqlConnectionAsync(cancellationToken);
+            .GetSqlConnectionAsync(cancellationToken)
+            .ConfigureAwait(false);
         using var sqlTransaction = await sqlConnection
-            .BeginTransactionAsync(cancellationToken);
+            .BeginTransactionAsync(cancellationToken)
+            .ConfigureAwait(false);
         try
         {
-            await sqlConnection.ExecuteAsync(
-                DeleteStatement,
-                new { Path = path, },
-                sqlTransaction);
+            await sqlConnection
+                .ExecuteAsync(
+                    DeleteStatement,
+                    new { Path = path, },
+                    sqlTransaction)
+                .ConfigureAwait(false);
 
-            await sqlTransaction.CommitAsync(
-                cancellationToken);
+            await sqlTransaction
+                .CommitAsync(
+                    cancellationToken)
+                .ConfigureAwait(false);
         }
         catch
         {
-            await sqlTransaction.RollbackAsync(
-                cancellationToken);
+            await sqlTransaction
+                .RollbackAsync(
+                    cancellationToken)
+                .ConfigureAwait(false);
             throw;
         }
     }
@@ -137,14 +152,16 @@ public class ContentRepository : IContentRepository
         selectStatementBuilder.Append(';');
 
         using var sqlConnection = await DbConnectionFactory
-            .GetSqlConnectionAsync(cancellationToken);
+            .GetSqlConnectionAsync(cancellationToken)
+            .ConfigureAwait(false);
         return await sqlConnection
             .QuerySingleOrDefaultAsync<Content?>(
                 selectStatementBuilder.ToString(),
                 new
                 {
                     Path = path,
-                });
+                })
+            .ConfigureAwait(false);
     }
 
     public async Task<SearchResponse<Content>> SearchContentAsync(
@@ -180,7 +197,8 @@ public class ContentRepository : IContentRepository
         selectTotalCountStatementBuilder.Append(';');
 
         using var sqlConnection = await DbConnectionFactory
-            .GetSqlConnectionAsync(cancellationToken);
+            .GetSqlConnectionAsync(cancellationToken)
+            .ConfigureAwait(false);
         var contents = await sqlConnection
             .QueryAsync<Content>(
                 selectStatementBuilder.ToString(),
@@ -190,7 +208,8 @@ public class ContentRepository : IContentRepository
                     contentSearchRequest.Path,
                     Skip = skip,
                     Take = take,
-                });
+                })
+            .ConfigureAwait(false);
 
         var totalCount = await sqlConnection
             .ExecuteScalarAsync<int>(
@@ -199,7 +218,8 @@ public class ContentRepository : IContentRepository
                 {
                     contentSearchRequest.IsIndexed,
                     contentSearchRequest.Path,
-                });
+                })
+            .ConfigureAwait(false);
 
         return new SearchResponse<Content>
         {
@@ -215,16 +235,19 @@ public class ContentRepository : IContentRepository
         CancellationToken cancellationToken = default)
     {
         using var sqlConnection = await DbConnectionFactory
-            .GetSqlConnectionAsync(cancellationToken);
+            .GetSqlConnectionAsync(cancellationToken)
+            .ConfigureAwait(false);
         using var sqlTransaction = await sqlConnection
-            .BeginTransactionAsync(cancellationToken);
+            .BeginTransactionAsync(cancellationToken)
+            .ConfigureAwait(false);
         try
         {
             var recordsAffected = await sqlConnection
                 .ExecuteAsync(
                     UpdateStatement,
                     content,
-                    sqlTransaction);
+                    sqlTransaction)
+                .ConfigureAwait(false);
             if (recordsAffected != 1)
             {
                 throw new ArgumentException(
@@ -232,13 +255,17 @@ public class ContentRepository : IContentRepository
                     nameof(content));
             }
 
-            await sqlTransaction.CommitAsync(
-                cancellationToken);
+            await sqlTransaction
+                .CommitAsync(
+                    cancellationToken)
+                .ConfigureAwait(false);
         }
         catch
         {
-            await sqlTransaction.RollbackAsync(
-                cancellationToken);
+            await sqlTransaction
+                .RollbackAsync(
+                    cancellationToken)
+                .ConfigureAwait(false);
             throw;
         }
     }

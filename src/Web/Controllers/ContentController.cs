@@ -1,6 +1,7 @@
 ﻿using Diov.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Diov.Web;
 
@@ -34,8 +35,11 @@ public class ContentController : Controller
             return View(content);
         }
 
-        await ContentAccessor.AddContentAsync(
-            content, cancellationToken);
+        await ContentAccessor
+            .AddContentAsync(
+                content,
+                cancellationToken)
+            .ConfigureAwait(false);
 
         return RedirectToAction(
             "Detail",
@@ -46,13 +50,14 @@ public class ContentController : Controller
     [Authorize]
     [HttpGet("[controller]/{path}/[action]")]
     public async Task<IActionResult> Delete(
-        [FromRoute]string path,
+        [FromRoute] string path,
         CancellationToken cancellationToken = default)
     {
         var content = await ContentAccessor
             .GetContentAsync(
                 path.ToLowerInvariant(),
-                cancellationToken);
+                cancellationToken)
+            .ConfigureAwait(false);
 
         if (content == null)
         {
@@ -65,12 +70,15 @@ public class ContentController : Controller
     [Authorize]
     [HttpPost("[controller]/{path}/[action]")]
     public async Task<IActionResult> Delete(
-        [FromRoute]string path,
-        [FromForm]Content _,
+        [FromRoute] string path,
+        [FromForm] Content _,
         CancellationToken cancellationToken = default)
     {
-        await ContentAccessor.DeleteContentAsync(
-            path.ToLowerInvariant(), cancellationToken);
+        await ContentAccessor
+            .DeleteContentAsync(
+                path.ToLowerInvariant(),
+                cancellationToken)
+            .ConfigureAwait(false);
 
         return RedirectToAction(
             "Index",
@@ -79,13 +87,14 @@ public class ContentController : Controller
 
     [HttpGet("[controller]/{path}")]
     public async Task<IActionResult> Detail(
-        [FromRoute]string path,
+        [FromRoute] string path,
         CancellationToken cancellationToken = default)
     {
         var content = await ContentAccessor
             .GetContentAsync(
                 path.ToLowerInvariant(),
-                cancellationToken);
+                cancellationToken)
+            .ConfigureAwait(false);
 
         if (content == null)
         {
@@ -98,13 +107,14 @@ public class ContentController : Controller
     [Authorize]
     [HttpGet("[controller]/{path}/[action]")]
     public async Task<IActionResult> Edit(
-        [FromRoute]string path,
+        [FromRoute] string path,
         CancellationToken cancellationToken = default)
     {
         var content = await ContentAccessor
             .GetContentAsync(
                 path.ToLowerInvariant(),
-                cancellationToken);
+                cancellationToken)
+            .ConfigureAwait(false);
 
         if (content == null)
         {
@@ -117,8 +127,8 @@ public class ContentController : Controller
     [Authorize]
     [HttpPost("[controller]/{path}/[action]")]
     public async Task<IActionResult> Edit(
-        [FromRoute]string path,
-        [FromForm]Content content,
+        [FromRoute] string path,
+        [FromForm] Content content,
         CancellationToken cancellationToken = default)
     {
         if (!ModelState.IsValid)
@@ -131,7 +141,8 @@ public class ContentController : Controller
         content.Id = (await ContentAccessor
             .GetContentAsync(
                 path.ToLowerInvariant(),
-                cancellationToken))?
+                cancellationToken)
+            .ConfigureAwait(false))?
                 .Id ?? 0;
 
         if (content.Id == 0)
@@ -139,8 +150,11 @@ public class ContentController : Controller
             return NotFound();
         }
 
-        await ContentAccessor.UpdateContentAsync(
-            content, cancellationToken);
+        await ContentAccessor
+            .UpdateContentAsync(
+                content,
+                cancellationToken)
+            .ConfigureAwait(false);
 
         return RedirectToAction(
             "Detail",
@@ -164,7 +178,8 @@ public class ContentController : Controller
                 {
                     IsIndexed = indexed,
                 },
-                skip);
+                skip)
+            .ConfigureAwait(false);
 
         return View(new ContentIndexModel
         {

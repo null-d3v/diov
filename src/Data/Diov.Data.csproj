@@ -3,6 +3,7 @@
     <AnalysisLevel>latest-all</AnalysisLevel>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <ImplicitUsings>enable</ImplicitUsings>
+    <NoWarn>CA1062;CA1308;</NoWarn>
     <Nullable>enable</Nullable>
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
@@ -14,9 +15,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.*" />
-    <PackageReference Include="dbup-sqlserver" Version="4.6.*" />
+    <PackageReference Include="dbup-sqlserver" Version="5.0.*" />
     <PackageReference Include="HtmlSanitizer" Version="8.0.*" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.*" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.*" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.*" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.*" />
   </ItemGroup>

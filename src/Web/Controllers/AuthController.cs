@@ -26,14 +26,15 @@ public class AuthController : Controller
     {
         var authenticateResult = await HttpContext
             .AuthenticateAsync(
-                Constants.ExternalAuthenticationScheme);
+                Constants.ExternalAuthenticationScheme)
+            .ConfigureAwait(false);
         if (!authenticateResult.Succeeded ||
             authenticateResult.Principal == null)
         {
             return Unauthorized();
         }
 
-        var nameIdentifier = authenticateResult.Principal?
+        var nameIdentifier = authenticateResult.Principal
             .Claims.FirstOrDefault(
                 claim => claim.Type == ClaimTypes.NameIdentifier)?
             .Value;
@@ -45,24 +46,29 @@ public class AuthController : Controller
         }
 
         if (ExternalAuthenticationOptions
-            .GetSchemeOptions(scheme)?
-            .AdminAuthorization != nameIdentifier)
+                .GetSchemeOptions(scheme)?
+                .AdminAuthorization != nameIdentifier)
         {
             var adminAuthorization = await AdminAuthorizationRepository
                 .GetAdminAuthorizationAsync(
-                    nameIdentifier, scheme, cancellationToken);
+                    nameIdentifier, scheme, cancellationToken)
+                .ConfigureAwait(false);
             if (adminAuthorization == null)
             {
                 return Unauthorized();
             }
         }
 
-        await HttpContext.SignOutAsync(
-            Constants.ExternalAuthenticationScheme);
+        await HttpContext
+            .SignOutAsync(
+                Constants.ExternalAuthenticationScheme)
+            .ConfigureAwait(false);
 
-        await HttpContext.SignInAsync(
-            Constants.LocalAuthenticationScheme,
-            authenticateResult.Principal!); // HACK Unnecessary
+        await HttpContext
+            .SignInAsync(
+                Constants.LocalAuthenticationScheme,
+                authenticateResult.Principal)
+            .ConfigureAwait(false);
 
         var returnUrl = authenticateResult
             .Properties
@@ -77,8 +83,8 @@ public class AuthController : Controller
 
     [HttpGet("[action]/{scheme}")]
     public IActionResult Challenge(
-        [FromRoute]string scheme,
-        [FromQuery]string? returnUrl = null)
+        [FromRoute] string scheme,
+        [FromQuery] string? returnUrl = null)
     {
         var authenticationProperties = new AuthenticationProperties
         {
@@ -110,7 +116,9 @@ public class AuthController : Controller
     [HttpGet("[action]")]
     public async Task<IActionResult> Logout()
     {
-        await HttpContext.SignOutAsync();
+        await HttpContext
+            .SignOutAsync()
+            .ConfigureAwait(false);
 
         return RedirectToAction("Index", "Content");
     }

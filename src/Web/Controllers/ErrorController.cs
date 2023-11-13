@@ -7,7 +7,7 @@ public class ErrorController : Controller
 {
     [HttpGet("{error}")]
     public IActionResult Detail(
-        [FromRoute]string error)
+        [FromRoute] string error)
     {
         return View(error);
     }

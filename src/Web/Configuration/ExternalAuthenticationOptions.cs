@@ -16,18 +16,4 @@ public class ExternalAuthenticationOptions
                     BindingFlags.Public)?
             .GetValue(this) as ISchemeOptions;
     }
-
-    public interface ISchemeOptions
-    {
-        string? AdminAuthorization { get; set; }
-    }
-
-    public class GoogleAuthenticationOptions : ISchemeOptions
-    {
-        public string? AdminAuthorization { get; set; }
-
-        public string? ClientId { get; set; }
-
-        public string? ClientSecret { get; set; }
-    }
 }
