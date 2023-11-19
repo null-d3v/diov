@@ -2,14 +2,12 @@ using Microsoft.Data.SqlClient;
 
 namespace Diov.Data;
 
-public class DbConnectionFactory : IDbConnectionFactory
+public class DbConnectionFactory(
+    string connection) :
+    IDbConnectionFactory
 {
-    public DbConnectionFactory(string connection)
-    {
-        Connection = connection;
-    }
-
-    public string Connection { get; }
+    public string Connection { get; } =
+        connection;
 
     public async Task<SqlConnection> GetSqlConnectionAsync(
         CancellationToken cancellationToken = default)

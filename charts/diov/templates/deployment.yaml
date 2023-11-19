@@ -117,12 +117,16 @@ spec:
             labels:
                 {{- include "diov.web.selectorLabels" . | nindent 16 }}
         spec:
+            securityContext:
+                fsGroup: 1654
+                runAsGroup: 1654
+                runAsUser: 1654
             containers:
               - image: {{ .Values.web.image | quote }}
                 name: web
                 ports:
                   - name: http
-                    containerPort: 80
+                    containerPort: 8080
                     protocol: TCP
                 env:
                   - name: ConnectionStrings__Redis

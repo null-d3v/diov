@@ -24,6 +24,15 @@ try
     webApplicationBuilder.Configuration
         .AddEnvironmentVariables();
 
+    if (!webApplicationBuilder.Environment.IsDevelopment())
+    {
+        webApplicationBuilder.Environment.WebRootFileProvider =
+            new NoWatchFileProvider(
+                webApplicationBuilder
+                    .Environment
+                    .WebRootFileProvider);
+    }
+
     webApplicationBuilder.Host.UseSerilog(
         (context, loggerConfiguration) =>
             loggerConfiguration
@@ -122,9 +131,12 @@ try
     webApplicationBuilder.Services
         .AddDataProtection()
         .PersistKeysToStackExchangeRedis(
-            ConnectionMultiplexer.Connect(
-                webApplicationBuilder.Configuration
-                    .GetConnectionString("Redis")!));
+            () => ConnectionMultiplexer
+                .Connect(
+                    webApplicationBuilder.Configuration
+                        .GetConnectionString("PersistentRedis")!)
+                .GetDatabase(),
+                $"{Constants.RedisInstanceName}DataProtection-Keys");
 
     var externalAuthenticationOptions = webApplicationBuilder.Configuration
         .GetSection("ExternalAuthentication")
@@ -174,11 +186,11 @@ try
         .AddRedis(
             webApplicationBuilder.Configuration
                 .GetConnectionString("Redis")!,
-            tags: new[] { Constants.ReadinessHealthCheckTag, })
+            tags: [ Constants.ReadinessHealthCheckTag, ])
         .AddSqlServer(
             webApplicationBuilder.Configuration
                 .GetConnectionString("Sql")!,
-            tags: new[] { Constants.ReadinessHealthCheckTag, });
+            tags: [ Constants.ReadinessHealthCheckTag, ]);
 
     var mvcBuilder = webApplicationBuilder.Services
         .AddControllersWithViews();
@@ -234,7 +246,9 @@ try
         });
     webApplication.MapControllers();
 
-    webApplication.Run();
+    await webApplication
+        .RunAsync()
+        .ConfigureAwait(false);
     return 0;
 }
 catch (Exception exception)
@@ -246,7 +260,9 @@ catch (Exception exception)
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log
+        .CloseAndFlushAsync()
+        .ConfigureAwait(false);
 }
 
 #pragma warning restore CA1031

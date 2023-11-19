@@ -5,18 +5,15 @@ using System.Reflection;
 
 namespace Diov.Data;
 
-public class MigrationHostedService : IHostedService
+public class MigrationHostedService(
+    IDbConnectionFactory dbConnectionFactory,
+    IHostApplicationLifetime hostApplicationLifetime) :
+    IHostedService
 {
-    public MigrationHostedService(
-        IDbConnectionFactory dbConnectionFactory,
-        IHostApplicationLifetime hostApplicationLifetime)
-    {
-        DbConnectionFactory = dbConnectionFactory;
-        HostApplicationLifetime = hostApplicationLifetime;
-    }
-
-    public IDbConnectionFactory DbConnectionFactory { get; }
-    public IHostApplicationLifetime HostApplicationLifetime { get; }
+    public IDbConnectionFactory DbConnectionFactory { get; } =
+        dbConnectionFactory;
+    public IHostApplicationLifetime HostApplicationLifetime { get; } =
+        hostApplicationLifetime;
 
     [SuppressMessage("Design", "CA1031")]
     public Task StartAsync(

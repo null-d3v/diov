@@ -15,7 +15,7 @@ public class Content : IValidatableObject
         HtmlSanitizer.AllowedAttributes.Add("class");
     }
 
-    private static IHtmlSanitizer HtmlSanitizer  { get; }
+    private static HtmlSanitizer HtmlSanitizer { get; }
 
     public string Body
     {
@@ -63,7 +63,7 @@ public class Content : IValidatableObject
         {
             yield return new ValidationResult(
                 $"The {nameof(Name)} field is required for indexed content.",
-                new[] { nameof(Name), });
+                [ nameof(Name), ]);
         }
     }
 }

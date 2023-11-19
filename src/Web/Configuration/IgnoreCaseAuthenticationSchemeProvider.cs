@@ -3,15 +3,11 @@ using Microsoft.Extensions.Options;
 
 namespace Diov.Web;
 
-public class IgnoreCaseAuthenticationSchemeProvider :
-    AuthenticationSchemeProvider
+public class IgnoreCaseAuthenticationSchemeProvider(
+    IOptions<AuthenticationOptions> optionsAccessor) :
+    AuthenticationSchemeProvider(
+        optionsAccessor,
+        new Dictionary<string, AuthenticationScheme>(
+            StringComparer.OrdinalIgnoreCase))
 {
-    public IgnoreCaseAuthenticationSchemeProvider(
-        IOptions<AuthenticationOptions> optionsAccessor) :
-        base(
-            optionsAccessor,
-            new Dictionary<string, AuthenticationScheme>(
-                StringComparer.OrdinalIgnoreCase))
-    {
-    }
 }

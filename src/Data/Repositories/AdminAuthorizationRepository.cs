@@ -2,7 +2,8 @@ using Dapper;
 
 namespace Diov.Data;
 
-public class AdminAuthorizationRepository :
+public class AdminAuthorizationRepository(
+    IDbConnectionFactory dbConnectionFactory) :
     IAdminAuthorizationRepository
 {
     private const string SelectStatement =
@@ -14,13 +15,8 @@ public class AdminAuthorizationRepository :
         WHERE [AccountId] = @AccountId AND
             [IdentityProvider] = @IdentityProvider";
 
-    public AdminAuthorizationRepository(
-        IDbConnectionFactory dbConnectionFactory)
-    {
-        DbConnectionFactory = dbConnectionFactory;
-    }
-
-    public IDbConnectionFactory DbConnectionFactory { get; }
+    public IDbConnectionFactory DbConnectionFactory { get; } =
+        dbConnectionFactory;
 
     public async Task<AdminAuthorization?> GetAdminAuthorizationAsync(
         string accountId,

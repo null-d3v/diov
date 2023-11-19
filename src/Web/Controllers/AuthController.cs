@@ -7,18 +7,15 @@ using System.Security.Claims;
 namespace Diov.Web;
 
 [Route("[controller]")]
-public class AuthController : Controller
+public class AuthController(
+    IAdminAuthorizationRepository adminAuthorizationRepository,
+    IOptions<ExternalAuthenticationOptions> externalAuthenticationOptionsAccessor) :
+    Controller
 {
-    public AuthController(
-        IAdminAuthorizationRepository adminAuthorizationRepository,
-        IOptions<ExternalAuthenticationOptions> externalAuthenticationOptionsAccessor)
-    {
-        AdminAuthorizationRepository = adminAuthorizationRepository;
-        ExternalAuthenticationOptions = externalAuthenticationOptionsAccessor.Value;
-    }
-
-    public IAdminAuthorizationRepository AdminAuthorizationRepository { get; }
-    public ExternalAuthenticationOptions ExternalAuthenticationOptions { get; }
+    public IAdminAuthorizationRepository AdminAuthorizationRepository { get; } =
+        adminAuthorizationRepository;
+    public ExternalAuthenticationOptions ExternalAuthenticationOptions { get; } =
+        externalAuthenticationOptionsAccessor.Value;
 
     [HttpGet("[action]")]
     public async Task<IActionResult> Callback(
@@ -102,7 +99,7 @@ public class AuthController : Controller
 
     [HttpGet("[action]")]
     public IActionResult Login(
-        [FromQuery]string returnUrl)
+        [FromQuery] string returnUrl)
     {
         return View(
             new LoginModel
