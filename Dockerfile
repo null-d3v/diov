@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 COPY src/Data/Diov.Data.csproj src/Data/
@@ -9,12 +9,17 @@ COPY . .
 WORKDIR /src/src/Web
 RUN dotnet publish -c Release --no-restore -o /app -r linux-musl-x64 --self-contained false
 
-FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine
+FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine
 
-ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT false
-RUN apk add --no-cache icu-libs
-ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
+ONBUILD ENV \
+    DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false \
+    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
+    LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8
+ONBUILD RUN \
+    apk add --no-cache \
+    icu-data-full \
+    icu-libs
 
 WORKDIR /app
 COPY --from=build /app .

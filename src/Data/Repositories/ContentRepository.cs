@@ -3,7 +3,9 @@ using System.Text;
 
 namespace Diov.Data;
 
-public class ContentRepository : IContentRepository
+public class ContentRepository(
+    IDbConnectionFactory dbConnectionFactory) :
+    IContentRepository
 {
     private const string DeleteStatement =
         @"DELETE FROM [Content]
@@ -62,13 +64,8 @@ public class ContentRepository : IContentRepository
             [Summary] = @Summary
         WHERE [Id] = @Id;";
 
-    public ContentRepository(
-        IDbConnectionFactory dbConnectionFactory)
-    {
-        DbConnectionFactory = dbConnectionFactory;
-    }
-
-    public IDbConnectionFactory DbConnectionFactory { get; }
+    public IDbConnectionFactory DbConnectionFactory { get; } =
+        dbConnectionFactory;
 
     public async Task<int> AddContentAsync(
         Content content,

@@ -5,27 +5,24 @@ using System.Text.Json;
 
 namespace Diov.Web;
 
-public class DistributedCacheContentAccessor : IContentAccessor
+public class DistributedCacheContentAccessor(
+    IContentRepository contentRepository,
+    IDistributedCache distributedCache,
+    IOptions<DistributedCacheEntryOptions> distributedCacheEntryOptionsAccessor,
+    IOptions<JsonSerializerOptions> jsonSerializerOptionsAccessor) :
+    IContentAccessor
 {
-    public DistributedCacheContentAccessor(
-        IContentRepository contentRepository,
-        IDistributedCache distributedCache,
-        IOptions<DistributedCacheEntryOptions> distributedCacheEntryOptionsAccessor,
-        IOptions<JsonSerializerOptions> jsonSerializerOptionsAccessor)
-    {
-        ContentRepository = contentRepository;
-        DistributedCache = distributedCache;
-        DistributedCacheEntryOptions = distributedCacheEntryOptionsAccessor.Value;
-        JsonSerializerOptions = jsonSerializerOptionsAccessor.Value;
-    }
-
     private static string CacheKeyPrefix { get; } =
         $"{nameof(Content)}:{nameof(Content.Path)}:";
 
-    public IContentRepository ContentRepository { get; set; }
-    public IDistributedCache DistributedCache { get; }
-    public DistributedCacheEntryOptions DistributedCacheEntryOptions { get; }
-    public JsonSerializerOptions JsonSerializerOptions { get; }
+    public IContentRepository ContentRepository { get; set; } =
+        contentRepository;
+    public IDistributedCache DistributedCache { get; } =
+        distributedCache;
+    public DistributedCacheEntryOptions DistributedCacheEntryOptions { get; } =
+        distributedCacheEntryOptionsAccessor.Value;
+    public JsonSerializerOptions JsonSerializerOptions { get; } =
+        jsonSerializerOptionsAccessor.Value;
 
     public async Task<int> AddContentAsync(
         Content content,

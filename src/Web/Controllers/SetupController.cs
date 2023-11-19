@@ -8,18 +8,15 @@ namespace Diov.Web;
 
 [Authorize]
 [Route("[controller]")]
-public class SetupController : Controller
+public class SetupController(
+    IContentAccessor contentAccessor,
+    IOptions<JsonSerializerOptions> jsonSerializerOptionsAccessor) :
+    Controller
 {
-    public SetupController(
-        IContentAccessor contentAccessor,
-        IOptions<JsonSerializerOptions> jsonSerializerOptionsAccessor)
-    {
-        ContentAccessor = contentAccessor;
-        JsonSerializerOptions = jsonSerializerOptionsAccessor.Value;
-    }
-
-    public IContentAccessor ContentAccessor { get; }
-    public JsonSerializerOptions JsonSerializerOptions { get; }
+    public IContentAccessor ContentAccessor { get; } =
+        contentAccessor;
+    public JsonSerializerOptions JsonSerializerOptions { get; } =
+        jsonSerializerOptionsAccessor.Value;
 
     [HttpGet("[action]")]
     public async Task<IActionResult> Export(
@@ -54,7 +51,7 @@ public class SetupController : Controller
 
     [HttpPost("[action]")]
     public async Task<IActionResult> Import(
-        [FromForm]SetupModel setupModel,
+        [FromForm] SetupModel setupModel,
         CancellationToken cancellationToken = default)
     {
         if (!ModelState.IsValid)

@@ -1,19 +1,15 @@
 ﻿using Diov.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Diov.Web;
 
-public class ContentController : Controller
+public class ContentController(
+    IContentAccessor contentAccessor) :
+    Controller
 {
-    public ContentController(
-        IContentAccessor contentAccessor)
-    {
-        ContentAccessor = contentAccessor;
-    }
-
-    public IContentAccessor ContentAccessor { get; }
+    public IContentAccessor ContentAccessor { get; } =
+        contentAccessor;
 
     [Authorize]
     [HttpGet("[controller]/[action]")]
@@ -25,7 +21,7 @@ public class ContentController : Controller
     [Authorize]
     [HttpPost("[controller]/[action]")]
     public async Task<IActionResult> Add(
-        [FromForm]Content content,
+        [FromForm] Content content,
         CancellationToken cancellationToken = default)
     {
         if (!ModelState.IsValid)
@@ -164,8 +160,8 @@ public class ContentController : Controller
 
     [HttpGet("")]
     public async Task<IActionResult> Index(
-        [FromQuery]bool indexed = true,
-        [FromQuery]int skip = 0)
+        [FromQuery] bool indexed = true,
+        [FromQuery] int skip = 0)
     {
         if (User.Identity?.IsAuthenticated != true)
         {
