@@ -11,12 +11,12 @@ RUN dotnet publish -c Release --no-restore -o /app -r linux-musl-x64 --self-cont
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine
 
-ONBUILD ENV \
+ENV \
     DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false \
     DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8
-ONBUILD RUN \
+RUN \
     apk add --no-cache \
     icu-data-full \
     icu-libs
