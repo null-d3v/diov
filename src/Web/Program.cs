@@ -134,7 +134,7 @@ try
             () => ConnectionMultiplexer
                 .Connect(
                     webApplicationBuilder.Configuration
-                        .GetConnectionString("PersistentRedis")!)
+                        .GetConnectionString("Redis")!)
                 .GetDatabase(),
                 $"{Constants.RedisInstanceName}DataProtection-Keys");
 
