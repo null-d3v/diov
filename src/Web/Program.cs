@@ -9,7 +9,7 @@ using Serilog;
 using StackExchange.Redis;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using WebMarkupMin.AspNetCore7;
+using WebMarkupMin.AspNetCore8;
 
 #pragma warning disable CA1031
 
