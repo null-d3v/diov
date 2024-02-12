@@ -117,6 +117,10 @@ try
                 assetPipeline.AddJavaScriptBundle(
                     "/js/site.min.js",
                     "js/**/*.js");
+            },
+            options =>
+            {
+                options.EnableDiskCache = false;
             });
     webApplicationBuilder.Services
         .AddWebMarkupMin(
