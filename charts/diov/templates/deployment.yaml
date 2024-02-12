@@ -133,7 +133,7 @@ spec:
                     value: redis
                   - name: ConnectionStrings__Sql
                     value: Server=db;Database=Diov;User Id={{ .Values.web.db.userId }};Password={{ .Values.web.db.password }};Encrypt=False;
-                  {{- range .Values.env }}
+                  {{- range .Values.web.env }}
                   - name: {{ .name | quote }}
                     value: {{ .value | quote }}
                   {{- end }}
