@@ -11,7 +11,7 @@ jobs:
     release:
         runs-on: ubuntu-latest
         steps:
-          - uses: actions/checkout@v3
+          - uses: actions/checkout@v4
             with:
                 fetch-depth: 0
           - name: Configure Git
@@ -23,6 +23,6 @@ jobs:
             with:
                 token: ${{ secrets.GITHUB_TOKEN }}
           - name: Run chart-releaser
-            uses: helm/chart-releaser-action@v1.4.1
+            uses: helm/chart-releaser-action@v1
             env:
                 CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"

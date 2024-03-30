@@ -22,31 +22,31 @@ public class SetupController(
     public async Task<IActionResult> Export(
         CancellationToken cancellationToken = default)
     {
-        var contents = new List<Content>();
+        var content = new List<Content>();
 
-        var pagedContents = new SearchResponse<Content>
+        var pagedContent = new SearchResponse<Content>
         {
             Skip = -100,
             Take = 100,
         };
         do
         {
-            pagedContents.Skip += pagedContents.Take;
+            pagedContent.Skip += pagedContent.Take;
 
-            pagedContents = await ContentAccessor
+            pagedContent = await ContentAccessor
                 .SearchContentAsync(
                     new ContentSearchRequest(),
-                    pagedContents.Skip,
-                    pagedContents.Take,
+                    pagedContent.Skip,
+                    pagedContent.Take,
                     cancellationToken)
                 .ConfigureAwait(false);
 
-            contents.AddRange(pagedContents.Items);
+            content.AddRange(pagedContent.Items);
         }
-        while (pagedContents.TotalCount >=
-            pagedContents.Skip + pagedContents.Take);
+        while (pagedContent.TotalCount >=
+            pagedContent.Skip + pagedContent.Take);
 
-        return Ok(contents);
+        return Ok(content);
     }
 
     [HttpPost("[action]")]

@@ -292,3 +292,5 @@ appsettings.Development.json
 *.min.*
 
 Web/wwwroot/media/
+
+.mono/

@@ -2,8 +2,7 @@ namespace Diov.Data;
 
 public class SearchResponse<T>
 {
-    public IEnumerable<T> Items { get; set; } =
-        Enumerable.Empty<T>();
+    public IEnumerable<T> Items { get; set; } = [ ];
 
     public int Skip { get; set; }
 

@@ -18,10 +18,10 @@ try
     Log.Logger = new LoggerConfiguration()
         .CreateBootstrapLogger();
 
-    var webApplicationBuilder = WebApplication.CreateBuilder(args);
+    var webApplicationBuilder = WebApplication
+        .CreateBuilder(args);
     webApplicationBuilder.Configuration
-        .AddJsonFile("appsettings.json", false, false);
-    webApplicationBuilder.Configuration
+        .AddJsonFile("appsettings.json", false, false)
         .AddEnvironmentVariables();
 
     if (!webApplicationBuilder.Environment.IsDevelopment())
@@ -33,11 +33,12 @@ try
                     .WebRootFileProvider);
     }
 
-    webApplicationBuilder.Host.UseSerilog(
-        (context, loggerConfiguration) =>
-            loggerConfiguration
-                .ReadFrom.Configuration(
-                    context.Configuration));
+    webApplicationBuilder.Host
+        .UseSerilog(
+            (context, loggerConfiguration) =>
+                loggerConfiguration
+                    .ReadFrom.Configuration(
+                        context.Configuration));
 
     webApplicationBuilder.Services
         .AddSingleton(webApplicationBuilder.Configuration);
@@ -203,13 +204,16 @@ try
         mvcBuilder.AddRazorRuntimeCompilation();
     }
 
-    using var webApplication = webApplicationBuilder.Build();
+    using var webApplication = webApplicationBuilder
+        .Build();
 
-    webApplication.UseSerilogRequestLogging();
+    webApplication
+        .UseSerilogRequestLogging();
 
     if (webApplicationBuilder.Environment.IsDevelopment())
     {
-        webApplication.UseDeveloperExceptionPage();
+        webApplication
+            .UseDeveloperExceptionPage();
     }
     else
     {
@@ -219,36 +223,42 @@ try
             .UseStatusCodePagesWithReExecute("/error/{0}");
     }
 
-    webApplication.UseResponseCompression();
-    webApplication.UseWebOptimizer();
-    webApplication.UseWebMarkupMin();
-    webApplication.UseStaticFiles(
-        new StaticFileOptions
-        {
-            ServeUnknownFileTypes = true,
-        });
-    webApplication.UseRouting();
+    webApplication
+        .UseResponseCompression()
+        .UseWebOptimizer()
+        .UseWebMarkupMin()
+        .UseStaticFiles(
+            new StaticFileOptions
+            {
+                ServeUnknownFileTypes = true,
+            })
+        .UseRouting();
 
-    webApplication.UseForwardedHeaders();
+    webApplication
+        .UseForwardedHeaders();
 
-    webApplication.UseAuthentication();
-    webApplication.UseAuthorization();
+    webApplication
+        .UseAuthentication()
+        .UseAuthorization();
 
-    webApplication.MapHealthChecks(
-        "/health/live",
-        new HealthCheckOptions
-        {
-            Predicate = (healthCheckRegistration) => false,
-        });
-    webApplication.MapHealthChecks(
+    webApplication
+        .MapHealthChecks(
+            "/health/live",
+            new HealthCheckOptions
+            {
+                Predicate = (healthCheckRegistration) => false,
+            });
+    webApplication
+        .MapHealthChecks(
         "/health/ready",
-        new HealthCheckOptions
-        {
-            Predicate = (healthCheckRegistration) =>
-                healthCheckRegistration.Tags.Contains(
-                    Constants.ReadinessHealthCheckTag),
-        });
-    webApplication.MapControllers();
+            new HealthCheckOptions
+            {
+                Predicate = (healthCheckRegistration) =>
+                    healthCheckRegistration.Tags.Contains(
+                        Constants.ReadinessHealthCheckTag),
+            });
+    webApplication
+        .MapControllers();
 
     await webApplication
         .RunAsync()
