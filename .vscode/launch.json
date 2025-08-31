@@ -7,13 +7,14 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/Web/bin/Debug/net8.0/Diov.Web.dll",
+            "program": "${workspaceFolder}/src/Web/bin/Debug/net9.0/Diov.Web.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/Web",
             "stopAtEntry": false,
             "serverReadyAction":
             {
-                "action": "openExternally"
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)\",",
             },
             "env":
             {

@@ -1,7 +1,6 @@
-version: "3.8"
 services:
     devcontainer:
-        image: mcr.microsoft.com/devcontainers/dotnet:8.0-bookworm
+        image: mcr.microsoft.com/devcontainers/dotnet:10.0-preview
         volumes:
           - ..:/workspace:cached
         command: sleep infinity
@@ -12,4 +11,4 @@ services:
             MSSQL_PID: "Express"
             SA_PASSWORD: "P@ssword123"
     redis:
-        image: redis
+        image: redis:latest

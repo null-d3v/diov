@@ -1,26 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <AnalysisLevel>latest-all</AnalysisLevel>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <NoWarn>CA1054;CA1062;CA1308;</NoWarn>
-    <Nullable>enable</Nullable>
-    <TargetFramework>net8.0</TargetFramework>
+    <NoWarn>CA1054;CA1062;CA1308;CA1515;</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Data\Diov.Data.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="8.0.*" />
-    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.*" />
-    <PackageReference Include="L1L2RedisCache" Version="2.2.*" />
-    <PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.*" />
-    <PackageReference Include="Markdig" Version="0.36.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="8.0.*" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="8.0.*" />
-    <PackageReference Include="Serilog.AspNetCore" Version="8.0.*" />
-    <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.*" />
-    <PackageReference Include="WebMarkupMin.AspNetCore8" Version="2.16.*" />
+    <PackageReference Include="AspNetCore.HealthChecks.Redis" />
+    <PackageReference Include="AspNetCore.HealthChecks.SqlServer" />
+    <PackageReference Include="L1L2RedisCache" />
+    <PackageReference Include="LigerShark.WebOptimizer.Core" />
+    <PackageReference Include="Markdig" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" />
+    <PackageReference Include="WebMarkupMin.AspNetCoreLatest" />
   </ItemGroup>
 </Project>

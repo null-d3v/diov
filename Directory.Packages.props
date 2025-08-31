@@ -1,0 +1,23 @@
+<Project>
+  <PropertyGroup>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="AspNetCore.HealthChecks.Redis" Version="9.0.0" />
+    <PackageVersion Include="AspNetCore.HealthChecks.SqlServer" Version="9.0.0" />
+    <PackageVersion Include="Dapper" Version="2.1.66" />
+    <PackageVersion Include="dbup-sqlserver" Version="6.0.0" />
+    <PackageVersion Include="HtmlSanitizer" Version="9.0.886" />
+    <PackageVersion Include="L1L2RedisCache" Version="2.3.0" />
+    <PackageVersion Include="LigerShark.WebOptimizer.Core" Version="3.0.471" />
+    <PackageVersion Include="Markdig" Version="0.41.3" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="9.0.8" />
+    <PackageVersion Include="Microsoft.Data.SqlClient" Version="6.1.1" />
+    <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.8" />
+    <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageVersion Include="WebMarkupMin.AspNetCoreLatest" Version="2.19.0" />
+  </ItemGroup>
+</Project>

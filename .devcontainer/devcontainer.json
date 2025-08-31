@@ -9,6 +9,10 @@
                 "ms-dotnettools.csdevkit",
                 "ue.alphabetical-sorter"
             ]
+        },
+        "settings":
+        {
+            "remote.autoForwardPorts": false
         }
     },
     "forwardPorts":
@@ -18,7 +22,7 @@
         "mssql:1433",
         "redis:6379"
     ],
-    "name": "Diov",
+    "name": "diov",
     "portsAttributes":
     {
         "5001":

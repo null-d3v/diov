@@ -1,11 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <AnalysisLevel>latest-all</AnalysisLevel>
-    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-    <ImplicitUsings>enable</ImplicitUsings>
     <NoWarn>CA1062;CA1308;</NoWarn>
-    <Nullable>enable</Nullable>
-    <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\00001.sql" />
@@ -14,11 +9,11 @@
     <EmbeddedResource Include="Migrations\00004.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.1.*" />
-    <PackageReference Include="dbup-sqlserver" Version="5.0.*" />
-    <PackageReference Include="HtmlSanitizer" Version="8.0.*" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.*" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.*" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.*" />
+    <PackageReference Include="Dapper" />
+    <PackageReference Include="dbup-sqlserver" />
+    <PackageReference Include="HtmlSanitizer" />
+    <PackageReference Include="Microsoft.Data.SqlClient" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+    <PackageReference Include="System.ComponentModel.Annotations" />
   </ItemGroup>
 </Project>

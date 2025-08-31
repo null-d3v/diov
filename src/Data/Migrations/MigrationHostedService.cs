@@ -1,5 +1,6 @@
 using DbUp;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
@@ -7,13 +8,16 @@ namespace Diov.Data;
 
 public class MigrationHostedService(
     IDbConnectionFactory dbConnectionFactory,
-    IHostApplicationLifetime hostApplicationLifetime) :
+    IHostApplicationLifetime hostApplicationLifetime,
+    ILogger<MigrationHostedService> logger) :
     IHostedService
 {
     public IDbConnectionFactory DbConnectionFactory { get; } =
         dbConnectionFactory;
     public IHostApplicationLifetime HostApplicationLifetime { get; } =
         hostApplicationLifetime;
+    public ILogger<MigrationHostedService> Logger { get; } =
+        logger;
 
     [SuppressMessage("Design", "CA1031")]
     public Task StartAsync(
@@ -28,7 +32,7 @@ public class MigrationHostedService(
             .WithScriptsEmbeddedInAssembly(
                 Assembly.GetExecutingAssembly())
             .WithTransactionPerScript()
-            .LogToAutodetectedLog()
+            .LogTo(Logger)
             .Build();
 
         if (upgradeEngine.IsUpgradeRequired())
