@@ -50,7 +50,7 @@ web:
         value:
       - name: ExternalAuthentication__Google__ClientSecret
         value:
-      - name: Serilog__MinimumLevel
+      - name: Logging__LogLevel__Default
         value: Warning
     host: example.com
     image: nulld3v/diov

@@ -265,6 +265,7 @@ time
     {
         display: flex;
         justify-content: space-between;
+        overflow: visible;
     }
 }
 
@@ -299,6 +300,7 @@ time
     height: 100%;
     margin: 0 auto;
     max-width: 41rem;
+    overflow: hidden;
     width: 80%;
 }
 
