@@ -7,6 +7,9 @@ metadata:
         {{- include "diov.web.labels" . | nindent 8 }}
     name: web
 spec:
+    {{- if .Values.web.ingress.className }}
+    ingressClassName: {{ .Values.web.ingress.className }}
+    {{- end }}
     tls:
       - hosts:
           - {{ .Values.web.host | quote }}
